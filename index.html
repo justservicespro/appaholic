@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AppAholic — Marketplace for Utility & Productivity Apps</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 /* ── DESIGN TOKENS ─────────────────────────────────────────────── */
 :root {
@@ -32,7 +32,7 @@
   --shadow-lg: 0 12px 40px rgba(10,10,15,.12), 0 4px 12px rgba(10,10,15,.07);
   --shadow-volt: 0 0 0 3px rgba(200,255,0,.35);
 
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-body:    'Inter', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
 }
@@ -128,9 +128,9 @@ input, textarea, select { font-family: inherit; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(40px, 5.5vw, 68px);
-  font-weight: 800; line-height: 1.02;
-  letter-spacing: -2px;
+  font-size: clamp(36px, 4.8vw, 58px);
+  font-weight: 800; line-height: 1.08;
+  letter-spacing: -1.5px;
   margin-bottom: 24px;
 }
 .hero__title em { font-style: normal; color: var(--volt); }
@@ -193,7 +193,7 @@ input, textarea, select { font-family: inherit; }
 /* ── CATEGORIES ────────────────────────────────────────────────── */
 .categories { padding: 48px 0 0; }
 .section-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-family: var(--font-mono); }
-.section-title { font-family: var(--font-display); font-size: clamp(26px, 3.5vw, 36px); font-weight: 800; letter-spacing: -1px; margin-bottom: 32px; }
+.section-title { font-family: var(--font-display); font-size: clamp(22px, 2.8vw, 30px); font-weight: 800; letter-spacing: -.6px; margin-bottom: 32px; }
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
 .cat-chip {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
@@ -268,7 +268,7 @@ input, textarea, select { font-family: inherit; }
   background: radial-gradient(circle, rgba(75,62,255,.3) 0%, transparent 70%);
 }
 .featured-banner__tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--volt); font-family: var(--font-mono); margin-bottom: 12px; }
-.featured-banner__title { font-family: var(--font-display); font-size: 30px; font-weight: 800; color: var(--white); letter-spacing: -1px; margin-bottom: 10px; }
+.featured-banner__title { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--white); letter-spacing: -.6px; margin-bottom: 10px; }
 .featured-banner__desc { font-size: 14px; color: rgba(255,255,255,.55); max-width: 420px; line-height: 1.7; margin-bottom: 24px; }
 .featured-banner__actions { display: flex; gap: 12px; align-items: center; }
 .featured-banner__price { font-family: var(--font-display); font-size: 36px; font-weight: 800; color: var(--volt); text-align: right; }
@@ -286,7 +286,7 @@ input, textarea, select { font-family: inherit; }
   background: radial-gradient(circle, rgba(200,255,0,.1) 0%, transparent 60%);
 }
 .request-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-.request-left h2 { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); font-weight: 800; color: var(--white); letter-spacing: -1.5px; margin-bottom: 16px; line-height: 1.1; }
+.request-left h2 { font-family: var(--font-display); font-size: clamp(24px, 3.2vw, 38px); font-weight: 800; color: var(--white); letter-spacing: -1px; margin-bottom: 16px; line-height: 1.15; }
 .request-left p { color: rgba(255,255,255,.55); font-size: 15px; line-height: 1.8; margin-bottom: 32px; }
 .request-promise { display: flex; flex-direction: column; gap: 16px; }
 .request-promise__item { display: flex; align-items: flex-start; gap: 14px; }
@@ -457,6 +457,18 @@ select.form-input { cursor: pointer; }
   .modal__body { padding: 16px 20px 24px; }
   .hero__stats { flex-wrap: wrap; gap: 20px; }
   .featured-banner { padding: 28px 24px; }
+}
+/* ── CHECK CHIPS ───────────────────────────────────────────────── */
+.check-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 13px; border-radius: 999px; font-size: 13px; font-weight: 500;
+  border: 1.5px solid var(--border); background: var(--surface);
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.check-chip input { display: none; }
+.check-chip:hover { border-color: var(--ink); }
+.check-chip:has(input:checked) {
+  background: var(--ink); color: var(--white); border-color: var(--ink);
 }
 </style>
 </head>
@@ -719,7 +731,10 @@ select.form-input { cursor: pointer; }
       </div>
 
       <div class="request-form">
-        <h3 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:24px;letter-spacing:-.5px">App Request Form</h3>
+        <h3 style="font-family:var(--font-display);font-size:19px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px">App Request Form</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:22px">The more detail you give, the faster we can build it.</p>
+
+        <!-- Contact -->
         <div class="form-grid-2">
           <div class="form-row">
             <label>Full Name <span>*</span></label>
@@ -730,10 +745,20 @@ select.form-input { cursor: pointer; }
             <input class="form-input" type="email" placeholder="you@example.com" id="reqEmail"/>
           </div>
         </div>
+
         <div class="form-row">
-          <label>App Name / Title <span>*</span></label>
+          <label>Phone / WhatsApp <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+          <input class="form-input" type="tel" placeholder="+234 800 000 0000" id="reqPhone"/>
+        </div>
+
+        <!-- App basics -->
+        <div style="margin:18px 0 14px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono)">About the App</div>
+
+        <div class="form-row">
+          <label>App Name / Working Title <span>*</span></label>
           <input class="form-input" type="text" placeholder="e.g. Invoice Generator Pro" id="reqTitle"/>
         </div>
+
         <div class="form-grid-2">
           <div class="form-row">
             <label>Category <span>*</span></label>
@@ -744,15 +769,16 @@ select.form-input { cursor: pointer; }
               <option>Analytics & Reports</option>
               <option>HR & Team Management</option>
               <option>Inventory & Logistics</option>
-              <option>Customer Management</option>
+              <option>Customer Management (CRM)</option>
               <option>Security & Privacy</option>
-              <option>Communication</option>
-              <option>AI Tools</option>
+              <option>Communication & Collaboration</option>
+              <option>AI / Automation Tools</option>
+              <option>Education & Training</option>
               <option>Other</option>
             </select>
           </div>
           <div class="form-row">
-            <label>Target Platform</label>
+            <label>Target Platform <span>*</span></label>
             <select class="form-input" id="reqPlatform">
               <option value="">Select platform</option>
               <option>Web (Browser)</option>
@@ -760,27 +786,104 @@ select.form-input { cursor: pointer; }
               <option>Mac Desktop</option>
               <option>Android Mobile</option>
               <option>iOS Mobile</option>
-              <option>Cross-platform</option>
+              <option>Cross-platform (All)</option>
             </select>
           </div>
         </div>
-        <div class="form-row">
-          <label>Describe what the app should do <span>*</span></label>
-          <textarea class="form-input" placeholder="Explain the problem it solves, key features you'd want, who will use it..." id="reqDesc"></textarea>
+
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>Who will use this app? <span>*</span></label>
+            <select class="form-input" id="reqAudience">
+              <option value="">Select audience</option>
+              <option>Just me (personal use)</option>
+              <option>My small team (2–10 people)</option>
+              <option>My company / organisation</option>
+              <option>My customers / clients</option>
+              <option>General public</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Estimated number of users</label>
+            <select class="form-input" id="reqUsers">
+              <option value="">Not sure yet</option>
+              <option>1–5</option>
+              <option>6–25</option>
+              <option>26–100</option>
+              <option>100–500</option>
+              <option>500+</option>
+            </select>
+          </div>
         </div>
+
+        <!-- Problem & features -->
+        <div style="margin:18px 0 14px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono)">Problem & Features</div>
+
         <div class="form-row">
-          <label>Budget range (optional)</label>
-          <select class="form-input" id="reqBudget">
-            <option value="">I'm flexible</option>
-            <option>Free (open source)</option>
-            <option>₦1,000 – ₦5,000</option>
-            <option>₦5,000 – ₦20,000</option>
-            <option>₦20,000 – ₦50,000</option>
-            <option>₦50,000+</option>
-          </select>
+          <label>What problem does this app solve? <span>*</span></label>
+          <textarea class="form-input" placeholder="e.g. I currently track staff attendance on paper and it's always inaccurate. I need a simple digital system that records clock-in/out and generates monthly reports." id="reqProblem" style="min-height:90px"></textarea>
         </div>
+
+        <div class="form-row">
+          <label>Key features you must have <span>*</span></label>
+          <textarea class="form-input" placeholder="List each feature on a new line e.g.&#10;— Clock-in / clock-out per employee&#10;— Monthly attendance PDF report&#10;— Admin dashboard to manage staff&#10;— SMS notification on late arrival" id="reqFeatures" style="min-height:100px"></textarea>
+        </div>
+
+        <div class="form-row">
+          <label>Any apps or tools that inspired this?</label>
+          <input class="form-input" type="text" placeholder="e.g. Similar to Clockify but simpler, or like QuickBooks Lite" id="reqInspiration"/>
+        </div>
+
+        <!-- Integrations -->
+        <div class="form-row">
+          <label>Does it need to connect to anything?</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="integrationsWrap">
+            <label class="check-chip"><input type="checkbox" value="whatsapp"/> WhatsApp</label>
+            <label class="check-chip"><input type="checkbox" value="email"/> Email / SMTP</label>
+            <label class="check-chip"><input type="checkbox" value="sms"/> SMS</label>
+            <label class="check-chip"><input type="checkbox" value="flutterwave"/> Flutterwave</label>
+            <label class="check-chip"><input type="checkbox" value="google"/> Google Sheets</label>
+            <label class="check-chip"><input type="checkbox" value="excel"/> Excel / CSV</label>
+            <label class="check-chip"><input type="checkbox" value="paystack"/> Paystack</label>
+            <label class="check-chip"><input type="checkbox" value="none"/> No integrations</label>
+          </div>
+        </div>
+
+        <!-- Timeline & budget -->
+        <div style="margin:18px 0 14px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono)">Timeline & Budget</div>
+
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>How soon do you need it?</label>
+            <select class="form-input" id="reqTimeline">
+              <option value="">No rush</option>
+              <option>ASAP (within 2 weeks)</option>
+              <option>Within 1 month</option>
+              <option>Within 3 months</option>
+              <option>Planning ahead (3–6 months)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Budget range</label>
+            <select class="form-input" id="reqBudget">
+              <option value="">I'm flexible / open to pricing</option>
+              <option>Free (add to catalogue)</option>
+              <option>₦1,000 – ₦5,000</option>
+              <option>₦5,000 – ₦20,000</option>
+              <option>₦20,000 – ₦50,000</option>
+              <option>₦50,000+</option>
+              <option>Discuss with me first</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>Anything else we should know?</label>
+          <textarea class="form-input" placeholder="Any extra context, existing systems it must work with, design preferences, things you definitely don't want..." id="reqExtra" style="min-height:70px"></textarea>
+        </div>
+
         <button class="form-submit" onclick="submitRequest()">Submit My App Request →</button>
-        <div class="form-note">🔒 We'll never spam you. Your request is reviewed by a real person.</div>
+        <div class="form-note">🔒 Your info is private. A real person reviews every request within 48 hours.</div>
       </div>
     </div>
   </div>
@@ -1193,13 +1296,16 @@ function handleCardGet(id) {
 
 /* ── REQUEST FORM ──────────────────────────────────────────────── */
 function submitRequest() {
-  const name = document.getElementById('reqName').value.trim();
-  const email = document.getElementById('reqEmail').value.trim();
-  const title = document.getElementById('reqTitle').value.trim();
+  const name     = document.getElementById('reqName').value.trim();
+  const email    = document.getElementById('reqEmail').value.trim();
+  const title    = document.getElementById('reqTitle').value.trim();
   const category = document.getElementById('reqCategory').value;
-  const desc = document.getElementById('reqDesc').value.trim();
+  const platform = document.getElementById('reqPlatform').value;
+  const audience = document.getElementById('reqAudience').value;
+  const problem  = document.getElementById('reqProblem').value.trim();
+  const features = document.getElementById('reqFeatures').value.trim();
 
-  if (!name || !email || !title || !category || !desc) {
+  if (!name || !email || !title || !category || !platform || !audience || !problem || !features) {
     showToast('Please fill in all required fields.', '⚠️');
     return;
   }
@@ -1208,12 +1314,12 @@ function submitRequest() {
     return;
   }
 
-  // Clear fields
-  ['reqName','reqEmail','reqTitle','reqCategory','reqPlatform','reqDesc','reqBudget'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el.tagName === 'SELECT') el.selectedIndex = 0;
-    else el.value = '';
-  });
+  // Clear all fields
+  const textFields = ['reqName','reqEmail','reqPhone','reqTitle','reqProblem','reqFeatures','reqInspiration','reqExtra'];
+  textFields.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  const selectFields = ['reqCategory','reqPlatform','reqAudience','reqUsers','reqTimeline','reqBudget'];
+  selectFields.forEach(id => { const el = document.getElementById(id); if(el) el.selectedIndex = 0; });
+  document.querySelectorAll('#integrationsWrap input[type=checkbox]').forEach(c => c.checked = false);
 
   showToast('Request submitted! We\'ll review within 48 hours.', '🎉');
 }
