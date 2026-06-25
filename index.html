@@ -3,9 +3,24 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AppAholic — Marketplace for Utility & Productivity Apps</title>
+<title>AppAholic — Utility & Productivity App Marketplace | JustServicesPro</title>
+<meta name="description" content="Browse, buy and download utility and productivity apps built for real workflows. Free and premium tools for freelancers and businesses across Nigeria. A JustServicesPro product."/>
+<meta name="robots" content="index, follow"/>
+<meta name="author" content="JustServicesPro Management and Consulting Ltd"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="AppAholic — Utility & Productivity App Marketplace"/>
+<meta property="og:description" content="Discover and download utility & productivity apps built for real workflows. Free and premium — powered by JustServicesPro."/>
+<meta property="og:url" content="https://appaholic.justservices.pro/"/>
+<meta property="og:image" content="https://appaholic.justservices.pro/og-image.png"/>
+<meta property="og:site_name" content="AppAholic"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="AppAholic — App Marketplace by JustServicesPro"/>
+<meta name="twitter:description" content="Browse utility & productivity apps for Nigerian freelancers and businesses."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap&display=swap" rel="stylesheet"/>
 <style>
 /* ── DESIGN TOKENS ─────────────────────────────────────────────── */
 :root {
@@ -519,15 +534,63 @@ select.form-input { cursor: pointer; }
 .btn-form-submit{border-radius:var(--r-lg);padding:12px 26px;font-size:14px;font-family:var(--font-display)}
 @media(max-width:960px){.calc-inner{grid-template-columns:1fr;gap:40px}}
 
+
+/* SKIP LINK */
+.skip-link{position:absolute;top:-40px;left:8px;background:var(--volt);color:var(--ink);padding:8px 16px;border-radius:var(--r-md);font-size:13px;font-weight:700;z-index:999;transition:top .2s}
+.skip-link:focus{top:8px}
+
+/* MOBILE NAV DRAWER */
+.nav-drawer-toggle{display:none;width:40px;height:40px;border-radius:var(--r-md);align-items:center;justify-content:center;font-size:20px;border:1.5px solid var(--border);cursor:pointer;background:var(--white);transition:all .2s}
+.nav-drawer-toggle:hover{border-color:var(--ink)}
+.nav-drawer{position:fixed;top:0;right:-300px;width:280px;height:100vh;background:var(--white);z-index:200;box-shadow:-8px 0 32px rgba(10,10,15,.12);transition:right .3s cubic-bezier(.4,0,.2,1);padding:24px 20px;display:flex;flex-direction:column;gap:0}
+.nav-drawer.open{right:0}
+.nav-drawer__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.nav-drawer__logo{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:7px}
+.nav-drawer__close{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:var(--muted)}
+.nav-drawer__links{list-style:none;display:flex;flex-direction:column;gap:4px}
+.nav-drawer__links a{display:block;padding:12px 14px;border-radius:var(--r-md);font-size:15px;font-weight:500;color:var(--ink-3);transition:background .15s}
+.nav-drawer__links a:hover{background:var(--surface);color:var(--ink)}
+.nav-drawer__actions{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-top:20px;border-top:1px solid var(--border)}
+.nav-drawer__actions .btn{justify-content:center;border-radius:var(--r-lg)}
+.nav-overlay{position:fixed;inset:0;background:rgba(10,10,15,.5);z-index:150;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
+.nav-overlay.open{opacity:1;pointer-events:all}
+@media(max-width:960px){
+  .nav__links{display:none}
+  .nav-drawer-toggle{display:flex}
+}
+
+/* ACTIVE CATEGORY CHIP */
+.cat-chip.active-cat{border-color:var(--ink);background:var(--ink);color:var(--white)}
+.cat-chip.active-cat .cat-chip__count{color:rgba(255,255,255,.5)}
+
+/* FORM FIELD ERROR */
+.form-input.error{border-color:var(--rose);box-shadow:0 0 0 3px rgba(255,62,108,.1)}
+.field-error{font-size:12px;color:var(--rose);margin-top:5px;display:none}
+.field-error.show{display:block}
+
+/* CLEAR SEARCH BUTTON */
+.search-clear{padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--border);color:var(--muted);cursor:pointer;background:var(--white);transition:all .15s;display:none}
+.search-clear.show{display:block}
+.search-clear:hover{border-color:var(--rose);color:var(--rose)}
+
+/* HOW IT WORKS CTA */
+.how-cta{text-align:center;margin-top:40px}
+
+/* FOOTER SOCIAL ICONS */
+.footer__social{display:flex;gap:10px;margin-top:16px}
+.footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s}
+.footer__social a:hover{background:rgba(255,255,255,.12)}
+
 </style>
 </head>
 <body>
 
 <!-- ADMIN BAR -->
+<a class="skip-link" href="#apps">Skip to content</a>
+
 <div class="admin-bar">
   <div class="admin-bar__inner">
-    🛠️ You are previewing AppAholic Marketplace
-    <a href="#admin-note">→ Admin Dashboard available separately</a>
+    A <strong>JustServicesPro</strong> product &nbsp;·&nbsp; Questions? <a href="mailto:info@justservices.pro">info@justservices.pro</a>
   </div>
 </div>
 
@@ -542,14 +605,36 @@ select.form-input { cursor: pointer; }
       <ul class="nav__links">
         <li><a href="#apps" class="active">Browse Apps</a></li>
         <li><a href="#categories">Categories</a></li>
+        <li><a href="#calculator">Budget Calc</a></li>
         <li><a href="#request">Request an App</a></li>
         <li><a href="#how">How it Works</a></li>
       </ul>
       <div class="nav__actions">
         <button class="btn btn-ghost" onclick="showToast('Sign in coming soon!', '🔐')">Sign In</button>
         <button class="btn btn-primary" onclick="scrollToSection('request')">Submit Request</button>
+        <button class="nav-drawer-toggle" onclick="openDrawer()" aria-label="Open menu">&#9776;</button>
       </div>
     </div>
+  </div>
+</nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
+<nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation">
+  <div class="nav-drawer__header">
+    <div class="nav-drawer__logo"><span style="width:8px;height:8px;background:var(--volt);border-radius:50%;display:inline-block"></span>AppAholic</div>
+    <button class="nav-drawer__close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <ul class="nav-drawer__links">
+    <li><a href="#apps" onclick="closeDrawer()">Browse Apps</a></li>
+    <li><a href="#categories" onclick="closeDrawer()">Categories</a></li>
+    <li><a href="#calculator" onclick="closeDrawer()">Budget Calculator</a></li>
+    <li><a href="#request" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="#how" onclick="closeDrawer()">How it Works</a></li>
+  </ul>
+  <div class="nav-drawer__actions">
+    <button class="btn btn-ghost" onclick="showToast('Sign in coming soon!','🔐');closeDrawer()">Sign In</button>
+    <button class="btn btn-primary" onclick="scrollToSection('request');closeDrawer()">Submit Request</button>
   </div>
 </nav>
 
@@ -654,6 +739,7 @@ select.form-input { cursor: pointer; }
         <option>AI Tools</option>
         <option>Utilities</option>
       </select>
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">&#x2715; Clear</button>
       <button class="search-bar__btn">Search</button>
     </div>
   </div>
@@ -1052,6 +1138,11 @@ select.form-input { cursor: pointer; }
         <div class="step-desc">All purchases include lifetime updates. New versions appear automatically in your account — no rebuying needed.</div>
       </div>
     </div>
+    <div class="how-cta">
+      <button class="btn btn-primary btn-lg" onclick="scrollToSection('apps')">Start Browsing Apps</button>
+      &nbsp;
+      <button class="btn btn-ghost btn-lg" onclick="scrollToSection('request')">Request a Custom App</button>
+    </div>
   </div>
 </section>
 
@@ -1107,50 +1198,59 @@ select.form-input { cursor: pointer; }
           <span style="width:8px;height:8px;background:var(--volt);border-radius:50%;display:inline-block"></span>
           AppAholic
         </div>
-        <div class="footer__tagline">The marketplace for utility and productivity apps that actually solve real problems.</div>
-        <div class="payment-badges">
+        <div class="footer__tagline">The marketplace for utility and productivity apps that actually solve real workflows. A <strong style="color:rgba(255,255,255,.7)">JustServicesPro</strong> product.</div>
+        <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,.35)">
+          <a href="mailto:info@justservices.pro" style="color:rgba(255,255,255,.45);transition:color .2s" onmouseover="this.style.color='rgba(200,255,0,.8)'" onmouseout="this.style.color='rgba(255,255,255,.45)'">info@justservices.pro</a>
+        </div>
+        <div class="payment-badges" style="margin-top:14px">
           <span class="payment-badge">Flutterwave</span>
           <span class="payment-badge">SSL Secure</span>
-          <span class="payment-badge">₦ NGN</span>
+          <span class="payment-badge">&#x20A6; NGN</span>
+        </div>
+        <div class="footer__social">
+          <a href="#" title="Twitter / X" aria-label="AppAholic on Twitter">&#x1D54F;</a>
+          <a href="#" title="Instagram" aria-label="AppAholic on Instagram">&#x1F4F7;</a>
+          <a href="#" title="LinkedIn" aria-label="AppAholic on LinkedIn">in</a>
+          <a href="#" title="WhatsApp" aria-label="Contact on WhatsApp">&#x1F4AC;</a>
         </div>
       </div>
       <div>
         <div class="footer__col-title">Marketplace</div>
         <ul class="footer__links">
-          <li><a href="#">Browse Apps</a></li>
-          <li><a href="#">Free Apps</a></li>
-          <li><a href="#">New Releases</a></li>
-          <li><a href="#">Top Rated</a></li>
-          <li><a href="#">Categories</a></li>
+          <li><a href="#apps">Browse Apps</a></li>
+          <li><a href="#apps" onclick="document.getElementById('categoryFilter').value='';document.querySelectorAll('.filter-tab')[0].click()">Free Apps</a></li>
+          <li><a href="#apps" onclick="document.querySelectorAll('.filter-tab')[3].click()">New Releases</a></li>
+          <li><a href="#apps" onclick="document.querySelectorAll('.filter-tab')[4].click()">Top Rated</a></li>
+          <li><a href="#categories">Categories</a></li>
         </ul>
       </div>
       <div>
         <div class="footer__col-title">Support</div>
         <ul class="footer__links">
-          <li><a href="#">Help Center</a></li>
-          <li><a href="#">Request an App</a></li>
-          <li><a href="#">Download Issues</a></li>
-          <li><a href="#">Refund Policy</a></li>
-          <li><a href="#">Contact Us</a></li>
+          <li><a href="#how">How it Works</a></li>
+          <li><a href="#request">Request an App</a></li>
+          <li><a href="mailto:info@justservices.pro">Download Issues</a></li>
+          <li><a href="mailto:info@justservices.pro">Refund Policy</a></li>
+          <li><a href="mailto:info@justservices.pro">Contact Us</a></li>
         </ul>
       </div>
       <div>
         <div class="footer__col-title">Company</div>
         <ul class="footer__links">
+          <li><a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro</a></li>
           <li><a href="#">About AppAholic</a></li>
           <li><a href="#">Blog</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Use</a></li>
-          <li><a href="#" id="admin-note">Admin Portal →</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
-      <div>© 2025 AppAholic. All rights reserved.</div>
+      <div id="footerCopy">&copy; 2025 AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd. All rights reserved.</div>
       <div class="footer__bottom-right">
         <a href="#">Privacy</a>
         <a href="#">Terms</a>
-        <a href="#">Cookies</a>
+        <a href="mailto:info@justservices.pro">Contact</a>
       </div>
     </div>
   </div>
@@ -1541,6 +1641,57 @@ function scrollToSection(id){
 
 /* ── INIT ──────────────────────────────────────────────────────── */
 renderApps(APPS);
+
+/* MOBILE DRAWER */
+function openDrawer(){
+  document.getElementById('navDrawer').classList.add('open');
+  document.getElementById('navOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDrawer(){
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* DYNAMIC COPYRIGHT YEAR */
+(function(){
+  var el=document.getElementById('footerCopy');
+  if(el) el.innerHTML=el.innerHTML.replace('2025', new Date().getFullYear());
+})();
+
+/* SEARCH CLEAR BUTTON */
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchClear').classList.remove('show');
+  filterApps();
+}
+
+/* CATEGORY CHIP ACTIVE STATE */
+(function(){
+  var chips=document.querySelectorAll('.cat-chip');
+  chips.forEach(function(chip){
+    chip.addEventListener('click',function(){
+      chips.forEach(function(c){c.classList.remove('active-cat')});
+      chip.classList.add('active-cat');
+    });
+  });
+})();
+
+/* DYNAMIC CATEGORY COUNTS */
+(function(){
+  var counts={};
+  APPS.forEach(function(a){ counts[a.category]=(counts[a.category]||0)+1; });
+  document.querySelectorAll('.cat-chip').forEach(function(chip){
+    var label=chip.querySelector('.cat-chip__label');
+    var countEl=chip.querySelector('.cat-chip__count');
+    if(label && countEl){
+      var cat=label.textContent.trim();
+      if(counts[cat]) countEl.textContent=counts[cat]+' app'+(counts[cat]>1?'s':'');
+    }
+  });
+})();
+
 </script>
 </body>
 </html>
