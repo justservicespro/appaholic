@@ -470,6 +470,55 @@ select.form-input { cursor: pointer; }
 .check-chip:has(input:checked) {
   background: var(--ink); color: var(--white); border-color: var(--ink);
 }
+
+.calc-section{padding:76px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.calc-inner{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:start}
+.calc-left p{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:24px}
+.calc-hints{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.calc-hint{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--muted);line-height:1.6}
+.calc-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:32px;box-shadow:var(--shadow-md)}
+.calc-row{margin-bottom:20px}
+.calc-row label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--font-mono);margin-bottom:10px}
+.calc-options{display:flex;flex-wrap:wrap;gap:8px}
+.calc-opt{padding:8px 14px;border-radius:var(--r-md);font-size:13px;font-weight:500;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .15s}
+.calc-opt:hover{border-color:var(--ink)}.calc-opt.sel{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.calc-result{background:var(--ink);border-radius:var(--r-lg);padding:22px 24px;margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.calc-result__lbl{font-size:11px;color:rgba(255,255,255,.45);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.calc-result__price{font-family:var(--font-display);font-size:30px;font-weight:800;color:var(--volt);letter-spacing:-.5px}
+.calc-result__range{font-size:12px;color:rgba(255,255,255,.35);margin-top:4px}
+.calc-breakdown{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.calc-brow{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:8px 12px;border-radius:var(--r-sm);background:var(--surface)}
+.calc-brow.total{background:var(--ink)}
+.calc-brow__lbl{color:var(--muted)}.calc-brow.total .calc-brow__lbl{color:rgba(255,255,255,.5)}
+.calc-brow__val{font-weight:600;font-family:var(--font-mono);color:var(--ink)}.calc-brow.total .calc-brow__val{color:var(--volt)}
+.calc-note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+.form-progress{margin-bottom:28px}
+.form-progress__steps{display:flex;align-items:flex-start}
+.form-progress__step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.form-progress__step:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;right:-50%;height:2px;background:var(--border);z-index:0}
+.form-progress__step.done::after,.form-progress__step.active::after{background:var(--volt)}
+.form-progress__dot{width:27px;height:27px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--font-mono);color:var(--muted);position:relative;z-index:1;transition:all .25s}
+.form-progress__step.active .form-progress__dot{border-color:var(--ink);background:var(--ink);color:var(--white)}
+.form-progress__step.done .form-progress__dot{border-color:#4A7C00;background:var(--volt);color:var(--ink)}
+.form-progress__label{font-size:10px;font-weight:600;color:var(--muted);text-align:center;font-family:var(--font-mono);letter-spacing:.04em;text-transform:uppercase;margin-top:7px}
+.form-progress__step.active .form-progress__label{color:var(--ink)}
+.form-progress__step.done .form-progress__label{color:#4A7C00}
+.form-step{display:none}.form-step.active{display:block;animation:stepIn .22s ease}
+@keyframes stepIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.step-heading{font-family:var(--font-display);font-size:17px;font-weight:800;margin-bottom:4px;letter-spacing:-.3px}
+.step-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.check-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.check-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;font-size:13px;font-weight:500;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .15s;user-select:none}
+.check-chip input{display:none}.check-chip:hover{border-color:var(--ink)}
+.check-chip:has(input:checked){background:var(--ink);color:var(--white);border-color:var(--ink)}
+.form-nav{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.btn-form-back{padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--border);color:var(--muted);transition:all .18s;cursor:pointer;background:none;font-family:inherit}
+.btn-form-back:hover{border-color:var(--ink);color:var(--ink)}
+.btn-form-next,.btn-form-submit{padding:10px 22px;border-radius:999px;font-size:13px;font-weight:700;background:var(--ink);color:var(--white);transition:all .2s;cursor:pointer;border:none;font-family:inherit}
+.btn-form-next:hover,.btn-form-submit:hover{background:var(--indigo)}
+.btn-form-submit{border-radius:var(--r-lg);padding:12px 26px;font-size:14px;font-family:var(--font-display)}
+@media(max-width:960px){.calc-inner{grid-template-columns:1fr;gap:40px}}
+
 </style>
 </head>
 <body>
@@ -508,6 +557,11 @@ select.form-input { cursor: pointer; }
 <section class="hero">
   <div class="hero__grid-bg"></div>
   <div class="hero__volt-glow"></div>
+  
+  <div class="hero__img-wrap" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80" alt="" loading="eager"/>
+  </div>
+
   <div class="container">
     <div class="hero__inner">
       <div>
@@ -697,8 +751,89 @@ select.form-input { cursor: pointer; }
   </div>
 </section>
 
+
+<!-- BUDGET CALCULATOR -->
+<section class="calc-section" id="calculator">
+  <div class="container">
+    <div class="calc-inner">
+      <div class="calc-left">
+        <div class="section-eyebrow">Project estimator</div>
+        <h2 class="section-title">How much will your app cost?</h2>
+        <p>Adjust the scope and get an instant ballpark estimate. Every project is quoted individually &mdash; this gives you a realistic starting point before submitting a request.</p>
+        <div class="calc-hints">
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#128203;</span><span>Estimates cover standard builds. Complex AI features or multi-platform needs may shift pricing.</span></div>
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#9889;</span><span>Rush delivery under 2 weeks adds 30% to the estimate.</span></div>
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#127873;</span><span>Apps listed on AppAholic get discounted &mdash; we share revenue instead of charging full rate.</span></div>
+        </div>
+      </div>
+      <div class="calc-card">
+        <div class="calc-row">
+          <label>App Type</label>
+          <div class="calc-options" id="calc-type">
+            <button class="calc-opt sel" data-val="utility" onclick="calcPick(this,'type')">Utility / Tool</button>
+            <button class="calc-opt" data-val="dashboard" onclick="calcPick(this,'type')">Dashboard</button>
+            <button class="calc-opt" data-val="ecommerce" onclick="calcPick(this,'type')">E-commerce</button>
+            <button class="calc-opt" data-val="ai" onclick="calcPick(this,'type')">AI-powered</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Platform</label>
+          <div class="calc-options" id="calc-platform">
+            <button class="calc-opt sel" data-val="web" onclick="calcPick(this,'platform')">Web only</button>
+            <button class="calc-opt" data-val="mobile" onclick="calcPick(this,'platform')">Mobile only</button>
+            <button class="calc-opt" data-val="both" onclick="calcPick(this,'platform')">Web + Mobile</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Complexity</label>
+          <div class="calc-options" id="calc-complexity">
+            <button class="calc-opt sel" data-val="basic" onclick="calcPick(this,'complexity')">Basic (3&ndash;5)</button>
+            <button class="calc-opt" data-val="standard" onclick="calcPick(this,'complexity')">Standard (6&ndash;10)</button>
+            <button class="calc-opt" data-val="advanced" onclick="calcPick(this,'complexity')">Advanced (10+)</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Integrations</label>
+          <div class="calc-options" id="calc-integrations">
+            <button class="calc-opt sel" data-val="none" onclick="calcPick(this,'integrations')">None</button>
+            <button class="calc-opt" data-val="some" onclick="calcPick(this,'integrations')">1&ndash;2 (email, SMS)</button>
+            <button class="calc-opt" data-val="many" onclick="calcPick(this,'integrations')">3+ (APIs, payments)</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Admin Dashboard</label>
+          <div class="calc-options" id="calc-admin">
+            <button class="calc-opt sel" data-val="no" onclick="calcPick(this,'admin')">Not needed</button>
+            <button class="calc-opt" data-val="basic" onclick="calcPick(this,'admin')">Basic</button>
+            <button class="calc-opt" data-val="full" onclick="calcPick(this,'admin')">Full dashboard</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Timeline</label>
+          <div class="calc-options" id="calc-timeline">
+            <button class="calc-opt sel" data-val="normal" onclick="calcPick(this,'timeline')">Flexible</button>
+            <button class="calc-opt" data-val="rush" onclick="calcPick(this,'timeline')">Rush (+30%)</button>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div>
+            <div class="calc-result__lbl">Estimated Cost</div>
+            <div class="calc-result__price" id="calcPrice">&#x20A6;25,000</div>
+            <div class="calc-result__range" id="calcRange">Range: &#x20A6;20,000 &ndash; &#x20A6;33,000</div>
+          </div>
+          <button class="btn btn-volt" style="font-size:13px;padding:10px 18px;flex-shrink:0" onclick="scrollToSection('request')">Request This &rarr;</button>
+        </div>
+        <div class="calc-breakdown" id="calcBreakdown"></div>
+        <div class="calc-note">This is an estimate, not a quote. Submit a request and we will send a detailed proposal within 48 hours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- REQUEST FORM -->
 <section class="request-section" id="request">
+  <img class="req-bg-img" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&auto=format&fit=crop&q=80" alt="" loading="lazy" aria-hidden="true"/>
+
   <div class="container">
     <div class="request-inner">
       <div class="request-left" style="position:relative">
@@ -731,159 +866,156 @@ select.form-input { cursor: pointer; }
       </div>
 
       <div class="request-form">
-        <h3 style="font-family:var(--font-display);font-size:19px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px">App Request Form</h3>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:22px">The more detail you give, the faster we can build it.</p>
-
-        <!-- Contact -->
-        <div class="form-grid-2">
-          <div class="form-row">
-            <label>Full Name <span>*</span></label>
-            <input class="form-input" type="text" placeholder="e.g. Tunde Bakare" id="reqName"/>
-          </div>
-          <div class="form-row">
-            <label>Email Address <span>*</span></label>
-            <input class="form-input" type="email" placeholder="you@example.com" id="reqEmail"/>
+        <!-- Progress bar -->
+        <div class="form-progress">
+          <div class="form-progress__steps">
+            <div class="form-progress__step active" id="prog-1"><div class="form-progress__dot">1</div><div class="form-progress__label">You</div></div>
+            <div class="form-progress__step" id="prog-2"><div class="form-progress__dot">2</div><div class="form-progress__label">The App</div></div>
+            <div class="form-progress__step" id="prog-3"><div class="form-progress__dot">3</div><div class="form-progress__label">Features</div></div>
+            <div class="form-progress__step" id="prog-4"><div class="form-progress__dot">4</div><div class="form-progress__label">Budget</div></div>
           </div>
         </div>
-
-        <div class="form-row">
-          <label>Phone / WhatsApp <span style="color:var(--muted);font-weight:400">(optional)</span></label>
-          <input class="form-input" type="tel" placeholder="+234 800 000 0000" id="reqPhone"/>
-        </div>
-
-        <!-- App basics -->
-        <div style="margin:18px 0 14px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono)">About the App</div>
-
-        <div class="form-row">
-          <label>App Name / Working Title <span>*</span></label>
-          <input class="form-input" type="text" placeholder="e.g. Invoice Generator Pro" id="reqTitle"/>
-        </div>
-
-        <div class="form-grid-2">
+        <!-- Step 1 -->
+        <div class="form-step active" id="step-1">
+          <div class="step-heading">Tell us about yourself</div>
+          <div class="step-sub">We will use this to send your proposal and follow up.</div>
+          <div class="form-grid-2">
+            <div class="form-row"><label>Full Name <span style="color:var(--rose)">*</span></label><input class="form-input" type="text" id="reqName" placeholder="e.g. Tunde Bakare"/></div>
+            <div class="form-row"><label>Email Address <span style="color:var(--rose)">*</span></label><input class="form-input" type="email" id="reqEmail" placeholder="you@example.com"/></div>
+          </div>
+          <div class="form-row"><label>Phone / WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400">(optional)</span></label><input class="form-input" type="tel" id="reqPhone" placeholder="+234 800 000 0000"/></div>
           <div class="form-row">
-            <label>Category <span>*</span></label>
-            <select class="form-input" id="reqCategory">
-              <option value="">Select category</option>
-              <option>Productivity</option>
-              <option>Finance & Accounting</option>
-              <option>Analytics & Reports</option>
-              <option>HR & Team Management</option>
-              <option>Inventory & Logistics</option>
-              <option>Customer Management (CRM)</option>
-              <option>Security & Privacy</option>
-              <option>Communication & Collaboration</option>
-              <option>AI / Automation Tools</option>
-              <option>Education & Training</option>
-              <option>Other</option>
+            <label>Your role <span style="color:var(--rose)">*</span></label>
+            <select class="form-input" id="reqRole">
+              <option value="">Select your role</option>
+              <option>Freelancer / Sole trader</option><option>Business owner / Founder</option>
+              <option>Manager / Team lead</option><option>Developer / Designer</option>
+              <option>Student</option><option>Other</option>
             </select>
           </div>
+          <div class="form-nav"><div></div><button class="btn-form-next" onclick="nextStep(1)">The App &rarr;</button></div>
+        </div>
+        <!-- Step 2 -->
+        <div class="form-step" id="step-2">
+          <div class="step-heading">About the app</div>
+          <div class="step-sub">Give us the headline &mdash; what is this thing?</div>
+          <div class="form-row"><label>App Name / Title <span style="color:var(--rose)">*</span></label><input class="form-input" type="text" id="reqTitle" placeholder="e.g. Staff Attendance Manager"/></div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label>Category <span style="color:var(--rose)">*</span></label>
+              <select class="form-input" id="reqCategory">
+                <option value="">Select category</option>
+                <option>Productivity</option><option>Finance &amp; Accounting</option><option>Analytics &amp; Reports</option>
+                <option>HR &amp; Team Management</option><option>Inventory &amp; Logistics</option>
+                <option>Customer Management (CRM)</option><option>Security &amp; Privacy</option>
+                <option>Communication &amp; Collaboration</option><option>AI / Automation Tools</option>
+                <option>Education &amp; Training</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Platform <span style="color:var(--rose)">*</span></label>
+              <select class="form-input" id="reqPlatform">
+                <option value="">Select platform</option>
+                <option>Web (Browser)</option><option>Windows Desktop</option><option>Mac Desktop</option>
+                <option>Android Mobile</option><option>iOS Mobile</option><option>Cross-platform</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label>Who will use it? <span style="color:var(--rose)">*</span></label>
+              <select class="form-input" id="reqAudience">
+                <option value="">Select audience</option>
+                <option>Just me</option><option>My small team (2&ndash;10)</option>
+                <option>My company / org</option><option>My customers / clients</option><option>General public</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Est. number of users</label>
+              <select class="form-input" id="reqUsers">
+                <option value="">Not sure yet</option>
+                <option>1&ndash;5</option><option>6&ndash;25</option><option>26&ndash;100</option><option>100&ndash;500</option><option>500+</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row"><label>Similar apps for inspiration?</label><input class="form-input" type="text" id="reqInspiration" placeholder="e.g. Like Clockify but simpler"/></div>
+          <div class="form-nav">
+            <button class="btn-form-back" onclick="prevStep(2)">&larr; Back</button>
+            <button class="btn-form-next" onclick="nextStep(2)">Features &rarr;</button>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="form-step" id="step-3">
+          <div class="step-heading">Problem &amp; features</div>
+          <div class="step-sub">The more specific, the faster we can build it.</div>
+          <div class="form-row"><label>What problem does this solve? <span style="color:var(--rose)">*</span></label><textarea class="form-input" id="reqProblem" placeholder="e.g. I track staff attendance on paper and it is always wrong. Need digital clock-in/out with monthly reports." style="min-height:82px"></textarea></div>
+          <div class="form-row"><label>Must-have features <span style="color:var(--rose)">*</span></label><textarea class="form-input" id="reqFeatures" placeholder="One per line:&#10;Clock-in / clock-out per employee&#10;Monthly PDF report&#10;Admin dashboard&#10;SMS on late arrival" style="min-height:96px"></textarea></div>
           <div class="form-row">
-            <label>Target Platform <span>*</span></label>
-            <select class="form-input" id="reqPlatform">
-              <option value="">Select platform</option>
-              <option>Web (Browser)</option>
-              <option>Windows Desktop</option>
-              <option>Mac Desktop</option>
-              <option>Android Mobile</option>
-              <option>iOS Mobile</option>
-              <option>Cross-platform (All)</option>
+            <label>Integrations needed?</label>
+            <div class="check-chips" id="integrationsWrap">
+              <label class="check-chip"><input type="checkbox" value="whatsapp"/> WhatsApp</label>
+              <label class="check-chip"><input type="checkbox" value="email"/> Email / SMTP</label>
+              <label class="check-chip"><input type="checkbox" value="sms"/> SMS</label>
+              <label class="check-chip"><input type="checkbox" value="flutterwave"/> Flutterwave</label>
+              <label class="check-chip"><input type="checkbox" value="paystack"/> Paystack</label>
+              <label class="check-chip"><input type="checkbox" value="google"/> Google Sheets</label>
+              <label class="check-chip"><input type="checkbox" value="excel"/> Excel / CSV</label>
+              <label class="check-chip"><input type="checkbox" value="none"/> None</label>
+            </div>
+          </div>
+          <div class="form-row"><label>Anything else we should know?</label><textarea class="form-input" id="reqExtra" placeholder="Design preferences, existing systems, dealbreakers..." style="min-height:64px"></textarea></div>
+          <div class="form-nav">
+            <button class="btn-form-back" onclick="prevStep(3)">&larr; Back</button>
+            <button class="btn-form-next" onclick="nextStep(3)">Budget &rarr;</button>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="form-step" id="step-4">
+          <div class="step-heading">Timeline &amp; budget</div>
+          <div class="step-sub">Helps us prioritise and quote accurately.</div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label>How soon do you need it?</label>
+              <select class="form-input" id="reqTimeline">
+                <option value="">No rush</option>
+                <option>ASAP (within 2 weeks)</option><option>Within 1 month</option>
+                <option>Within 3 months</option><option>Planning ahead (3&ndash;6 months)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Budget range</label>
+              <select class="form-input" id="reqBudget">
+                <option value="">I am flexible / open</option>
+                <option>Free (add to catalogue)</option><option>&#x20A6;1,000 &ndash; &#x20A6;5,000</option>
+                <option>&#x20A6;5,000 &ndash; &#x20A6;20,000</option><option>&#x20A6;20,000 &ndash; &#x20A6;50,000</option>
+                <option>&#x20A6;50,000 &ndash; &#x20A6;150,000</option><option>&#x20A6;150,000+</option>
+                <option>Discuss with me first</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>How should the app be delivered?</label>
+            <div class="check-chips">
+              <label class="check-chip"><input type="checkbox" value="marketplace" checked/> Add to AppAholic</label>
+              <label class="check-chip"><input type="checkbox" value="private"/> Private use only</label>
+              <label class="check-chip"><input type="checkbox" value="saas"/> SaaS (charge my users)</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>How did you hear about us?</label>
+            <select class="form-input" id="reqSource">
+              <option value="">Select</option>
+              <option>Google Search</option><option>WhatsApp / Referral</option>
+              <option>Social Media</option><option>Friend / Colleague</option><option>Other</option>
             </select>
           </div>
-        </div>
-
-        <div class="form-grid-2">
-          <div class="form-row">
-            <label>Who will use this app? <span>*</span></label>
-            <select class="form-input" id="reqAudience">
-              <option value="">Select audience</option>
-              <option>Just me (personal use)</option>
-              <option>My small team (2–10 people)</option>
-              <option>My company / organisation</option>
-              <option>My customers / clients</option>
-              <option>General public</option>
-            </select>
+          <div class="form-nav">
+            <button class="btn-form-back" onclick="prevStep(4)">&larr; Back</button>
+            <button class="btn-form-submit" onclick="submitRequest()">&#128640; Submit Request</button>
           </div>
-          <div class="form-row">
-            <label>Estimated number of users</label>
-            <select class="form-input" id="reqUsers">
-              <option value="">Not sure yet</option>
-              <option>1–5</option>
-              <option>6–25</option>
-              <option>26–100</option>
-              <option>100–500</option>
-              <option>500+</option>
-            </select>
-          </div>
+          <div class="form-note">&#128274; Private. A real person reviews every request within 48 hours.</div>
         </div>
-
-        <!-- Problem & features -->
-        <div style="margin:18px 0 14px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono)">Problem & Features</div>
-
-        <div class="form-row">
-          <label>What problem does this app solve? <span>*</span></label>
-          <textarea class="form-input" placeholder="e.g. I currently track staff attendance on paper and it's always inaccurate. I need a simple digital system that records clock-in/out and generates monthly reports." id="reqProblem" style="min-height:90px"></textarea>
-        </div>
-
-        <div class="form-row">
-          <label>Key features you must have <span>*</span></label>
-          <textarea class="form-input" placeholder="List each feature on a new line e.g.&#10;— Clock-in / clock-out per employee&#10;— Monthly attendance PDF report&#10;— Admin dashboard to manage staff&#10;— SMS notification on late arrival" id="reqFeatures" style="min-height:100px"></textarea>
-        </div>
-
-        <div class="form-row">
-          <label>Any apps or tools that inspired this?</label>
-          <input class="form-input" type="text" placeholder="e.g. Similar to Clockify but simpler, or like QuickBooks Lite" id="reqInspiration"/>
-        </div>
-
-        <!-- Integrations -->
-        <div class="form-row">
-          <label>Does it need to connect to anything?</label>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="integrationsWrap">
-            <label class="check-chip"><input type="checkbox" value="whatsapp"/> WhatsApp</label>
-            <label class="check-chip"><input type="checkbox" value="email"/> Email / SMTP</label>
-            <label class="check-chip"><input type="checkbox" value="sms"/> SMS</label>
-            <label class="check-chip"><input type="checkbox" value="flutterwave"/> Flutterwave</label>
-            <label class="check-chip"><input type="checkbox" value="google"/> Google Sheets</label>
-            <label class="check-chip"><input type="checkbox" value="excel"/> Excel / CSV</label>
-            <label class="check-chip"><input type="checkbox" value="paystack"/> Paystack</label>
-            <label class="check-chip"><input type="checkbox" value="none"/> No integrations</label>
-          </div>
-        </div>
-
-        <!-- Timeline & budget -->
-        <div style="margin:18px 0 14px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono)">Timeline & Budget</div>
-
-        <div class="form-grid-2">
-          <div class="form-row">
-            <label>How soon do you need it?</label>
-            <select class="form-input" id="reqTimeline">
-              <option value="">No rush</option>
-              <option>ASAP (within 2 weeks)</option>
-              <option>Within 1 month</option>
-              <option>Within 3 months</option>
-              <option>Planning ahead (3–6 months)</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>Budget range</label>
-            <select class="form-input" id="reqBudget">
-              <option value="">I'm flexible / open to pricing</option>
-              <option>Free (add to catalogue)</option>
-              <option>₦1,000 – ₦5,000</option>
-              <option>₦5,000 – ₦20,000</option>
-              <option>₦20,000 – ₦50,000</option>
-              <option>₦50,000+</option>
-              <option>Discuss with me first</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label>Anything else we should know?</label>
-          <textarea class="form-input" placeholder="Any extra context, existing systems it must work with, design preferences, things you definitely don't want..." id="reqExtra" style="min-height:70px"></textarea>
-        </div>
-
-        <button class="form-submit" onclick="submitRequest()">Submit My App Request →</button>
-        <div class="form-note">🔒 Your info is private. A real person reviews every request within 48 hours.</div>
+      </div>
       </div>
     </div>
   </div>
@@ -1057,6 +1189,81 @@ select.form-input { cursor: pointer; }
 </div>
 
 <script>
+
+/* BUDGET CALCULATOR */
+var CS={type:'utility',platform:'web',complexity:'basic',integrations:'none',admin:'no',timeline:'normal'};
+var CB={utility:25000,dashboard:45000,ecommerce:65000,ai:90000};
+var CP={web:1,mobile:1.3,both:1.7};
+var CC={basic:1,standard:1.5,advanced:2.2};
+var CI={none:0,some:8000,many:20000};
+var CA={no:0,basic:12000,full:25000};
+function calcPick(btn,g){
+  document.querySelectorAll('#calc-'+g+' .calc-opt').forEach(function(b){b.classList.remove('sel')});
+  btn.classList.add('sel');CS[g]=btn.dataset.val;updateCalc();
+}
+function updateCalc(){
+  var b=CB[CS.type]*CP[CS.platform]*CC[CS.complexity]+CI[CS.integrations]+CA[CS.admin];
+  if(CS.timeline==='rush')b*=1.3;
+  b=Math.round(b/1000)*1000;
+  var lo=Math.round(b*.8/1000)*1000,hi=Math.round(b*1.3/1000)*1000;
+  var N=String.fromCharCode(8358);
+  document.getElementById('calcPrice').textContent=N+b.toLocaleString();
+  document.getElementById('calcRange').textContent='Range: '+N+lo.toLocaleString()+' - '+N+hi.toLocaleString();
+  var rows=[
+    {l:'Base ('+CS.type+')',v:N+CB[CS.type].toLocaleString()},
+    {l:'Platform',v:'x'+CP[CS.platform]},
+    {l:'Complexity',v:'x'+CC[CS.complexity]},
+  ];
+  if(CI[CS.integrations])rows.push({l:'Integrations',v:'+'+N+CI[CS.integrations].toLocaleString()});
+  if(CA[CS.admin])rows.push({l:'Admin dashboard',v:'+'+N+CA[CS.admin].toLocaleString()});
+  if(CS.timeline==='rush')rows.push({l:'Rush delivery',v:'+30%'});
+  rows.push({l:'Total estimate',v:N+b.toLocaleString(),t:true});
+  document.getElementById('calcBreakdown').innerHTML=rows.map(function(r){
+    return '<div class="calc-brow'+(r.t?' total':'')+'"><span class="calc-brow__lbl">'+r.l+'</span><span class="calc-brow__val">'+r.v+'</span></div>';
+  }).join('');
+}
+if(document.getElementById('calcBreakdown'))updateCalc();
+
+/* MULTI-STEP FORM */
+var curStep=1;
+function setProgress(s){
+  for(var i=1;i<=4;i++){
+    var el=document.getElementById('prog-'+i);if(!el)continue;
+    el.classList.remove('active','done');
+    if(i<s)el.classList.add('done');
+    else if(i===s)el.classList.add('active');
+  }
+}
+function showStep(s){
+  document.querySelectorAll('.form-step').forEach(function(el){el.classList.remove('active')});
+  var st=document.getElementById('step-'+s);
+  if(st){st.classList.add('active');}
+  setProgress(s);curStep=s;
+}
+function nextStep(from){
+  if(from===1){
+    var n=document.getElementById('reqName').value.trim();
+    var em=document.getElementById('reqEmail').value.trim();
+    var r=document.getElementById('reqRole').value;
+    if(!n||!em||!r){showToast('Please fill all required fields.','⚠️');return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showToast('Please enter a valid email address.','⚠️');return}
+  }
+  if(from===2){
+    var t=document.getElementById('reqTitle').value.trim();
+    var c=document.getElementById('reqCategory').value;
+    var p=document.getElementById('reqPlatform').value;
+    var a=document.getElementById('reqAudience').value;
+    if(!t||!c||!p||!a){showToast('Please fill all required fields.','⚠️');return}
+  }
+  if(from===3){
+    var pr=document.getElementById('reqProblem').value.trim();
+    var f=document.getElementById('reqFeatures').value.trim();
+    if(!pr||!f){showToast('Describe the problem and list the features.','⚠️');return}
+  }
+  showStep(from+1);
+}
+function prevStep(from){showStep(from-1)}
+
 /* ── APP DATA ──────────────────────────────────────────────────── */
 const APPS = [
   {
@@ -1295,20 +1502,14 @@ function handleCardGet(id) {
 }
 
 /* ── REQUEST FORM ──────────────────────────────────────────────── */
-function submitRequest() {
-  const name     = document.getElementById('reqName').value.trim();
-  const email    = document.getElementById('reqEmail').value.trim();
-  const title    = document.getElementById('reqTitle').value.trim();
-  const category = document.getElementById('reqCategory').value;
-  const platform = document.getElementById('reqPlatform').value;
-  const audience = document.getElementById('reqAudience').value;
-  const problem  = document.getElementById('reqProblem').value.trim();
-  const features = document.getElementById('reqFeatures').value.trim();
-
-  if (!name || !email || !title || !category || !platform || !audience || !problem || !features) {
-    showToast('Please fill in all required fields.', '⚠️');
-    return;
-  }
+function submitRequest(){
+  ['reqName','reqEmail','reqPhone','reqTitle','reqProblem','reqFeatures','reqInspiration','reqExtra'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
+  ['reqRole','reqCategory','reqPlatform','reqAudience','reqUsers','reqTimeline','reqBudget','reqSource'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0});
+  var cbs=document.querySelectorAll('#integrationsWrap input[type=checkbox]');
+  cbs.forEach(function(c){c.checked=false});
+  showStep(1);
+  showToast('Request submitted! We will review within 48 hours &#127881;','✅');
+}
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     showToast('Please enter a valid email address.', '⚠️');
     return;
@@ -1334,7 +1535,7 @@ function showToast(msg, icon='✅') {
 }
 
 /* ── UTILS ─────────────────────────────────────────────────────── */
-function scrollToSection(id) {
+function scrollToSection(id){
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 }
 
