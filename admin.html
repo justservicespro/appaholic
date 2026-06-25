@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="author" content="JustServicesPro Management and Consulting Ltd"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AppAholic — Admin Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --ink:    #0A0A0F;  --ink-2: #1C1C26;  --ink-3: #2E2E3E;
@@ -14,7 +16,7 @@
   --green:  #00C875;  --teal:   #00B5D8;
   --sidebar-w: 240px;
   --topbar-h:  64px;
-  --font-d: 'Syne', sans-serif;
+  --font-d: 'Plus Jakarta Sans', sans-serif;
   --font-b: 'Inter', sans-serif;
   --font-m: 'JetBrains Mono', monospace;
   --r-sm: 8px; --r-md: 12px; --r-lg: 18px;
@@ -93,7 +95,7 @@ input,select,textarea{font-family:inherit}
 .topbar__period button.active { background: var(--ink); color: var(--white); }
 
 /* ── CONTENT ── */
-.content { padding: 28px; flex: 1; }
+.content { padding: 28px 28px 56px; flex: 1; }
 
 /* ── PAGE ── */
 .page { display: none; }
@@ -255,7 +257,7 @@ tbody tr:hover td { background: var(--surface); }
       <div class="sidebar__avatar">A</div>
       <div>
         <div class="sidebar__user-name">Admin</div>
-        <div class="sidebar__user-role">Super Admin</div>
+        <div class="sidebar__user-role">Super Admin &mdash; JustServicesPro</div>
       </div>
     </div>
   </div>
@@ -696,7 +698,7 @@ tbody tr:hover td { background: var(--surface); }
             <div class="card__body">
               <div class="form-row"><label>Marketplace Name</label><input class="form-input" value="AppAholic"/></div>
               <div class="form-row"><label>Tagline</label><input class="form-input" value="Apps that actually get work done."/></div>
-              <div class="form-row"><label>Support Email</label><input class="form-input" type="email" value="support@appaholic.com"/></div>
+              <div class="form-row"><label>Support Email</label><input class="form-input" type="email" value="info@justservices.pro"/></div>
               <div class="form-grid-2">
                 <div class="form-row"><label>Default Currency</label><select class="form-input"><option>NGN</option><option>USD</option></select></div>
                 <div class="form-row"><label>Tax Rate (%)</label><input class="form-input" type="number" value="7.5"/></div>
@@ -919,5 +921,9 @@ function showToast(msg, icon='✅') {
   setTimeout(()=>t.classList.remove('show'),3200);
 }
 </script>
+<div style="position:fixed;bottom:0;left:240px;right:0;background:var(--ink-2);border-top:1px solid rgba(255,255,255,.06);padding:8px 28px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.3);z-index:30;font-family:var(--font-m)">
+  <span>AppAholic Admin &mdash; JustServicesPro Management and Consulting Ltd</span>
+  <a href="mailto:info@justservices.pro" style="color:rgba(255,255,255,.35);transition:color .15s" onmouseover="this.style.color='rgba(200,255,0,.7)'" onmouseout="this.style.color='rgba(255,255,255,.35)'">info@justservices.pro</a>
+</div>
 </body>
 </html>
