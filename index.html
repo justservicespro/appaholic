@@ -129,7 +129,7 @@ input, textarea, select { font-family: inherit; }
   background: radial-gradient(circle, rgba(200,255,0,.18) 0%, transparent 70%);
   pointer-events: none;
 }
-.hero__inner { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.hero__inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .hero__eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 6px 14px; border-radius: 999px;
@@ -581,6 +581,61 @@ select.form-input { cursor: pointer; }
 .footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s}
 .footer__social a:hover{background:rgba(255,255,255,.12)}
 
+/* ── IMAGE 1: Hero partial right-side image ─────────────────────────────── */
+.hero__img-wrap {
+  position: absolute;
+  top: 0; right: 0;
+  width: 48%; height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero__img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: .18;
+  -webkit-mask-image:
+    linear-gradient(to left,  black 0%, black 20%, transparent 85%),
+    linear-gradient(to top,   transparent 0%, black 25%, black 100%);
+  mask-image:
+    linear-gradient(to left,  black 0%, black 20%, transparent 85%),
+    linear-gradient(to top,   transparent 0%, black 25%, black 100%);
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+}
+@media (max-width: 960px) {
+  .hero__img-wrap { width: 100%; opacity: .06; }
+}
+
+/* ── IMAGE 2: Request section near-opaque background ───────────────────── */
+.req-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: .07;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+}
+.request-section {
+  position: relative;
+  overflow: hidden;
+}
+.request-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(135deg, rgba(10,10,15,.97) 0%, rgba(28,28,38,.93) 100%);
+}
+.request-inner {
+  position: relative;
+  z-index: 2;
+}
+
 </style>
 </head>
 <body>
@@ -603,7 +658,7 @@ select.form-input { cursor: pointer; }
         AppAholic
       </a>
       <ul class="nav__links">
-        <li><a href="#apps" class="active">Browse Apps</a></li>
+        <li><a href="marketplace.html" class="active">Browse Apps</a></li>
         <li><a href="#categories">Categories</a></li>
         <li><a href="#calculator">Budget Calc</a></li>
         <li><a href="#request">Request an App</a></li>
@@ -664,7 +719,7 @@ select.form-input { cursor: pointer; }
           Free and premium apps — all in one place.
         </p>
         <div class="hero__cta">
-          <button class="btn btn-volt btn-lg" onclick="scrollToSection('apps')">Browse Apps</button>
+          <a href="marketplace.html" class="btn btn-volt btn-lg">Browse Apps</a>
           <button class="btn btn-ghost btn-lg" style="color:rgba(255,255,255,.7); border-color:rgba(255,255,255,.2)" onclick="scrollToSection('request')">Request an App →</button>
         </div>
         <div class="hero__stats">
@@ -819,14 +874,17 @@ select.form-input { cursor: pointer; }
     <div class="apps-header">
       <div>
         <div class="section-eyebrow">App catalogue</div>
-        <h2 class="section-title" style="margin-bottom:0">All Apps</h2>
+        <h2 class="section-title" style="margin-bottom:0">Featured Apps</h2>
       </div>
+      <div style="display:flex;align-items:center;gap:12px">
+      <a href="marketplace.html" class="btn btn-ghost btn-sm" style="font-size:13px">View full catalogue →</a>
       <div class="filter-tabs">
         <button class="filter-tab active" onclick="setFilter(this,'all')">All</button>
         <button class="filter-tab" onclick="setFilter(this,'free')">Free</button>
         <button class="filter-tab" onclick="setFilter(this,'paid')">Paid</button>
         <button class="filter-tab" onclick="setFilter(this,'new')">New</button>
         <button class="filter-tab" onclick="setFilter(this,'top')">Top Rated</button>
+      </div>
       </div>
     </div>
 
