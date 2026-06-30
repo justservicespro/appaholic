@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>App Marketplace — Browse All Apps | AppAholic by JustServicesPro</title>
-<meta name="description" content="Browse all utility and productivity apps on AppAholic. Filter by category, price, rating and platform. Free and premium apps for Nigerian businesses and freelancers."/>
+<title>App Marketplace - Web, Desktop and Mobile Apps | AppAholic</title>
+<meta name="description" content="Browse Web, Desktop (Windows and Mac) and Mobile (Android and iOS) utility and productivity apps. Buy once, download instantly. By JustServicesPro."/>
 <meta name="robots" content="index, follow"/>
-<meta property="og:title" content="App Marketplace — AppAholic"/>
-<meta property="og:description" content="Browse all utility and productivity apps. Free and premium tools built for real workflows."/>
-<meta property="og:url" content="https://appaholic.justservices.pro/marketplace"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/marketplace"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -19,227 +17,244 @@
   --border:#E4E4F0;--surface:#F7F7FB;--white:#FFFFFF;
   --volt:#C8FF00;--volt-dim:#9FCC00;--indigo:#4B3EFF;
   --rose:#FF3E6C;--amber:#FFB800;--green:#00C875;
+  --web-c:#4B3EFF;--desktop-c:#5B30C8;--mobile-c:#D4700A;
   --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;
-  --shadow-sm:0 1px 3px rgba(10,10,15,.06),0 1px 2px rgba(10,10,15,.04);
+  --shadow-sm:0 1px 3px rgba(10,10,15,.06);
   --shadow-md:0 4px 16px rgba(10,10,15,.08),0 2px 6px rgba(10,10,15,.05);
   --shadow-lg:0 12px 40px rgba(10,10,15,.12),0 4px 12px rgba(10,10,15,.07);
   --font-display:'Plus Jakarta Sans',sans-serif;
   --font-body:'Inter',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
-  --sidebar-w:260px;
+  --sidebar-w:252px;
+  --nav-h:64px;
+  --tabs-h:52px;
+  --toolbar-h:56px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--font-body);background:var(--surface);color:var(--ink);-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
-input,select,textarea{font-family:inherit}
+input,select{font-family:inherit}
 
-/* ── NAV ── */
+/* NAV */
 .nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.nav__inner{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px;max-width:1400px;margin:0 auto;padding:0 24px}
-.nav__logo{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
-.nav__logo-dot{width:10px;height:10px;border-radius:50%;background:var(--volt);border:2px solid var(--ink);display:inline-block}
-.nav__links{display:flex;align-items:center;gap:4px;list-style:none}
-.nav__links a{padding:6px 12px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);transition:color .2s,background .2s}
+.nav__inner{max-width:1440px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:var(--nav-h);gap:4px}
+.nav__logo{font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;margin-right:12px}
+.nav__logo-dot{width:9px;height:9px;border-radius:50%;background:var(--volt);border:2px solid var(--ink)}
+.nav__links{display:flex;align-items:center;gap:2px;list-style:none;flex:1}
+.nav__links a{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);transition:color .18s,background .18s;white-space:nowrap}
 .nav__links a:hover{color:var(--ink);background:var(--surface)}
-.nav__links a.active{color:var(--ink);background:var(--surface)}
-.nav__actions{display:flex;align-items:center;gap:10px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:999px;font-size:14px;font-weight:600;transition:all .2s}
-.btn-ghost{border:1.5px solid var(--border);color:var(--ink)}
-.btn-ghost:hover{border-color:var(--ink)}
-.btn-primary{background:var(--ink);color:var(--white)}
-.btn-primary:hover{background:var(--ink-3);transform:translateY(-1px);box-shadow:var(--shadow-md)}
-.btn-volt{background:var(--volt);color:var(--ink);font-weight:700}
-.btn-volt:hover{background:var(--volt-dim);transform:translateY(-1px)}
-.btn-sm{padding:7px 16px;font-size:13px}
+.nav__links a.active{color:var(--ink);font-weight:700}
+.nav__links .pl{display:flex;align-items:center;gap:4px}
+.nav__links .pl.aw{color:var(--web-c);background:rgba(75,62,255,.07)}
+.nav__links .pl.ad{color:var(--desktop-c);background:rgba(91,48,200,.07)}
+.nav__links .pl.am{color:var(--mobile-c);background:rgba(212,112,10,.07)}
+.nav-sep{width:1px;height:18px;background:var(--border);margin:0 6px;flex-shrink:0}
+.nav__actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:13px;font-weight:600;transition:all .2s;white-space:nowrap}
+.btn-ghost{border:1.5px solid var(--border);color:var(--ink)}.btn-ghost:hover{border-color:var(--ink)}
+.btn-primary{background:var(--ink);color:var(--white)}.btn-primary:hover{background:var(--ink-3)}
 
-/* ── MARKETPLACE HERO BANNER ── */
-.mkt-banner{
-  background:var(--ink);color:var(--white);
-  padding:52px 0 48px;position:relative;overflow:hidden;
-}
-.mkt-banner__glow{position:absolute;top:-80px;right:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,255,0,.14) 0%,transparent 70%);pointer-events:none}
-.mkt-banner__inner{max-width:1400px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
-.mkt-banner__eyebrow{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:999px;border:1px solid rgba(200,255,0,.35);background:rgba(200,255,0,.07);color:var(--volt);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;font-family:var(--font-mono)}
-.mkt-banner__title{font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-1px;margin-bottom:12px;line-height:1.1}
-.mkt-banner__sub{font-size:15px;color:rgba(255,255,255,.55);max-width:500px;line-height:1.7;margin-bottom:28px}
-.mkt-banner__stats{display:flex;gap:28px;flex-wrap:wrap}
-.mkt-stat{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:var(--r-lg);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
-.mkt-stat__num{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--volt)}
-.mkt-stat__label{font-size:12px;color:rgba(255,255,255,.45)}
+/* BANNER */
+.banner{background:var(--ink);color:var(--white);padding:42px 0 36px;position:relative;overflow:hidden;transition:background .35s}
+.banner.b-web    {background:linear-gradient(135deg,#0D0B2A 0%,#0A0A1F 100%)}
+.banner.b-desktop{background:linear-gradient(135deg,#120A2E 0%,#0A0A0F 100%)}
+.banner.b-mobile {background:linear-gradient(135deg,#1E0A00 0%,#0A0A0F 100%)}
+.banner__glow{position:absolute;top:-80px;right:-40px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(200,255,0,.13) 0%,transparent 70%);pointer-events:none;transition:background .35s}
+.banner.b-web     .banner__glow{background:radial-gradient(circle,rgba(75,62,255,.28) 0%,transparent 70%)}
+.banner.b-desktop .banner__glow{background:radial-gradient(circle,rgba(91,48,200,.3) 0%,transparent 70%)}
+.banner.b-mobile  .banner__glow{background:radial-gradient(circle,rgba(212,112,10,.32) 0%,transparent 70%)}
+.banner__inner{max-width:1440px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+.banner__eyebrow{display:inline-flex;align-items:center;gap:7px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-family:var(--font-mono);margin-bottom:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:rgba(255,255,255,.65);transition:all .3s}
+.banner.b-web     .banner__eyebrow{border-color:rgba(75,62,255,.45);background:rgba(75,62,255,.14);color:#B4AFFF}
+.banner.b-desktop .banner__eyebrow{border-color:rgba(91,48,200,.45);background:rgba(91,48,200,.14);color:#C8AAFF}
+.banner.b-mobile  .banner__eyebrow{border-color:rgba(212,112,10,.45);background:rgba(212,112,10,.14);color:#FFBC80}
+.banner__title{font-family:var(--font-display);font-size:clamp(24px,3vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:9px;line-height:1.1}
+.banner__sub{font-size:14px;color:rgba(255,255,255,.5);max-width:520px;line-height:1.75;margin-bottom:22px}
+.banner__stats{display:flex;gap:16px;flex-wrap:wrap}
+.bstat{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:var(--r-lg);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.bstat__num{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--volt)}
+.bstat__lbl{font-size:11px;color:rgba(255,255,255,.4);font-family:var(--font-mono)}
 
-/* ── SEARCH + TOOLBAR ── */
-.mkt-toolbar{background:var(--white);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:64px;z-index:90}
-.mkt-toolbar__inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.mkt-search{display:flex;align-items:center;flex:1;min-width:240px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:border-color .2s,box-shadow .2s}
-.mkt-search:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,15,.06)}
-.mkt-search__icon{padding:0 12px 0 16px;color:var(--muted);font-size:16px;flex-shrink:0}
-.mkt-search__input{flex:1;padding:11px 0;font-size:14px;border:none;outline:none;background:transparent;color:var(--ink)}
-.mkt-search__input::placeholder{color:var(--muted)}
-.mkt-search__clear{padding:6px 12px;font-size:12px;font-weight:600;color:var(--muted);transition:color .15s;display:none}
-.mkt-search__clear.show{display:block}
-.mkt-search__clear:hover{color:var(--rose)}
-.sort-select{padding:10px 14px;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--white);font-size:13px;color:var(--ink);outline:none;cursor:pointer;transition:border-color .2s}
-.sort-select:focus{border-color:var(--ink)}
-.view-toggle{display:flex;border:1.5px solid var(--border);border-radius:var(--r-md);overflow:hidden}
-.view-btn{padding:9px 12px;font-size:16px;color:var(--muted);transition:all .15s;line-height:1}
-.view-btn.active{background:var(--ink);color:var(--white)}
-.results-count{font-size:13px;color:var(--muted);white-space:nowrap;font-family:var(--font-mono)}
+/* PLATFORM TABS */
+.ptabs{background:var(--white);border-bottom:1.5px solid var(--border);position:sticky;top:var(--nav-h);z-index:90}
+.ptabs__inner{max-width:1440px;margin:0 auto;padding:0 24px;display:flex;overflow-x:auto;scrollbar-width:none}
+.ptabs__inner::-webkit-scrollbar{display:none}
+.ptab{display:flex;align-items:center;gap:7px;padding:13px 20px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2.5px solid transparent;background:none;font-family:var(--font-body);transition:all .18s;flex-shrink:0}
+.ptab:hover{color:var(--ink)}
+.ptab.on{color:var(--ink);border-bottom-color:var(--ink)}
+.ptab.on.tw{color:var(--web-c);border-bottom-color:var(--web-c)}
+.ptab.on.td{color:var(--desktop-c);border-bottom-color:var(--desktop-c)}
+.ptab.on.tm{color:var(--mobile-c);border-bottom-color:var(--mobile-c)}
+.ptab__ico{font-size:17px}
+.ptab__sub{font-size:10px;color:var(--muted);font-family:var(--font-mono);font-weight:400;max-width:0;overflow:hidden;opacity:0;white-space:nowrap;transition:all .22s}
+.ptab.on .ptab__sub{max-width:160px;opacity:.65}
+.pcnt{font-size:10px;font-weight:700;font-family:var(--font-mono);padding:2px 7px;border-radius:999px;background:var(--surface);border:1px solid var(--border);transition:all .18s}
+.ptab.on .pcnt{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.ptab.on.tw .pcnt{background:var(--web-c);border-color:var(--web-c)}
+.ptab.on.td .pcnt{background:var(--desktop-c);border-color:var(--desktop-c)}
+.ptab.on.tm .pcnt{background:var(--mobile-c);border-color:var(--mobile-c)}
 
-/* ── LAYOUT: SIDEBAR + GRID ── */
-.mkt-layout{max-width:1400px;margin:0 auto;padding:28px 24px;display:grid;grid-template-columns:var(--sidebar-w) 1fr;gap:28px;align-items:start}
+/* TOOLBAR */
+.toolbar{background:var(--white);border-bottom:1px solid var(--border);padding:9px 0;position:sticky;top:calc(var(--nav-h) + var(--tabs-h));z-index:85}
+.toolbar__inner{max-width:1440px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.tsearch{display:flex;align-items:center;flex:1;min-width:180px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:border-color .2s}
+.tsearch:focus-within{border-color:var(--ink)}
+.tsearch__ico{padding:0 10px 0 14px;color:var(--muted);font-size:15px}
+.tsearch__inp{flex:1;padding:9px 0;font-size:13px;border:none;outline:none;background:transparent;color:var(--ink)}
+.tsearch__inp::placeholder{color:var(--muted)}
+.tsearch__clr{padding:6px 12px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;display:none;transition:color .15s}
+.tsearch__clr.show{display:block}.tsearch__clr:hover{color:var(--rose)}
+.tselect{padding:9px 11px;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--white);font-size:13px;color:var(--ink);outline:none;cursor:pointer}
+.tselect:focus{border-color:var(--ink)}
+.vt{display:flex;border:1.5px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+.vbtn{padding:8px 11px;font-size:14px;color:var(--muted);background:none;cursor:pointer;transition:all .15s;line-height:1}
+.vbtn.on{background:var(--ink);color:var(--white)}
+.rcnt{font-size:12px;color:var(--muted);font-family:var(--font-mono);white-space:nowrap}
+.filter-btn{display:none;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;border:1.5px solid var(--border);font-size:13px;font-weight:600;cursor:pointer;background:var(--white);transition:all .18s}
+.filter-btn:hover{border-color:var(--ink)}
+.filter-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
+@media(max-width:900px){.filter-btn{display:flex}}
 
-/* ── FILTER SIDEBAR ── */
-.filter-sidebar{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:24px;position:sticky;top:136px}
-.filter-sidebar__title{font-family:var(--font-display);font-size:15px;font-weight:800;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;letter-spacing:-.2px}
-.filter-clear{font-size:12px;font-weight:600;color:var(--indigo);cursor:pointer;transition:opacity .15s}
-.filter-clear:hover{opacity:.7}
-.filter-group{margin-bottom:22px}
-.filter-group__label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-family:var(--font-mono);margin-bottom:10px;display:block}
-.filter-options{display:flex;flex-direction:column;gap:4px}
-.filter-opt{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:var(--r-sm);cursor:pointer;transition:background .15s;font-size:13px;font-weight:500}
-.filter-opt:hover{background:var(--surface)}
-.filter-opt.selected{background:var(--ink);color:var(--white)}
-.filter-opt__count{font-size:11px;font-family:var(--font-mono);opacity:.6}
-.filter-divider{height:1px;background:var(--border);margin:20px 0}
-.price-range{display:flex;flex-direction:column;gap:8px}
-.price-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.price-input{padding:8px 10px;border-radius:var(--r-sm);border:1.5px solid var(--border);font-size:13px;outline:none;transition:border-color .2s;background:var(--surface)}
-.price-input:focus{border-color:var(--ink);background:var(--white)}
-.rating-stars{display:flex;flex-direction:column;gap:4px}
-.rating-opt{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r-sm);cursor:pointer;transition:background .15s;font-size:13px}
-.rating-opt:hover{background:var(--surface)}
-.rating-opt.selected{background:var(--ink);color:var(--white)}
-.stars{color:var(--amber);letter-spacing:1px;font-size:12px}
-.rating-opt.selected .stars{color:var(--volt)}
+/* LAYOUT */
+.mkt{max-width:1440px;margin:0 auto;padding:24px;display:grid;grid-template-columns:var(--sidebar-w) 1fr;gap:22px;align-items:start}
 
-/* ── APP GRID ── */
-.app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
-.app-grid.list-view{grid-template-columns:1fr;gap:12px}
+/* SIDEBAR */
+.sidebar{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;position:sticky;top:calc(var(--nav-h) + var(--tabs-h) + var(--toolbar-h) + 6px)}
+.sidebar__head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sidebar__title{font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:-.2px}
+.clr-btn{font-size:12px;font-weight:600;color:var(--indigo);cursor:pointer}
+.clr-btn:hover{text-decoration:underline}
+.fg{padding:13px 18px;border-bottom:1px solid var(--border)}
+.fg:last-child{border-bottom:none}
+.fg__lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:var(--font-mono);display:block;margin-bottom:7px}
+.fopts{display:flex;flex-direction:column;gap:2px}
+.fopt{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:var(--r-sm);cursor:pointer;transition:background .15s;font-size:13px;font-weight:500}
+.fopt:hover{background:var(--surface)}
+.fopt.sel{background:var(--ink);color:var(--white)}
+.fopt__c{font-size:10px;font-family:var(--font-mono);opacity:.55}
+.fopt.sel .fopt__c{opacity:.45}
 
-/* Grid card */
-.app-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:all .22s;cursor:pointer;position:relative}
-.app-card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.app-card__banner{height:110px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative}
-.app-card__badge{position:absolute;top:10px;right:10px;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:700;font-family:var(--font-mono)}
-.badge-free{background:rgba(200,255,0,.2);color:#4A7C00;border:1px solid rgba(200,255,0,.5)}
-.badge-paid{background:rgba(75,62,255,.1);color:var(--indigo);border:1px solid rgba(75,62,255,.3)}
-.badge-new{background:rgba(255,62,108,.1);color:var(--rose);border:1px solid rgba(255,62,108,.3)}
-.badge-top{background:rgba(255,184,0,.15);color:#7A5700;border:1px solid rgba(255,184,0,.4)}
-.app-card__body{padding:18px}
-.app-card__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.app-card__icon{width:44px;height:44px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:20px;border:1.5px solid var(--border);background:var(--white);margin-top:-32px;position:relative;z-index:1;box-shadow:var(--shadow-sm)}
-.app-card__rating{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--amber)}
-.app-card__name{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-.2px}
-.app-card__cat{font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px}
-.app-card__desc{font-size:12px;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px}
-.app-card__footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border)}
-.app-card__price{font-family:var(--font-display);font-size:17px;font-weight:800}
-.price-free{color:#3A6200}.price-paid{color:var(--ink)}
-.app-card__dl{font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-top:1px}
-.btn-get{padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;background:var(--ink);color:var(--white);transition:all .18s}
-.btn-get:hover{background:var(--indigo)}
-.btn-get.free{background:rgba(200,255,0,.15);color:#3A6200;border:1.5px solid rgba(200,255,0,.5)}
-.btn-get.free:hover{background:var(--volt);color:var(--ink)}
+/* OS CHIPS on cards */
+.oschips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
+.osc{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:700;font-family:var(--font-mono);border:1px solid}
+.oc-web{background:rgba(75,62,255,.07);color:var(--web-c);border-color:rgba(75,62,255,.2)}
+.oc-win{background:rgba(0,120,215,.07);color:#0078D7;border-color:rgba(0,120,215,.2)}
+.oc-mac{background:rgba(80,80,80,.07);color:#555;border-color:rgba(0,0,0,.14)}
+.oc-and{background:rgba(60,160,60,.08);color:#2E8B2E;border-color:rgba(60,160,60,.22)}
+.oc-ios{background:rgba(0,0,0,.04);color:#333;border-color:rgba(0,0,0,.1)}
 
-/* List card */
-.app-card.list-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;border-radius:var(--r-lg);padding:16px 20px}
-.app-card.list-card:hover{transform:translateY(-1px)}
-.list-card__icon{width:52px;height:52px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:24px;border:1.5px solid var(--border);background:var(--surface);flex-shrink:0}
-.list-card__mid{flex:1;min-width:0}
-.list-card__name{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:3px}
-.list-card__meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-.list-card__cat{font-size:11px;color:var(--muted);font-family:var(--font-mono)}
-.list-card__rating{font-size:12px;font-weight:600;color:var(--amber)}
-.list-card__desc{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:500px}
-.list-card__right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
-.list-card__price{font-family:var(--font-display);font-size:18px;font-weight:800}
-.list-card__dl{font-size:11px;color:var(--muted);font-family:var(--font-mono)}
+/* APP GRID */
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:18px}
+.agrid.lv{grid-template-columns:1fr;gap:10px}
 
-/* ── EMPTY STATE ── */
-.empty-state{text-align:center;padding:80px 24px;grid-column:1/-1}
-.empty-state__icon{font-size:48px;margin-bottom:16px}
-.empty-state__title{font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px;letter-spacing:-.3px}
-.empty-state__sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+/* SECTION DIVIDER */
+.sdiv{grid-column:1/-1;display:flex;align-items:center;gap:14px;margin:20px 0 4px}
+.sdiv__line{flex:1;height:1px;background:var(--border)}
+.sdiv__lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-family:var(--font-mono);white-space:nowrap;display:flex;align-items:center;gap:6px}
 
-/* ── PAGINATION ── */
-.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:40px;padding-bottom:40px}
-.page-btn{width:36px;height:36px;border-radius:var(--r-sm);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--white)}
-.page-btn:hover{border-color:var(--ink)}
-.page-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.page-btn.disabled{opacity:.4;cursor:not-allowed}
+/* APP CARD grid */
+.acard{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:all .22s;cursor:pointer}
+.acard:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.acard__bann{height:104px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative}
+.cbadge{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;font-family:var(--font-mono)}
+.cb-free{background:rgba(200,255,0,.2);color:#3A6200;border:1px solid rgba(200,255,0,.5)}
+.cb-paid{background:rgba(75,62,255,.1);color:var(--indigo);border:1px solid rgba(75,62,255,.3)}
+.cb-new {background:rgba(255,62,108,.1);color:var(--rose);border:1px solid rgba(255,62,108,.3)}
+.cb-top {background:rgba(255,184,0,.12);color:#7A5700;border:1px solid rgba(255,184,0,.4)}
+.acard__body{padding:15px}
+.acard__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.acard__ico{width:42px;height:42px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:20px;border:1.5px solid var(--border);background:var(--white);margin-top:-29px;position:relative;z-index:1;box-shadow:var(--shadow-sm)}
+.acard__rat{font-size:11px;font-weight:600;color:var(--amber)}
+.acard__name{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:5px;letter-spacing:-.2px}
+.acard__desc{font-size:12px;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:11px}
+.acard__foot{display:flex;align-items:center;justify-content:space-between;padding-top:11px;border-top:1px solid var(--border)}
+.acard__price{font-family:var(--font-display);font-size:16px;font-weight:800}
+.pf{color:#3A6200}.pp{color:var(--ink)}
+.acard__dl{font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-top:1px}
+.getbtn{padding:7px 14px;border-radius:999px;font-size:12px;font-weight:700;background:var(--ink);color:var(--white);transition:all .18s}
+.getbtn:hover{background:var(--indigo)}
+.getbtn.fr{background:rgba(200,255,0,.15);color:#3A6200;border:1.5px solid rgba(200,255,0,.5)}
+.getbtn.fr:hover{background:var(--volt);color:var(--ink)}
 
-/* ── LOAD MORE ── */
-.load-more-wrap{text-align:center;margin-top:36px;padding-bottom:40px}
+/* LIST CARD */
+.acard.lc{display:flex;align-items:center;gap:13px;border-radius:var(--r-lg);padding:13px 16px}
+.acard.lc:hover{transform:translateY(-1px)}
+.lc__ico{width:48px;height:48px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:22px;border:1.5px solid var(--border);background:var(--surface);flex-shrink:0}
+.lc__mid{flex:1;min-width:0}
+.lc__top{display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap}
+.lc__name{font-family:var(--font-display);font-size:14px;font-weight:700}
+.lc__rat{font-size:11px;font-weight:600;color:var(--amber)}
+.lc__desc{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc__right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.lc__price{font-family:var(--font-display);font-size:16px;font-weight:800}
+.lc__dl{font-size:10px;color:var(--muted);font-family:var(--font-mono)}
 
-/* ── APP DETAIL MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(10,10,15,.72);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--white);border-radius:var(--r-xl);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);transform:translateY(24px) scale(.96);transition:transform .25s}
-.modal-overlay.open .modal{transform:translateY(0) scale(1)}
-.modal__banner{height:160px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;border-radius:var(--r-xl) var(--r-xl) 0 0}
-.modal__close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--white);cursor:pointer;transition:background .2s}
-.modal__close:hover{background:rgba(0,0,0,.5)}
-.modal__body{padding:28px 32px 36px}
-.modal__header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px}
-.modal__icon{width:64px;height:64px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:30px;border:1.5px solid var(--border);background:var(--white);margin-top:-52px;position:relative;z-index:1;box-shadow:var(--shadow-md);flex-shrink:0}
-.modal__info{flex:1;padding-top:4px}
-.modal__name{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
-.modal__meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.modal__cat{font-size:12px;color:var(--muted);font-family:var(--font-mono)}
-.modal__rating{font-size:13px;font-weight:600;color:var(--amber)}
-.modal__downloads{font-size:12px;color:var(--muted);font-family:var(--font-mono)}
-.modal__platform{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
-.modal__section{margin-bottom:20px}
-.modal__section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px}
-.modal__desc{font-size:14px;color:var(--ink-3);line-height:1.8}
-.modal__features{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.modal__feature{display:flex;align-items:center;gap:8px;font-size:13px;padding:8px 10px;border-radius:var(--r-sm);background:var(--surface)}
-.modal__feature::before{content:'✓';color:#4A7C00;font-weight:700;font-size:11px;background:rgba(200,255,0,.2);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.modal__tags{display:flex;flex-wrap:wrap;gap:6px}
-.modal__tag{padding:4px 12px;border-radius:999px;font-size:12px;border:1.5px solid var(--border);color:var(--muted)}
-.modal__cta{display:flex;align-items:center;gap:16px;padding-top:20px;border-top:1px solid var(--border);margin-top:24px}
-.modal__price-wrap{flex:1}
-.modal__price{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-.5px}
-.modal__period{font-size:12px;color:var(--muted);margin-top:2px}
-.btn-purchase{flex:1;padding:15px;border-radius:var(--r-lg);font-size:15px;font-weight:700;font-family:var(--font-display);text-align:center;transition:all .2s;background:var(--ink);color:var(--white)}
-.btn-purchase:hover{background:var(--indigo)}
-.btn-purchase.free-btn{background:var(--volt);color:var(--ink)}
-.btn-purchase.free-btn:hover{background:var(--volt-dim)}
-.btn-wishlist{padding:14px 16px;border-radius:var(--r-lg);border:1.5px solid var(--border);font-size:18px;transition:all .2s}
-.btn-wishlist:hover{border-color:var(--rose);color:var(--rose)}
+/* EMPTY STATE */
+.empty{grid-column:1/-1;text-align:center;padding:64px 24px}
+.empty__ico{font-size:46px;margin-bottom:14px}
+.empty__title{font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px;letter-spacing:-.3px}
+.empty__sub{font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.6}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;z-index:300;background:var(--ink);color:var(--white);padding:13px 20px;border-radius:var(--r-lg);display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+/* MODAL */
+.moverlay{position:fixed;inset:0;background:rgba(10,10,15,.74);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+.moverlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:var(--r-xl);max-width:640px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);transform:translateY(18px) scale(.97);transition:transform .25s}
+.moverlay.open .modal{transform:translateY(0) scale(1)}
+.mbann{height:148px;display:flex;align-items:center;justify-content:center;font-size:58px;position:relative;border-radius:var(--r-xl) var(--r-xl) 0 0}
+.mclose{position:absolute;top:12px;right:12px;width:33px;height:33px;border-radius:50%;background:rgba(0,0,0,.32);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--white);cursor:pointer;transition:background .18s}
+.mclose:hover{background:rgba(0,0,0,.55)}
+.mbody{padding:22px 26px 30px}
+.mhead{display:flex;align-items:flex-start;gap:13px;margin-bottom:18px}
+.micon{width:58px;height:58px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:27px;border:1.5px solid var(--border);background:var(--white);margin-top:-44px;position:relative;z-index:1;box-shadow:var(--shadow-md);flex-shrink:0}
+.mname{font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.4px;margin-bottom:5px}
+.mmeta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px}
+.mcat{color:var(--muted);font-family:var(--font-mono)}
+.mrat{font-weight:600;color:var(--amber)}
+.mdl{color:var(--muted);font-family:var(--font-mono)}
+.mstl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-family:var(--font-mono);margin:16px 0 7px}
+.mdesc{font-size:14px;color:var(--ink-3);line-height:1.8}
+.mfeats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mfeat{display:flex;align-items:center;gap:7px;font-size:13px;padding:7px 10px;border-radius:var(--r-sm);background:var(--surface)}
+.mfeat::before{content:"c";font-family:monospace;color:#3A6200;font-weight:700;font-size:10px;background:rgba(200,255,0,.2);width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:sans-serif}
+.mtags{display:flex;flex-wrap:wrap;gap:5px}
+.mtag{padding:4px 10px;border-radius:999px;font-size:12px;border:1.5px solid var(--border);color:var(--muted)}
+.mcta{display:flex;align-items:center;gap:13px;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.mprice{font-family:var(--font-display);font-size:25px;font-weight:800;letter-spacing:-.4px}
+.mperiod{font-size:11px;color:var(--muted);margin-top:2px}
+.mbuy{flex:1;padding:13px;border-radius:var(--r-lg);font-size:14px;font-weight:700;font-family:var(--font-display);text-align:center;transition:all .2s;background:var(--ink);color:var(--white)}
+.mbuy:hover{background:var(--indigo)}
+.mbuy.mfr{background:var(--volt);color:var(--ink)}.mbuy.mfr:hover{background:var(--volt-dim)}
+.mwish{padding:12px 13px;border-radius:var(--r-lg);border:1.5px solid var(--border);font-size:17px;transition:all .2s}
+.mwish:hover{border-color:var(--rose);color:var(--rose)}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;z-index:300;background:var(--ink);color:var(--white);padding:12px 18px;border-radius:var(--r-lg);display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
 .toast.show{transform:translateY(0);opacity:1}
 
-/* ── FOOTER ── */
-.footer{background:var(--ink);color:rgba(255,255,255,.5);padding:48px 0 32px;margin-top:0}
-.footer__inner{max-width:1400px;margin:0 auto;padding:0 24px}
-.footer__bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;flex-wrap:wrap;gap:12px}
-.footer__bottom-right{display:flex;gap:16px}
+/* FOOTER */
+.footer{background:var(--ink);color:rgba(255,255,255,.4);padding:32px 0 24px}
+.footer__inner{max-width:1440px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px}
+.footer__links{display:flex;gap:14px}
+.footer__links a{transition:color .15s}
+.footer__links a:hover{color:rgba(255,255,255,.8)}
 
-/* ── RESPONSIVE ── */
-@media(max-width:1060px){
-  :root{--sidebar-w:220px}
-}
-@media(max-width:860px){
-  .mkt-layout{grid-template-columns:1fr}
-  .filter-sidebar{position:static;display:none}
-  .filter-sidebar.mobile-open{display:block}
-  .mobile-filter-btn{display:flex}
+/* DRAWER (mobile sidebar) */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,15,.5);z-index:140;backdrop-filter:blur(3px)}
+.drawer-overlay.show{display:block}
+@media(max-width:900px){
+  .mkt{grid-template-columns:1fr}
+  .sidebar{position:fixed;inset:0;width:300px;max-width:88vw;z-index:150;border-radius:0;overflow-y:auto;transform:translateX(-100%);transition:transform .26s cubic-bezier(.4,0,.2,1);top:0}
+  .sidebar.open{transform:translateX(0)}
+  .agrid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
 }
 @media(max-width:600px){
-  .app-grid{grid-template-columns:1fr}
-  .modal__features{grid-template-columns:1fr}
-  .modal__body{padding:20px 18px 28px}
-  .mkt-banner__stats{gap:12px}
-  .mkt-stat{padding:8px 12px}
-  .nav__links{display:none}
+  .agrid{grid-template-columns:1fr}
+  .mfeats{grid-template-columns:1fr}
+  .mbody{padding:16px 14px 24px}
+  .banner__stats{gap:10px}
 }
-.mobile-filter-btn{display:none;align-items:center;gap:6px;padding:9px 16px;border-radius:999px;border:1.5px solid var(--border);font-size:13px;font-weight:600;cursor:pointer;background:var(--white);transition:all .2s}
-.mobile-filter-btn:hover{border-color:var(--ink)}
 </style>
 </head>
 <body>
@@ -249,470 +264,534 @@ input,select,textarea{font-family:inherit}
   <div class="nav__inner">
     <a href="index.html" class="nav__logo"><span class="nav__logo-dot"></span>AppAholic</a>
     <ul class="nav__links">
-      <li><a href="marketplace.html" class="active">Browse Apps</a></li>
-      <li><a href="index.html#categories">Categories</a></li>
+      <li><a href="marketplace.html" id="nAll">All Apps</a></li>
+      <li><a href="marketplace.html?platform=web"     id="nWeb"  class="pl">&#x1F310; Web</a></li>
+      <li><a href="marketplace.html?platform=desktop" id="nDesk" class="pl">&#x1F5A5; Desktop</a></li>
+      <li><a href="marketplace.html?platform=mobile"  id="nMob"  class="pl">&#x1F4F1; Mobile</a></li>
+      <span class="nav-sep"></span>
       <li><a href="index.html#calculator">Budget Calc</a></li>
       <li><a href="index.html#request">Request an App</a></li>
-      <li><a href="index.html#how">How it Works</a></li>
     </ul>
     <div class="nav__actions">
-      <button class="btn btn-ghost" onclick="showToast('Sign in coming soon','🔐')">Sign In</button>
-      <a href="index.html#request" class="btn btn-primary">Submit Request</a>
+      <a class="btn btn-ghost" href="auth.html">Sign In</a>
+      <a class="btn btn-primary" href="index.html#request">Submit Request</a>
     </div>
   </div>
 </nav>
 
-<!-- MARKETPLACE HERO BANNER -->
-<section class="mkt-banner">
-  <div class="mkt-banner__glow"></div>
-  <div class="mkt-banner__inner">
-    <div class="mkt-banner__eyebrow">App Marketplace</div>
-    <h1 class="mkt-banner__title">Browse all apps</h1>
-    <p class="mkt-banner__sub">Utility and productivity tools for Nigerian businesses, freelancers, and teams. Buy once, download instantly, lifetime updates included.</p>
-    <div class="mkt-banner__stats">
-      <div class="mkt-stat"><div class="mkt-stat__num" id="statTotal">48</div><div class="mkt-stat__label">Total apps</div></div>
-      <div class="mkt-stat"><div class="mkt-stat__num" id="statFree">14</div><div class="mkt-stat__label">Free apps</div></div>
-      <div class="mkt-stat"><div class="mkt-stat__num">12K+</div><div class="mkt-stat__label">Downloads</div></div>
-      <div class="mkt-stat"><div class="mkt-stat__num">8</div><div class="mkt-stat__label">Categories</div></div>
+<!-- BANNER -->
+<section class="banner" id="banner">
+  <div class="banner__glow"></div>
+  <div class="banner__inner">
+    <div class="banner__eyebrow" id="bEye">&#x26A1; App Marketplace</div>
+    <h1 class="banner__title" id="bTitle">All Apps</h1>
+    <p class="banner__sub" id="bSub">Web, Desktop and Mobile apps for Nigerian businesses, freelancers and teams. Buy once, download instantly, lifetime updates included.</p>
+    <div class="banner__stats">
+      <div class="bstat"><div class="bstat__num" id="bTotal">15</div><div class="bstat__lbl">Total apps</div></div>
+      <div class="bstat"><div class="bstat__num" id="bFree">4</div><div class="bstat__lbl">Free apps</div></div>
+      <div class="bstat"><div class="bstat__num" id="bOs">Web &bull; Windows &bull; Mac &bull; Android &bull; iOS</div><div class="bstat__lbl">Supported platforms</div></div>
     </div>
   </div>
 </section>
 
-<!-- SEARCH + TOOLBAR -->
-<div class="mkt-toolbar">
-  <div class="mkt-toolbar__inner">
-    <div class="mkt-search">
-      <span class="mkt-search__icon">🔍</span>
-      <input class="mkt-search__input" type="text" id="mktSearch" placeholder="Search by name, feature, or use case..." oninput="onSearch()"/>
-      <button class="mkt-search__clear" id="searchClear" onclick="clearSearch()">✕ Clear</button>
-    </div>
-    <button class="mobile-filter-btn" onclick="toggleMobileFilter()">⚙ Filters</button>
-    <select class="sort-select" id="sortSelect" onchange="applyFilters()">
-      <option value="default">Sort: Featured</option>
-      <option value="rating">Highest Rated</option>
-      <option value="price-asc">Price: Low → High</option>
-      <option value="price-desc">Price: High → Low</option>
-      <option value="downloads">Most Downloaded</option>
-      <option value="newest">Newest First</option>
-    </select>
-    <div class="view-toggle">
-      <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Grid view">▦</button>
-      <button class="view-btn" id="listBtn" onclick="setView('list')" title="List view">☰</button>
-    </div>
-    <div class="results-count" id="resultsCount">Showing 8 apps</div>
+<!-- PLATFORM TABS -->
+<div class="ptabs">
+  <div class="ptabs__inner">
+    <button class="ptab on" id="pt-all" onclick="setTab('all')">
+      <span class="ptab__ico">&#x26A1;</span>All Platforms<span class="pcnt" id="pc-all">15</span>
+    </button>
+    <button class="ptab tw" id="pt-web" onclick="setTab('web')">
+      <span class="ptab__ico">&#x1F310;</span>Web Apps<span class="ptab__sub">Browser &bull; No install</span><span class="pcnt" id="pc-web">6</span>
+    </button>
+    <button class="ptab td" id="pt-desktop" onclick="setTab('desktop')">
+      <span class="ptab__ico">&#x1F5A5;</span>Desktop<span class="ptab__sub">Windows &bull; Mac &bull; Linux</span><span class="pcnt" id="pc-desktop">5</span>
+    </button>
+    <button class="ptab tm" id="pt-mobile" onclick="setTab('mobile')">
+      <span class="ptab__ico">&#x1F4F1;</span>Mobile<span class="ptab__sub">Android &bull; iOS</span><span class="pcnt" id="pc-mobile">4</span>
+    </button>
   </div>
 </div>
 
-<!-- MAIN LAYOUT -->
-<div class="mkt-layout">
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar__inner">
+    <div class="tsearch">
+      <span class="tsearch__ico">&#x1F50D;</span>
+      <input class="tsearch__inp" id="qInp" type="text" placeholder="Search apps by name, category, feature..." oninput="onQ()"/>
+      <button class="tsearch__clr" id="qClr" onclick="clrQ()">&#x2715;</button>
+    </div>
+    <button class="filter-btn" id="filterBtn" onclick="toggleDrawer()">&#x2699; Filters</button>
+    <select class="tselect" id="sortSel" onchange="go()">
+      <option value="def">Sort: Featured</option>
+      <option value="rat">Highest Rated</option>
+      <option value="pa">Price: Low to High</option>
+      <option value="pd">Price: High to Low</option>
+      <option value="new">Newest First</option>
+      <option value="dl">Most Downloaded</option>
+    </select>
+    <div class="vt">
+      <button class="vbtn on" id="vGrid" onclick="setView('g')" title="Grid">&#x25A6;</button>
+      <button class="vbtn"    id="vList" onclick="setView('l')" title="List">&#x2630;</button>
+    </div>
+    <div class="rcnt" id="rcnt">15 apps</div>
+  </div>
+</div>
 
-  <!-- FILTER SIDEBAR -->
-  <aside class="filter-sidebar" id="filterSidebar">
-    <div class="filter-sidebar__title">
-      Filters
-      <span class="filter-clear" onclick="clearAllFilters()">Clear all</span>
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="doverlay" onclick="toggleDrawer()"></div>
+
+<!-- LAYOUT -->
+<div class="mkt">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__head">
+      <div class="sidebar__title">Filters</div>
+      <span class="clr-btn" onclick="clrAll()">Clear all</span>
     </div>
 
-    <div class="filter-group">
-      <span class="filter-group__label">Category</span>
-      <div class="filter-options" id="catFilter">
-        <div class="filter-opt selected" data-cat="" onclick="selectCat(this,'')">
-          <span>All Categories</span><span class="filter-opt__count" id="count-all">8</span>
-        </div>
-        <div class="filter-opt" data-cat="Productivity" onclick="selectCat(this,'Productivity')">
-          <span>🎯 Productivity</span><span class="filter-opt__count" id="count-Productivity">2</span>
-        </div>
-        <div class="filter-opt" data-cat="Analytics" onclick="selectCat(this,'Analytics')">
-          <span>📊 Analytics</span><span class="filter-opt__count" id="count-Analytics">1</span>
-        </div>
-        <div class="filter-opt" data-cat="Finance" onclick="selectCat(this,'Finance')">
-          <span>💰 Finance</span><span class="filter-opt__count" id="count-Finance">1</span>
-        </div>
-        <div class="filter-opt" data-cat="Security" onclick="selectCat(this,'Security')">
-          <span>🔐 Security</span><span class="filter-opt__count" id="count-Security">1</span>
-        </div>
-        <div class="filter-opt" data-cat="Storage" onclick="selectCat(this,'Storage')">
-          <span>🗄️ Storage</span><span class="filter-opt__count" id="count-Storage">1</span>
-        </div>
-        <div class="filter-opt" data-cat="AI Tools" onclick="selectCat(this,'AI Tools')">
-          <span>🤖 AI Tools</span><span class="filter-opt__count" id="count-AI Tools">1</span>
-        </div>
-        <div class="filter-opt" data-cat="Communication" onclick="selectCat(this,'Communication')">
-          <span>💬 Communication</span><span class="filter-opt__count" id="count-Communication">1</span>
-        </div>
+    <div class="fg">
+      <span class="fg__lbl">Category</span>
+      <div class="fopts" id="catG">
+        <div class="fopt sel" data-v="" onclick="pick(this,'cat')"><span>All Categories</span><span class="fopt__c" id="cc-all">15</span></div>
+        <div class="fopt" data-v="Productivity"  onclick="pick(this,'cat')"><span>&#x1F3AF; Productivity</span><span class="fopt__c" id="cc-Productivity">4</span></div>
+        <div class="fopt" data-v="Finance"       onclick="pick(this,'cat')"><span>&#x1F4B0; Finance</span><span class="fopt__c" id="cc-Finance">4</span></div>
+        <div class="fopt" data-v="Security"      onclick="pick(this,'cat')"><span>&#x1F510; Security</span><span class="fopt__c" id="cc-Security">3</span></div>
+        <div class="fopt" data-v="Analytics"     onclick="pick(this,'cat')"><span>&#x1F4CA; Analytics</span><span class="fopt__c" id="cc-Analytics">1</span></div>
+        <div class="fopt" data-v="Communication" onclick="pick(this,'cat')"><span>&#x1F4AC; Communication</span><span class="fopt__c" id="cc-Communication">1</span></div>
+        <div class="fopt" data-v="AI Tools"      onclick="pick(this,'cat')"><span>&#x1F916; AI Tools</span><span class="fopt__c" id="cc-AI Tools">1</span></div>
+        <div class="fopt" data-v="Utilities"     onclick="pick(this,'cat')"><span>&#x1F6E0; Utilities</span><span class="fopt__c" id="cc-Utilities">1</span></div>
+        <div class="fopt" data-v="Storage"       onclick="pick(this,'cat')"><span>&#x1F5C4; Storage</span><span class="fopt__c" id="cc-Storage">1</span></div>
       </div>
     </div>
 
-    <div class="filter-divider"></div>
-
-    <div class="filter-group">
-      <span class="filter-group__label">Pricing</span>
-      <div class="filter-options" id="priceFilter">
-        <div class="filter-opt selected" data-price="" onclick="selectPrice(this,'')"><span>All Prices</span></div>
-        <div class="filter-opt" data-price="free" onclick="selectPrice(this,'free')"><span>Free</span></div>
-        <div class="filter-opt" data-price="paid" onclick="selectPrice(this,'paid')"><span>Paid</span></div>
-        <div class="filter-opt" data-price="under5k" onclick="selectPrice(this,'under5k')"><span>Under ₦5,000</span></div>
-        <div class="filter-opt" data-price="under10k" onclick="selectPrice(this,'under10k')"><span>Under ₦10,000</span></div>
+    <div class="fg">
+      <span class="fg__lbl">Pricing</span>
+      <div class="fopts" id="priceG">
+        <div class="fopt sel" data-v=""       onclick="pick(this,'price')"><span>All Prices</span></div>
+        <div class="fopt" data-v="free"       onclick="pick(this,'price')"><span>Free</span></div>
+        <div class="fopt" data-v="paid"       onclick="pick(this,'price')"><span>Paid</span></div>
+        <div class="fopt" data-v="u2"         onclick="pick(this,'price')"><span>Under &#x20A6;2,000</span></div>
+        <div class="fopt" data-v="u5"         onclick="pick(this,'price')"><span>Under &#x20A6;5,000</span></div>
       </div>
     </div>
 
-    <div class="filter-divider"></div>
+    <div class="fg" id="osG" style="display:none">
+      <span class="fg__lbl" id="osLbl">Operating System</span>
+      <div class="fopts" id="osOpts"></div>
+    </div>
 
-    <div class="filter-group">
-      <span class="filter-group__label">Minimum Rating</span>
-      <div class="rating-stars" id="ratingFilter">
-        <div class="rating-opt selected" data-rating="0" onclick="selectRating(this,0)"><span class="stars">★★★★★</span><span style="font-size:12px;color:inherit;margin-left:2px">Any</span></div>
-        <div class="rating-opt" data-rating="4.5" onclick="selectRating(this,4.5)"><span class="stars">★★★★★</span><span style="font-size:12px;color:var(--muted);margin-left:2px">4.5+</span></div>
-        <div class="rating-opt" data-rating="4" onclick="selectRating(this,4)"><span class="stars">★★★★☆</span><span style="font-size:12px;color:var(--muted);margin-left:2px">4.0+</span></div>
-        <div class="rating-opt" data-rating="3.5" onclick="selectRating(this,3.5)"><span class="stars">★★★☆☆</span><span style="font-size:12px;color:var(--muted);margin-left:2px">3.5+</span></div>
+    <div class="fg">
+      <span class="fg__lbl">Min. Rating</span>
+      <div class="fopts" id="ratG">
+        <div class="fopt sel" data-v="0"   onclick="pick(this,'rat')"><span>Any rating</span></div>
+        <div class="fopt" data-v="4.5"     onclick="pick(this,'rat')"><span>&#x2605;&#x2605;&#x2605;&#x2605;&#x2605; 4.5+</span></div>
+        <div class="fopt" data-v="4"       onclick="pick(this,'rat')"><span>&#x2605;&#x2605;&#x2605;&#x2605;&#x2606; 4.0+</span></div>
+        <div class="fopt" data-v="3.5"     onclick="pick(this,'rat')"><span>&#x2605;&#x2605;&#x2605;&#x2606;&#x2606; 3.5+</span></div>
       </div>
     </div>
 
-    <div class="filter-divider"></div>
-
-    <div class="filter-group">
-      <span class="filter-group__label">Platform</span>
-      <div class="filter-options" id="platformFilter">
-        <div class="filter-opt selected" data-plat="" onclick="selectPlat(this,'')"><span>All Platforms</span></div>
-        <div class="filter-opt" data-plat="Web" onclick="selectPlat(this,'Web')"><span>🌐 Web</span></div>
-        <div class="filter-opt" data-plat="Windows" onclick="selectPlat(this,'Windows')"><span>🖥 Windows</span></div>
-        <div class="filter-opt" data-plat="Mobile" onclick="selectPlat(this,'Mobile')"><span>📱 Mobile</span></div>
-        <div class="filter-opt" data-plat="Cross" onclick="selectPlat(this,'Cross')"><span>⚡ Cross-platform</span></div>
-      </div>
-    </div>
-
-    <div class="filter-divider"></div>
-
-    <div class="filter-group">
-      <span class="filter-group__label">Status</span>
-      <div class="filter-options" id="statusFilter">
-        <div class="filter-opt selected" data-status="" onclick="selectStatus(this,'')"><span>All Apps</span></div>
-        <div class="filter-opt" data-status="new" onclick="selectStatus(this,'new')"><span>🆕 New Releases</span></div>
-        <div class="filter-opt" data-status="top" onclick="selectStatus(this,'top')"><span>🏆 Top Rated</span></div>
+    <div class="fg">
+      <span class="fg__lbl">Status</span>
+      <div class="fopts" id="statG">
+        <div class="fopt sel" data-v=""  onclick="pick(this,'stat')"><span>All</span></div>
+        <div class="fopt" data-v="new"   onclick="pick(this,'stat')"><span>&#x1F195; New Releases</span></div>
+        <div class="fopt" data-v="top"   onclick="pick(this,'stat')"><span>&#x1F3C6; Top Rated</span></div>
       </div>
     </div>
   </aside>
 
-  <!-- APP GRID -->
-  <div>
-    <div class="app-grid" id="appGrid"></div>
-    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
-      <button class="btn btn-ghost" id="loadMoreBtn" onclick="loadMore()" style="padding:12px 32px;font-size:14px">Load more apps</button>
-    </div>
-  </div>
+  <!-- GRID -->
+  <div id="grid" class="agrid"></div>
 
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="modal">
-    <div class="modal__banner" id="modalBanner">
-      <span id="modalBannerIcon" style="font-size:64px"></span>
-      <button class="modal__close" onclick="closeModalDirect()">✕</button>
-    </div>
-    <div class="modal__body">
-      <div class="modal__header">
-        <div class="modal__icon" id="modalIcon"></div>
-        <div class="modal__info">
-          <div class="modal__name" id="modalName"></div>
-          <div class="modal__meta">
-            <span class="modal__cat" id="modalCat"></span>
-            <span class="modal__rating" id="modalRating"></span>
-            <span class="modal__downloads" id="modalDl"></span>
-            <span class="modal__platform" id="modalPlat"></span>
+<div class="moverlay" id="moverlay" onclick="mClose(event)">
+  <div class="modal">
+    <div class="mbann" id="mbann"><button class="mclose" onclick="mCloseDirect()">&#x2715;</button></div>
+    <div class="mbody">
+      <div class="mhead">
+        <div class="micon" id="mico"></div>
+        <div>
+          <div class="mname" id="mname"></div>
+          <div class="mmeta">
+            <span class="mcat" id="mcat"></span>
+            <span class="mrat" id="mrat"></span>
+            <span class="mdl"  id="mdl"></span>
           </div>
+          <div id="mosChips" style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap"></div>
         </div>
       </div>
-
-      <div class="modal__section">
-        <div class="modal__section-title">About this app</div>
-        <div class="modal__desc" id="modalDesc"></div>
-      </div>
-
-      <div class="modal__section">
-        <div class="modal__section-title">Key Features</div>
-        <div class="modal__features" id="modalFeatures"></div>
-      </div>
-
-      <div class="modal__section">
-        <div class="modal__section-title">Tags</div>
-        <div class="modal__tags" id="modalTags"></div>
-      </div>
-
-      <div class="modal__cta">
-        <div class="modal__price-wrap">
-          <div class="modal__price" id="modalPrice"></div>
-          <div class="modal__period" id="modalPeriod"></div>
+      <div class="mstl">About this app</div>
+      <div class="mdesc" id="mdesc"></div>
+      <div class="mstl">Key Features</div>
+      <div class="mfeats" id="mfeats"></div>
+      <div class="mstl">Tags</div>
+      <div class="mtags" id="mtags"></div>
+      <div class="mcta">
+        <div>
+          <div class="mprice" id="mprice"></div>
+          <div class="mperiod" id="mperiod"></div>
         </div>
-        <button class="btn-wishlist" onclick="showToast('Added to wishlist ❤️','❤️')" title="Save to wishlist">♡</button>
-        <button class="btn-purchase" id="modalBtn" onclick="handlePurchase()"></button>
+        <button class="mwish" onclick="toast('Saved to wishlist','&#x2764;&#xFE0F;')">&#x2661;</button>
+        <button class="mbuy" id="mbtn" onclick="doBuy()"></button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"><span id="toastIcon" style="font-size:18px"></span><span id="toastMsg"></span></div>
+<div class="toast" id="toastEl"><span id="tIco" style="font-size:16px"></span><span id="tMsg"></span></div>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="footer__inner">
-    <div class="footer__bottom">
-      <div>© <span id="footYear"></span> AppAholic — a product of JustServicesPro Management and Consulting Ltd.</div>
-      <div class="footer__bottom-right">
-        <a href="#" style="color:rgba(255,255,255,.4);transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.8)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Privacy</a>
-        <a href="#" style="color:rgba(255,255,255,.4);transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.8)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">Terms</a>
-        <a href="mailto:info@justservices.pro" style="color:rgba(255,255,255,.4);transition:color .2s" onmouseover="this.style.color='rgba(200,255,0,.8)'" onmouseout="this.style.color='rgba(255,255,255,.4)'">info@justservices.pro</a>
-      </div>
+    <span>&#169; <span id="yr"></span> AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd</span>
+    <div class="footer__links">
+      <a href="index.html">Home</a>
+      <a href="index.html#request">Request an App</a>
+      <a href="mailto:info@justservices.pro" style="color:rgba(200,255,0,.75)">info@justservices.pro</a>
     </div>
   </div>
 </footer>
 
 <script>
-document.getElementById('footYear').textContent = new Date().getFullYear();
+document.getElementById('yr').textContent = new Date().getFullYear();
 
-/* ── APP DATA ── */
 var APPS = [
-  {id:'focusclock',name:'FocusClock',category:'Productivity',icon:'⏱️',banner:'#FFF3E0',price:1200,rating:4.9,downloads:'3.2K',tag:'top',platform:'Web',desc:'Pomodoro-based focus timer with smart break scheduling and distraction blocking.',longDesc:'FocusClock is a precision focus tool built on the Pomodoro technique, extended with AI-driven break scheduling. It learns your energy patterns over time and suggests optimal work blocks for peak performance.',features:['Smart Pomodoro sessions','Website & app blocker','Productivity analytics dashboard','Google Calendar sync','Daily & weekly PDF reports'],tags:['Focus','Timer','Pomodoro','Productivity','Distraction']},
-  {id:'datapulse',name:'DataPulse',category:'Analytics',icon:'📊',banner:'#E8F5E9',price:3500,rating:4.8,downloads:'1.8K',tag:'paid',platform:'Web',desc:'Business analytics dashboard. Connect data sources and generate beautiful client-ready reports.',longDesc:'DataPulse connects to your spreadsheets, Google Sheets, or databases and turns raw numbers into clean, shareable dashboards with charts and tables. Export polished PDF reports in seconds.',features:['Google Sheets & Excel connector','Auto-generated PDF reports','Live shareable dashboard link','Drag-and-drop chart builder','Email report scheduling'],tags:['Analytics','Dashboard','Reports','Data','Business']},
-  {id:'vaultsync',name:'VaultSync',category:'Storage',icon:'🗂️',banner:'#E3F2FD',price:0,rating:4.5,downloads:'6.1K',tag:'free',platform:'Cross',desc:'Free file organizer and sync tool. Keep your local folders structured and backed up.',longDesc:'VaultSync watches your selected folders and auto-organizes files by type, date, and project. Syncs across two devices on the free plan with a clean UI and no bloat.',features:['Automatic file sorting by type','2-device sync (free plan)','Duplicate file finder','Folder templates & presets','Quick file preview'],tags:['Files','Sync','Organizer','Free','Storage']},
-  {id:'lockbox',name:'LockBox',category:'Security',icon:'🔐',banner:'#FCE4EC',price:2000,rating:4.7,downloads:'2.4K',tag:'paid',platform:'Web',desc:'Password manager and secure note vault. Military-grade AES-256 encryption, offline-first.',longDesc:'LockBox stores all your credentials and sensitive notes in an AES-256 encrypted local vault. No cloud dependency — your data never leaves your device unless you explicitly choose to sync.',features:['AES-256 local encryption','Offline-first, no cloud required','Secure password generator','Encrypted notes & attachments','Browser extension (coming soon)'],tags:['Security','Passwords','Encryption','Privacy','Vault']},
-  {id:'invoicekit',name:'InvoiceKit',category:'Finance',icon:'🧾',banner:'#F3E5F5',price:2500,rating:4.6,downloads:'4.5K',tag:'top',platform:'Web',desc:'Professional invoice generator for freelancers and SMEs. PDF export, payment tracking.',longDesc:'InvoiceKit lets you create, send, and track invoices in under 60 seconds. Set up your brand once and every invoice looks professional. Includes VAT/WHT calculation, recurring invoices, and late-payment reminders.',features:['Branded PDF invoice export','Client & product database','Payment status tracking','Recurring invoice scheduling','VAT & WHT tax calculation'],tags:['Invoice','Finance','Billing','Freelance','SME']},
-  {id:'quicknote',name:'QuickNote',category:'Productivity',icon:'📝',banner:'#FFFDE7',price:0,rating:4.3,downloads:'8.9K',tag:'free',platform:'Web',desc:'Lightweight markdown note-taking app. Fast, keyboard-first, with instant local search.',longDesc:'QuickNote is built for speed. Open it with a global hotkey, type in markdown, and it saves automatically. Folders, tags, and full-text search keep everything findable.',features:['Full markdown editor with preview','Instant full-text search','Tags, folders & nested notebooks','Keyboard-first shortcuts','Export to PDF or HTML'],tags:['Notes','Markdown','Writing','Free','Productivity']},
-  {id:'taskmind',name:'TaskMind AI',category:'AI Tools',icon:'🤖',banner:'#E8EAF6',price:5000,rating:4.9,downloads:'900',tag:'new',platform:'Web',desc:'AI-powered task manager that learns your habits and schedules your optimal work day.',longDesc:'TaskMind connects to your calendar and task list, then uses AI to reorder priorities based on deadlines, your energy levels, and meeting gaps. It adapts to your habits weekly.',features:['AI-powered task prioritization','Google & Outlook calendar sync','Daily AI-generated focus plan','Energy level & mood tracking','Weekly productivity insights'],tags:['AI','Tasks','Productivity','Automation','Planning']},
-  {id:'teamping',name:'TeamPing',category:'Communication',icon:'💬',banner:'#E0F7FA',price:1800,rating:4.4,downloads:'1.2K',tag:'new',platform:'Web',desc:'Minimal team chat for small teams. No noise, no channels — just threads and status.',longDesc:'TeamPing is a deliberately minimal team messaging tool. Threaded conversations, status indicators, and file sharing — nothing more. Built for teams under 25 who are tired of Slack bloat.',features:['Threaded message conversations','Real-time status indicators','File & image sharing (50MB)','Read receipts per message','Fully mobile-responsive'],tags:['Chat','Team','Communication','Collaboration','Messaging']},
+  {id:'focusclock',name:'FocusClock',cat:'Productivity',ico:'&#x23F1;&#xFE0F;',bann:'#FFF3E0',price:1200,rat:4.9,dl:'3.2K',tag:'top',plat:'web',os:['web'],
+   desc:'Pomodoro focus timer with smart break scheduling and distraction blocking.',
+   long:'FocusClock is a precision focus tool built on the Pomodoro technique extended with AI-driven break scheduling. It learns your energy patterns and suggests optimal work blocks.',
+   feats:['Smart Pomodoro sessions','Website & app blocker','Productivity analytics dashboard','Google Calendar sync','Daily & weekly PDF reports'],
+   tags:['Focus','Timer','Pomodoro','Productivity']},
+  {id:'datapulse',name:'DataPulse',cat:'Analytics',ico:'&#x1F4CA;',bann:'#E8F5E9',price:3500,rat:4.8,dl:'1.8K',tag:'paid',plat:'web',os:['web'],
+   desc:'Business analytics dashboard. Connect data sources and generate client-ready reports.',
+   long:'DataPulse connects to Google Sheets, Excel or your database and turns raw numbers into clean shareable dashboards. Export polished PDF reports in seconds.',
+   feats:['Google Sheets & Excel connector','Auto-generated PDF reports','Live shareable dashboard link','Drag-and-drop chart builder','Scheduled email reports'],
+   tags:['Analytics','Dashboard','Reports','Data']},
+  {id:'invoicekit',name:'InvoiceKit',cat:'Finance',ico:'&#x1F9FE;',bann:'#F3E5F5',price:2500,rat:4.6,dl:'4.5K',tag:'top',plat:'web',os:['web'],
+   desc:'Professional invoice generator. VAT/WHT support, PDF export, payment tracking.',
+   long:'InvoiceKit lets you create, send, and track invoices in under 60 seconds. Branded PDFs, recurring invoices, VAT & WHT calculation all in one clean web app.',
+   feats:['Branded PDF invoice export','Client & product database','Payment status tracking','Recurring invoice scheduling','VAT & WHT tax calculation'],
+   tags:['Invoice','Finance','Billing','Freelance']},
+  {id:'taskmind',name:'TaskMind AI',cat:'AI Tools',ico:'&#x1F916;',bann:'#E8EAF6',price:5000,rat:4.9,dl:'900',tag:'new',plat:'web',os:['web'],
+   desc:'AI-powered task manager that learns your habits and builds your optimal work day.',
+   long:'TaskMind connects to your calendar and to-do list then uses AI to reorder priorities based on deadlines, energy levels, and meeting gaps. Adapts to your habits weekly.',
+   feats:['AI-powered task prioritization','Google & Outlook calendar sync','Daily AI-generated focus plan','Energy level tracking','Weekly productivity insights'],
+   tags:['AI','Tasks','Productivity','Automation']},
+  {id:'teamping',name:'TeamPing',cat:'Communication',ico:'&#x1F4AC;',bann:'#E0F7FA',price:1800,rat:4.4,dl:'1.2K',tag:'new',plat:'web',os:['web'],
+   desc:'Minimal team chat for small teams. Threads and status, no noise.',
+   long:'TeamPing is a deliberately minimal messaging tool. Threaded conversations, status indicators, and file sharing. Built for teams under 25 tired of Slack bloat.',
+   feats:['Threaded conversations','Real-time status indicators','File sharing up to 50MB','Read receipts per message','Fully mobile-responsive'],
+   tags:['Chat','Team','Communication','Messaging']},
+  {id:'quicknote',name:'QuickNote',cat:'Productivity',ico:'&#x1F4DD;',bann:'#FFFDE7',price:0,rat:4.3,dl:'8.9K',tag:'free',plat:'web',os:['web'],
+   desc:'Lightweight markdown note-taking. Fast, keyboard-first, instant search.',
+   long:'QuickNote is built for speed. Open with a hotkey, type in markdown, auto-save. Tags, folders, and full-text search keep everything findable.',
+   feats:['Full markdown editor with preview','Instant full-text search','Tags, folders & notebooks','Keyboard-first shortcuts','Export to PDF or HTML'],
+   tags:['Notes','Markdown','Writing','Free']},
+  {id:'vaultsync',name:'VaultSync',cat:'Storage',ico:'&#x1F5C2;&#xFE0F;',bann:'#E3F2FD',price:0,rat:4.5,dl:'6.1K',tag:'free',plat:'desktop',os:['windows','mac'],
+   desc:'Free file organizer for Windows & Mac. Auto-sort folders, sync across 2 devices.',
+   long:'VaultSync watches your folders and auto-organizes files by type, date and project. Syncs across two devices on the free plan with a clean native UI.',
+   feats:['Auto file sorting by type & date','2-device sync on free plan','Duplicate file finder','Folder templates & presets','Quick preview panel'],
+   tags:['Files','Sync','Organizer','Free','Storage']},
+  {id:'lockbox',name:'LockBox',cat:'Security',ico:'&#x1F510;',bann:'#FCE4EC',price:2000,rat:4.7,dl:'2.4K',tag:'paid',plat:'desktop',os:['windows','mac'],
+   desc:'Password manager & secure vault for Windows & Mac. AES-256, fully offline.',
+   long:'LockBox stores credentials and secure notes in an AES-256 encrypted local vault. No cloud dependency. Your data never leaves your machine unless you choose to sync.',
+   feats:['AES-256 local encryption','Fully offline, no cloud required','Strong password generator','Encrypted notes & file attachments','Browser extension coming soon'],
+   tags:['Security','Passwords','Encryption','Privacy']},
+  {id:'focusdesk',name:'FocusDesk',cat:'Productivity',ico:'&#x1F3AF;',bann:'#FFF8E1',price:1500,rat:4.6,dl:'2.1K',tag:'paid',plat:'desktop',os:['windows','mac'],
+   desc:'Native desktop focus timer. System-level blocking, starts with your OS.',
+   long:'FocusDesk runs natively on Windows and Mac, blocking distracting sites at the system level. Starts automatically with your OS for seamless focus habits.',
+   feats:['System-level website blocking','Pomodoro & custom intervals','Starts with OS login automatically','Detailed daily productivity logs','Dark and light mode'],
+   tags:['Focus','Desktop','Blocking','Productivity']},
+  {id:'fileforge',name:'FileForge',cat:'Utilities',ico:'&#x1F6E0;&#xFE0F;',bann:'#F3E5F5',price:3000,rat:4.5,dl:'980',tag:'paid',plat:'desktop',os:['windows'],
+   desc:'Windows bulk file renamer, converter and organizer. Handles thousands of files.',
+   long:'FileForge is a powerful Windows utility for bulk renaming, format conversion and folder organization. Drag-and-drop with regex support and full undo history.',
+   feats:['Bulk file renaming with regex','Format conversion for images & docs','Folder tree reorganizer','Full undo history for every action','Command-line mode available'],
+   tags:['Files','Windows','Utilities','Bulk']},
+  {id:'macvault',name:'MacVault',cat:'Security',ico:'&#x1F512;',bann:'#E8F5E9',price:2500,rat:4.7,dl:'760',tag:'new',plat:'desktop',os:['mac'],
+   desc:'Mac-only folder encryption with Touch ID. Right-click to protect from Finder.',
+   long:'MacVault integrates with macOS Finder to add AES-256 encryption to any folder. Right-click to lock, authenticate with Touch ID to unlock. Auto-locks on sleep.',
+   feats:['Finder context-menu integration','Touch ID authentication','AES-256 folder encryption','Auto-locks on screen sleep','Encrypted iCloud backups'],
+   tags:['Mac','Security','Encryption','Touch ID']},
+  {id:'quicknote-m',name:'QuickNote Mobile',cat:'Productivity',ico:'&#x1F4F1;',bann:'#FFFDE7',price:0,rat:4.4,dl:'5.2K',tag:'free',plat:'mobile',os:['android','ios'],
+   desc:'Markdown notes on the go. Syncs with QuickNote web. Android & iOS.',
+   long:'The mobile companion to QuickNote. Capture notes on your phone, sync instantly to the web app. Works offline and syncs automatically when reconnected.',
+   feats:['Full markdown editor on mobile','Offline mode with auto-sync','Voice-to-note recording','Shares to QuickNote web','Dark mode & custom themes'],
+   tags:['Notes','Mobile','Offline','Free']},
+  {id:'paytrack',name:'PayTrack',cat:'Finance',ico:'&#x1F4B8;',bann:'#E8F5E9',price:800,rat:4.6,dl:'3.4K',tag:'top',plat:'mobile',os:['android','ios'],
+   desc:'Track income and expenses on your phone. Monthly summaries with charts.',
+   long:'PayTrack is a clean, fast expense tracker. Snap receipts, tag categories, set budgets, and get weekly summaries without needing a full accounting app.',
+   feats:['Receipt photo capture','Expense category tagging','Daily & monthly chart summaries','Budget limit alerts','Export to Excel or CSV'],
+   tags:['Finance','Expenses','Budget','Mobile']},
+  {id:'staffcheck',name:'StaffCheck',cat:'Productivity',ico:'&#x2705;',bann:'#E0F7FA',price:1200,rat:4.5,dl:'1.9K',tag:'new',plat:'mobile',os:['android'],
+   desc:'Android attendance app for SMEs. GPS clock-in/out, late alerts, admin reports.',
+   long:'StaffCheck lets employees clock in and out via Android phone with GPS tagging. Admin gets a real-time attendance dashboard, late arrival alerts, and monthly PDF reports.',
+   feats:['GPS-tagged clock in & clock out','Real-time attendance dashboard','Late arrival SMS alerts','Monthly PDF attendance reports','Multi-location support'],
+   tags:['HR','Attendance','Android','Team']},
+  {id:'invkit-m',name:'InvoiceKit Mobile',cat:'Finance',ico:'&#x1F9FE;',bann:'#F3E5F5',price:1500,rat:4.7,dl:'2.8K',tag:'paid',plat:'mobile',os:['android','ios'],
+   desc:'Create and send professional invoices from your phone. Syncs with InvoiceKit web.',
+   long:'Send invoices on the go. Full InvoiceKit features in your pocket. Create, send and get paid. Syncs in real time with your InvoiceKit web account.',
+   feats:['Full invoice creation on mobile','PDF generation & WhatsApp sharing','Real-time payment notifications','Client database sync with web','Flutterwave payment link generation'],
+   tags:['Invoice','Mobile','Finance','WhatsApp']},
 ];
 
-/* ── STATE ── */
-var state = { cat:'', price:'', rating:0, plat:'', status:'', search:'', sort:'default', view:'grid', page:1, perPage:12 };
-var currentApp = null;
+var S = {tab:'all',cat:'',price:'',rat:0,os:'',stat:'',q:'',view:'g'};
+var curApp = null;
 
-/* ── COUNTS ── */
-function updateCounts(filtered) {
-  document.getElementById('resultsCount').textContent = 'Showing ' + filtered.length + ' app' + (filtered.length !== 1 ? 's' : '');
-  // category counts
-  var cats = {};
-  APPS.forEach(function(a){ cats[a.category] = (cats[a.category]||0)+1; });
-  Object.keys(cats).forEach(function(c){
-    var el = document.getElementById('count-'+c);
-    if(el) el.textContent = cats[c];
-  });
-  document.getElementById('count-all').textContent = APPS.length;
-  document.getElementById('statTotal').textContent = APPS.length + '+';
-  document.getElementById('statFree').textContent = APPS.filter(function(a){return a.price===0}).length;
-}
+var OS_CFG = {
+  desktop:[{v:'',l:'All Desktop'},{v:'windows',l:'Windows'},{v:'mac',l:'macOS'},{v:'linux',l:'Linux'}],
+  mobile: [{v:'',l:'All Mobile'},{v:'android',l:'Android'},{v:'ios',l:'iOS'}],
+};
+var OS_CLS = {web:'oc-web',windows:'oc-win',mac:'oc-mac',linux:'oc-mac',android:'oc-and',ios:'oc-ios'};
+var OS_LBL = {web:'Web',windows:'Windows',mac:'macOS',linux:'Linux',android:'Android',ios:'iOS'};
 
-/* ── FILTER + SORT ── */
-function getFiltered() {
-  var s = state.search.toLowerCase();
-  return APPS.filter(function(a) {
-    if(state.cat && a.category !== state.cat) return false;
-    if(state.price === 'free' && a.price !== 0) return false;
-    if(state.price === 'paid' && a.price === 0) return false;
-    if(state.price === 'under5k' && a.price > 5000) return false;
-    if(state.price === 'under10k' && a.price > 10000) return false;
-    if(state.rating && a.rating < state.rating) return false;
-    if(state.plat && !a.platform.toLowerCase().includes(state.plat.toLowerCase())) return false;
-    if(state.status === 'new' && a.tag !== 'new') return false;
-    if(state.status === 'top' && a.tag !== 'top') return false;
-    if(s && !a.name.toLowerCase().includes(s) && !a.desc.toLowerCase().includes(s) && !a.category.toLowerCase().includes(s) && !(a.tags||[]).join(' ').toLowerCase().includes(s)) return false;
+var BANNERS = {
+  all:    {eye:'&#x26A1; App Marketplace',title:'All Apps',sub:'Web, Desktop and Mobile apps for Nigerian businesses, freelancers and teams. Buy once, download instantly, lifetime updates included.',cls:''},
+  web:    {eye:'&#x1F310; Web Apps',title:'Web Apps',sub:'Browser-based apps that run on any device. No download, no installation. Open a tab and get to work.',cls:'b-web'},
+  desktop:{eye:'&#x1F5A5; Desktop Apps',title:'Desktop Apps',sub:'Native Windows and Mac apps. Full system-level power, offline capability, and deep OS integration for serious work.',cls:'b-desktop'},
+  mobile: {eye:'&#x1F4F1; Mobile Apps',title:'Mobile Apps',sub:'Android and iOS apps for professionals on the go. GPS, camera, offline sync and mobile payments built in.',cls:'b-mobile'},
+};
+
+function getFiltered(){
+  var q=S.q.toLowerCase();
+  return APPS.filter(function(a){
+    if(S.tab!=='all'&&a.plat!==S.tab)return false;
+    if(S.os&&!(a.os||[]).includes(S.os))return false;
+    if(S.cat&&a.cat!==S.cat)return false;
+    if(S.price==='free'&&a.price!==0)return false;
+    if(S.price==='paid'&&a.price===0)return false;
+    if(S.price==='u2'&&a.price>2000)return false;
+    if(S.price==='u5'&&a.price>5000)return false;
+    if(S.rat&&a.rat<S.rat)return false;
+    if(S.stat==='new'&&a.tag!=='new')return false;
+    if(S.stat==='top'&&a.tag!=='top')return false;
+    if(q&&!a.name.toLowerCase().includes(q)&&!a.desc.toLowerCase().includes(q)&&!a.cat.toLowerCase().includes(q)&&!(a.tags||[]).join(' ').toLowerCase().includes(q))return false;
     return true;
   }).sort(function(a,b){
-    if(state.sort === 'rating') return b.rating - a.rating;
-    if(state.sort === 'price-asc') return a.price - b.price;
-    if(state.sort === 'price-desc') return b.price - a.price;
-    if(state.sort === 'downloads') return parseFloat(b.downloads) - parseFloat(a.downloads);
-    if(state.sort === 'newest') return (b.tag==='new'?1:0) - (a.tag==='new'?1:0);
+    var s=document.getElementById('sortSel').value;
+    if(s==='rat')return b.rat-a.rat;
+    if(s==='pa')return a.price-b.price;
+    if(s==='pd')return b.price-a.price;
+    if(s==='new')return(b.tag==='new'?1:0)-(a.tag==='new'?1:0);
+    if(s==='dl')return parseFloat(b.dl)-parseFloat(a.dl);
     return 0;
   });
 }
 
-/* ── RENDER ── */
-function renderGrid(apps) {
-  var grid = document.getElementById('appGrid');
-  grid.className = state.view === 'list' ? 'app-grid list-view' : 'app-grid';
+function badge(a){
+  if(a.price===0)return '<span class="cbadge cb-free">FREE</span>';
+  if(a.tag==='new')return '<span class="cbadge cb-new">NEW</span>';
+  if(a.tag==='top')return '<span class="cbadge cb-top">TOP</span>';
+  return '<span class="cbadge cb-paid">PAID</span>';
+}
 
-  if(!apps.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-state__icon">🔎</div><div class="empty-state__title">No apps match your filters</div><div class="empty-state__sub">Try adjusting your search or filters to find what you need.</div><button class="btn btn-primary" onclick="clearAllFilters()">Clear all filters</button></div>';
+function oschips(a){
+  return (a.os||[]).map(function(o){
+    var l={web:'&#x1F310; Web',windows:'&#x1FA9F; Win',mac:'&#xF8FF; Mac',android:'&#x1F4F4; Android',ios:'&#xF8FF; iOS'};
+    return '<span class="osc '+OS_CLS[o]+'">'+( l[o]||o)+'</span>';
+  }).join('');
+}
+
+function go(){
+  var apps=getFiltered();
+  var grid=document.getElementById('grid');
+  grid.className=S.view==='l'?'agrid lv':'agrid';
+  document.getElementById('rcnt').textContent=apps.length+' app'+(apps.length!==1?'s':'');
+
+  if(!apps.length){
+    grid.innerHTML='<div class="empty"><div class="empty__ico">&#x1F50E;</div><div class="empty__title">No apps match your filters</div><div class="empty__sub">Try adjusting your search, category or OS filter.</div><button class="btn-primary" onclick="clrAll()" style="border-radius:999px;padding:10px 22px;font-size:13px">Clear all filters</button></div>';
     return;
   }
 
-  var html = '';
-  apps.forEach(function(a) {
-    if(state.view === 'list') {
-      html += renderListCard(a);
-    } else {
-      html += renderGridCard(a);
-    }
-  });
-  grid.innerHTML = html;
+  var grouped=S.tab==='all'&&!S.q&&!S.cat&&!S.os&&!S.price&&!S.rat&&!S.stat;
+  var html='';
+
+  if(grouped){
+    var platMeta={
+      web:{ico:'&#x1F310;',n:'Web Apps',sub:'Run in any browser, no installation needed'},
+      desktop:{ico:'&#x1F5A5;',n:'Desktop Apps',sub:'Windows & Mac native apps'},
+      mobile:{ico:'&#x1F4F1;',n:'Mobile Apps',sub:'Android & iOS'},
+    };
+    ['web','desktop','mobile'].forEach(function(p){
+      var pa=apps.filter(function(a){return a.plat===p});
+      if(!pa.length)return;
+      var m=platMeta[p];
+      html+='<div class="sdiv"><div class="sdiv__line"></div><div class="sdiv__lbl"><span>'+m.ico+'</span> '+m.n+'</div><div class="sdiv__line"></div></div>';
+      pa.forEach(function(a){html+=S.view==='l'?renderL(a):renderG(a)});
+    });
+  } else {
+    apps.forEach(function(a){html+=S.view==='l'?renderL(a):renderG(a)});
+  }
+  grid.innerHTML=html;
 }
 
-function badgeHTML(a) {
-  if(a.price === 0) return '<span class="app-card__badge badge-free">FREE</span>';
-  if(a.tag === 'new') return '<span class="app-card__badge badge-new">NEW</span>';
-  if(a.tag === 'top') return '<span class="app-card__badge badge-top">TOP</span>';
-  return '<span class="app-card__badge badge-paid">PAID</span>';
-}
-
-function renderGridCard(a) {
-  var priceStr = a.price === 0 ? 'Free' : '&#x20A6;' + a.price.toLocaleString();
-  var priceClass = a.price === 0 ? 'price-free' : 'price-paid';
-  var btnClass = a.price === 0 ? 'btn-get free' : 'btn-get';
-  var btnLabel = a.price === 0 ? 'Download' : 'Buy Now';
-  return '<div class="app-card" onclick="openModal(\'' + a.id + '\')">' +
-    '<div class="app-card__banner" style="background:' + a.banner + '">' + a.icon + badgeHTML(a) + '</div>' +
-    '<div class="app-card__body">' +
-    '<div class="app-card__top"><div class="app-card__icon">' + a.icon + '</div><div class="app-card__rating">★ ' + a.rating + '</div></div>' +
-    '<div class="app-card__name">' + a.name + '</div>' +
-    '<div class="app-card__cat">' + a.category + ' &bull; ' + a.platform + '</div>' +
-    '<div class="app-card__desc">' + a.desc + '</div>' +
-    '<div class="app-card__footer">' +
-    '<div><div class="app-card__price ' + priceClass + '">' + priceStr + '</div><div class="app-card__dl">' + a.downloads + ' downloads</div></div>' +
-    '<button class="' + btnClass + '" onclick="event.stopPropagation();handleCardGet(\'' + a.id + '\')">' + btnLabel + '</button>' +
-    '</div></div></div>';
-}
-
-function renderListCard(a) {
-  var priceStr = a.price === 0 ? 'Free' : '&#x20A6;' + a.price.toLocaleString();
-  var priceClass = a.price === 0 ? 'price-free' : 'price-paid';
-  var btnClass = a.price === 0 ? 'btn-get free' : 'btn-get';
-  var btnLabel = a.price === 0 ? 'Download' : 'Buy Now';
-  return '<div class="app-card list-card" onclick="openModal(\'' + a.id + '\')">' +
-    '<div class="list-card__icon">' + a.icon + '</div>' +
-    '<div class="list-card__mid">' +
-    '<div class="list-card__name">' + a.name + '</div>' +
-    '<div class="list-card__meta"><span class="list-card__cat">' + a.category + '</span><span class="list-card__rating">★ ' + a.rating + '</span><span class="list-card__cat">' + a.platform + '</span>' + badgeHTML(a).replace('app-card__badge','app-card__badge') + '</div>' +
-    '<div class="list-card__desc">' + a.desc + '</div>' +
-    '</div>' +
-    '<div class="list-card__right">' +
-    '<div class="list-card__price ' + priceClass + '">' + priceStr + '</div>' +
-    '<div class="list-card__dl">' + a.downloads + ' downloads</div>' +
-    '<button class="' + btnClass + '" onclick="event.stopPropagation();handleCardGet(\'' + a.id + '\')">' + btnLabel + '</button>' +
+function renderG(a){
+  var ps=a.price===0?'Free':'&#x20A6;'+a.price.toLocaleString();
+  var pc=a.price===0?'pf':'pp';
+  var bc=a.price===0?'getbtn fr':'getbtn';
+  var bl=a.price===0?'Download':'Buy Now';
+  return '<div class="acard" onclick="openModal(\''+a.id+'\')">'+
+    '<div class="acard__bann" style="background:'+a.bann+'">'+a.ico+badge(a)+'</div>'+
+    '<div class="acard__body">'+
+      '<div class="acard__top"><div class="acard__ico">'+a.ico+'</div><div class="acard__rat">&#x2605; '+a.rat+'</div></div>'+
+      '<div class="acard__name">'+a.name+'</div>'+
+      '<div class="oschips">'+oschips(a)+'</div>'+
+      '<div class="acard__desc">'+a.desc+'</div>'+
+      '<div class="acard__foot">'+
+        '<div><div class="acard__price '+pc+'">'+ps+'</div><div class="acard__dl">'+a.dl+' downloads</div></div>'+
+        '<button class="'+bc+'" onclick="event.stopPropagation();qBuy(\''+a.id+'\')">'+bl+'</button>'+
+      '</div>'+
     '</div></div>';
 }
 
-function applyFilters() {
-  state.sort = document.getElementById('sortSelect').value;
-  var filtered = getFiltered();
-  updateCounts(filtered);
-  renderGrid(filtered);
+function renderL(a){
+  var ps=a.price===0?'Free':'&#x20A6;'+a.price.toLocaleString();
+  var pc=a.price===0?'pf':'pp';
+  var bc=a.price===0?'getbtn fr':'getbtn';
+  var bl=a.price===0?'Download':'Buy';
+  return '<div class="acard lc" onclick="openModal(\''+a.id+'\')">'+
+    '<div class="lc__ico">'+a.ico+'</div>'+
+    '<div class="lc__mid">'+
+      '<div class="lc__top"><span class="lc__name">'+a.name+'</span>'+badge(a)+'<span class="lc__rat">&#x2605; '+a.rat+'</span>'+oschips(a)+'</div>'+
+      '<div class="lc__desc">'+a.desc+'</div>'+
+    '</div>'+
+    '<div class="lc__right"><div class="lc__price '+pc+'">'+ps+'</div><div class="lc__dl">'+a.dl+' dl</div><button class="'+bc+'" onclick="event.stopPropagation();qBuy(\''+a.id+'\')">'+bl+'</button></div>'+
+  '</div>';
 }
 
-/* ── FILTER SELECTORS ── */
-function selectCat(el, val) {
-  document.querySelectorAll('#catFilter .filter-opt').forEach(function(o){ o.classList.remove('selected') });
-  el.classList.add('selected'); state.cat = val; applyFilters();
-}
-function selectPrice(el, val) {
-  document.querySelectorAll('#priceFilter .filter-opt').forEach(function(o){ o.classList.remove('selected') });
-  el.classList.add('selected'); state.price = val; applyFilters();
-}
-function selectRating(el, val) {
-  document.querySelectorAll('#ratingFilter .rating-opt').forEach(function(o){ o.classList.remove('selected') });
-  el.classList.add('selected'); state.rating = val; applyFilters();
-}
-function selectPlat(el, val) {
-  document.querySelectorAll('#platformFilter .filter-opt').forEach(function(o){ o.classList.remove('selected') });
-  el.classList.add('selected'); state.plat = val; applyFilters();
-}
-function selectStatus(el, val) {
-  document.querySelectorAll('#statusFilter .filter-opt').forEach(function(o){ o.classList.remove('selected') });
-  el.classList.add('selected'); state.status = val; applyFilters();
-}
-function clearAllFilters() {
-  state = { cat:'', price:'', rating:0, plat:'', status:'', search:'', sort:'default', view:state.view, page:1, perPage:12 };
-  document.getElementById('mktSearch').value = '';
-  document.getElementById('sortSelect').value = 'default';
-  document.getElementById('searchClear').classList.remove('show');
-  document.querySelectorAll('.filter-opt').forEach(function(o,i){ o.classList.toggle('selected', i===0 || o.dataset.cat==='' || o.dataset.price==='' || o.dataset.plat==='' || o.dataset.status==='') });
-  document.querySelectorAll('.rating-opt').forEach(function(o,i){ o.classList.toggle('selected', i===0) });
-  applyFilters();
-}
-function onSearch() {
-  state.search = document.getElementById('mktSearch').value;
-  var show = state.search.length > 0;
-  document.getElementById('searchClear').classList.toggle('show', show);
-  applyFilters();
-}
-function clearSearch() {
-  document.getElementById('mktSearch').value = '';
-  state.search = '';
-  document.getElementById('searchClear').classList.remove('show');
-  applyFilters();
-}
-
-/* ── VIEW TOGGLE ── */
-function setView(v) {
-  state.view = v;
-  document.getElementById('gridBtn').classList.toggle('active', v==='grid');
-  document.getElementById('listBtn').classList.toggle('active', v==='list');
-  applyFilters();
-}
-
-/* ── MOBILE FILTER ── */
-function toggleMobileFilter() {
-  document.getElementById('filterSidebar').classList.toggle('mobile-open');
-}
-
-/* ── MODAL ── */
-function openModal(id) {
-  var a = APPS.filter(function(x){ return x.id===id })[0];
-  if(!a) return;
-  currentApp = a;
-  document.getElementById('modalBanner').style.background = a.banner;
-  document.getElementById('modalBannerIcon').textContent = a.icon;
-  document.getElementById('modalIcon').textContent = a.icon;
-  document.getElementById('modalName').textContent = a.name;
-  document.getElementById('modalCat').textContent = a.category;
-  document.getElementById('modalRating').textContent = '★ ' + a.rating;
-  document.getElementById('modalDl').textContent = a.downloads + ' downloads';
-  document.getElementById('modalPlat').textContent = a.platform;
-  document.getElementById('modalDesc').textContent = a.longDesc;
-  document.getElementById('modalPrice').innerHTML = a.price === 0 ? 'Free' : '&#x20A6;' + a.price.toLocaleString();
-  document.getElementById('modalPrice').style.color = a.price === 0 ? '#3A6200' : 'var(--ink)';
-  document.getElementById('modalPeriod').textContent = a.price === 0 ? 'No cost, download instantly' : 'One-time purchase, lifetime updates';
-  document.getElementById('modalBtn').textContent = a.price === 0 ? '⬇ Download Free' : '💳 Buy Now';
-  document.getElementById('modalBtn').className = 'btn-purchase' + (a.price === 0 ? ' free-btn' : '');
-  document.getElementById('modalFeatures').innerHTML = (a.features||[]).map(function(f){ return '<div class="modal__feature">' + f + '</div>' }).join('');
-  document.getElementById('modalTags').innerHTML = (a.tags||[]).map(function(t){ return '<span class="modal__tag">' + t + '</span>' }).join('');
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(e) { if(e.target===document.getElementById('modalOverlay')) closeModalDirect(); }
-function closeModalDirect() { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
-function handlePurchase() {
-  if(!currentApp) return;
-  closeModalDirect();
-  showToast(currentApp.price===0 ? 'Downloading ' + currentApp.name + '...' : 'Redirecting to Flutterwave checkout...', currentApp.price===0 ? '⬇️' : '💳');
-}
-function handleCardGet(id) {
-  var a = APPS.filter(function(x){ return x.id===id })[0];
-  if(!a) return;
-  showToast(a.price===0 ? 'Downloading ' + a.name + '...' : 'Opening checkout for ' + a.name, a.price===0 ? '⬇️' : '💳');
-}
-
-/* ── TOAST ── */
-function showToast(msg, icon) {
-  icon = icon || '✅';
-  var t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  document.getElementById('toastIcon').textContent = icon + ' ';
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 3500);
-}
-
-/* ── INIT ── */
-applyFilters();
-
-/* ── URL PARAM: auto-select category from ?cat=Finance ── */
-(function(){
-  var params = new URLSearchParams(window.location.search);
-  var cat = params.get('cat');
-  if(cat) {
-    var el = document.querySelector('[data-cat="' + cat + '"]');
-    if(el) selectCat(el, cat);
+function setTab(tab){
+  S.tab=tab; S.os='';
+  document.querySelectorAll('.ptab').forEach(function(b){b.classList.toggle('on',b.id==='pt-'+tab)});
+  var b=BANNERS[tab];
+  var el=document.getElementById('banner');
+  el.className='banner'+(b.cls?' '+b.cls:'');
+  document.getElementById('bEye').innerHTML=b.eye;
+  document.getElementById('bTitle').textContent=b.title;
+  document.getElementById('bSub').textContent=b.sub;
+  // nav links
+  ['nAll','nWeb','nDesk','nMob'].forEach(function(id){
+    var a=document.getElementById(id);
+    if(a){a.classList.remove('active','aw','ad','am')}
+  });
+  var navMap={all:'nAll',web:'nWeb',desktop:'nDesk',mobile:'nMob'};
+  var navCls={web:'aw',desktop:'ad',mobile:'am'};
+  var nEl=document.getElementById(navMap[tab]);
+  if(nEl){nEl.classList.add('active'); if(navCls[tab])nEl.classList.add(navCls[tab]);}
+  // OS sub-filter
+  var og=document.getElementById('osG');
+  var oo=document.getElementById('osOpts');
+  var ol=document.getElementById('osLbl');
+  if(tab==='desktop'||tab==='mobile'){
+    og.style.display='block';
+    ol.textContent=tab==='desktop'?'Desktop OS':'Mobile OS';
+    oo.innerHTML=(OS_CFG[tab]||[]).map(function(it,i){
+      return '<div class="fopt'+(i===0?' sel':'')+'" data-v="'+it.v+'" onclick="pickOs(this,\''+it.v+'\')"><span>'+it.l+'</span></div>';
+    }).join('');
+  } else {
+    og.style.display='none';
   }
+  // update counts
+  var counts={all:APPS.length,web:0,desktop:0,mobile:0};
+  APPS.forEach(function(a){if(counts[a.plat]!==undefined)counts[a.plat]++});
+  Object.keys(counts).forEach(function(k){var e=document.getElementById('pc-'+k);if(e)e.textContent=counts[k]});
+  // banner stats
+  var inTab=tab==='all'?APPS:APPS.filter(function(a){return a.plat===tab});
+  document.getElementById('bTotal').textContent=inTab.length;
+  document.getElementById('bFree').textContent=inTab.filter(function(a){return a.price===0}).length;
+  document.getElementById('bOs').innerHTML={all:'Web &bull; Windows &bull; Mac &bull; Android &bull; iOS',web:'Any browser, any OS',desktop:'Windows &bull; macOS &bull; Linux',mobile:'Android &bull; iOS'}[tab];
+  // cat counts
+  var cc={};inTab.forEach(function(a){cc[a.cat]=(cc[a.cat]||0)+1});
+  document.querySelectorAll('#catG .fopt').forEach(function(o){
+    var cv=o.dataset.v; var cel=o.querySelector('.fopt__c');
+    if(!cv) { var t=o.querySelector('.fopt__c'); if(t)t.textContent=inTab.length; }
+    else    { var t=o.querySelector('.fopt__c'); if(t)t.textContent=cc[cv]||0; }
+  });
+  go();
+}
+
+function pickOs(el,val){
+  document.querySelectorAll('#osOpts .fopt').forEach(function(o){o.classList.remove('sel')});
+  el.classList.add('sel'); S.os=val; go();
+}
+
+function pick(el,g){
+  var gMap={cat:'catG',price:'priceG',rat:'ratG',stat:'statG'};
+  document.querySelectorAll('#'+gMap[g]+' .fopt').forEach(function(o){o.classList.remove('sel')});
+  el.classList.add('sel');
+  if(g==='rat')S.rat=+el.dataset.v; else S[g]=el.dataset.v;
+  go();
+}
+
+function clrAll(){
+  S.cat='';S.price='';S.rat=0;S.os='';S.stat='';S.q='';
+  document.getElementById('qInp').value='';
+  document.getElementById('qClr').classList.remove('show');
+  ['catG','priceG','ratG','statG'].forEach(function(g){
+    var first=document.querySelector('#'+g+' .fopt');
+    if(first){document.querySelectorAll('#'+g+' .fopt').forEach(function(o){o.classList.remove('sel')});first.classList.add('sel');}
+  });
+  if(S.tab==='desktop'||S.tab==='mobile'){
+    var first=document.querySelector('#osOpts .fopt');
+    if(first){document.querySelectorAll('#osOpts .fopt').forEach(function(o){o.classList.remove('sel')});first.classList.add('sel');}
+  }
+  go();
+}
+
+function onQ(){S.q=document.getElementById('qInp').value;document.getElementById('qClr').classList.toggle('show',S.q.length>0);go()}
+function clrQ(){document.getElementById('qInp').value='';S.q='';document.getElementById('qClr').classList.remove('show');go()}
+function setView(v){S.view=v;document.getElementById('vGrid').classList.toggle('on',v==='g');document.getElementById('vList').classList.toggle('on',v==='l');go()}
+
+function toggleDrawer(){
+  var s=document.getElementById('sidebar');
+  var o=document.getElementById('doverlay');
+  var open=s.classList.toggle('open');
+  o.classList.toggle('show',open);
+  document.getElementById('filterBtn').classList.toggle('active',open);
+}
+
+function openModal(id){
+  var a=APPS.filter(function(x){return x.id===id})[0]; if(!a)return; curApp=a;
+  var bann=document.getElementById('mbann');
+  bann.style.background=a.bann;
+  bann.innerHTML='<span style="font-size:56px">'+a.ico+'</span><button class="mclose" onclick="mCloseDirect()">&#x2715;</button>';
+  document.getElementById('mico').innerHTML=a.ico;
+  document.getElementById('mname').textContent=a.name;
+  document.getElementById('mcat').textContent=a.cat;
+  document.getElementById('mrat').textContent='&#x2605; '+a.rat;
+  document.getElementById('mdl').textContent=a.dl+' downloads';
+  document.getElementById('mosChips').innerHTML=(a.os||[]).map(function(o){return '<span class="osc '+OS_CLS[o]+'">'+ OS_LBL[o]+'</span>'}).join('');
+  document.getElementById('mdesc').textContent=a.long;
+  document.getElementById('mfeats').innerHTML=(a.feats||[]).map(function(f){return '<div class="mfeat">'+f+'</div>'}).join('');
+  document.getElementById('mtags').innerHTML=(a.tags||[]).map(function(t){return '<span class="mtag">'+t+'</span>'}).join('');
+  var mpEl=document.getElementById('mprice');
+  mpEl.innerHTML=a.price===0?'Free':'&#x20A6;'+a.price.toLocaleString();
+  mpEl.style.color=a.price===0?'#3A6200':'var(--ink)';
+  document.getElementById('mperiod').textContent=a.price===0?'Free download, no payment needed':'One-time purchase, lifetime updates included';
+  var btn=document.getElementById('mbtn');
+  btn.innerHTML=a.price===0?'&#x2B07; Download Free':'&#x1F4B3; Buy Now &#x2014; &#x20A6;'+a.price.toLocaleString();
+  btn.className='mbuy'+(a.price===0?' mfr':'');
+  document.getElementById('moverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function mClose(e){if(e.target===document.getElementById('moverlay'))mCloseDirect()}
+function mCloseDirect(){document.getElementById('moverlay').classList.remove('open');document.body.style.overflow=''}
+function doBuy(){if(!curApp)return;mCloseDirect();toast(curApp.price===0?'Downloading '+curApp.name+'...':'Redirecting to Flutterwave...',curApp.price===0?'&#x2B07;&#xFE0F;':'&#x1F4B3;');}
+function qBuy(id){var a=APPS.filter(function(x){return x.id===id})[0];if(!a)return;toast(a.price===0?'Downloading '+a.name+'...':'Opening checkout for '+a.name,a.price===0?'&#x2B07;&#xFE0F;':'&#x1F4B3;');}
+
+function toast(msg,ico){
+  ico=ico||'&#x2705;';
+  var t=document.getElementById('toastEl');
+  document.getElementById('tMsg').textContent=msg;
+  document.getElementById('tIco').innerHTML=ico+' ';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3500);
+}
+
+// Init from URL param
+(function(){
+  var p=new URLSearchParams(window.location.search).get('platform');
+  if(p&&['web','desktop','mobile'].includes(p))setTab(p);
+  else setTab('all');
 })();
 </script>
 </body>

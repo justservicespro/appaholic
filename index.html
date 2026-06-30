@@ -636,6 +636,55 @@ select.form-input { cursor: pointer; }
   z-index: 2;
 }
 
+
+/* ── PLATFORM TILES ───────────────────────────────────────── */
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.platform-tile {
+  display: flex; flex-direction: column;
+  padding: 28px 24px;
+  border-radius: var(--r-xl);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  text-decoration: none; color: var(--ink);
+  transition: all .22s;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.platform-tile:hover {
+  border-color: var(--ink);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.platform-tile--dark {
+  background: var(--ink); color: var(--white);
+  border-color: var(--ink);
+}
+.platform-tile--dark .platform-tile__desc { color: rgba(255,255,255,.5); }
+.platform-tile--dark .platform-tile__count { color: var(--volt); }
+.platform-tile--dark:hover { box-shadow: 0 12px 40px rgba(10,10,15,.3); }
+.platform-tile__icon { font-size: 32px; margin-bottom: 14px; }
+.platform-tile__name {
+  font-family: var(--font-display); font-size: 20px; font-weight: 800;
+  letter-spacing: -.4px; margin-bottom: 8px;
+}
+.platform-tile__desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+.platform-tile__count {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+  color: var(--indigo); margin-bottom: 14px;
+}
+.platform-tile__arrow {
+  font-size: 18px; opacity: 0; transform: translateX(-6px);
+  transition: all .2s; position: absolute; bottom: 22px; right: 22px;
+}
+.platform-tile:hover .platform-tile__arrow { opacity: 1; transform: translateX(0); }
+.platform-tile--dark .platform-tile__arrow { color: var(--volt); }
+@media(max-width: 700px) { .platform-grid { grid-template-columns: 1fr; } }
+@media(max-width: 480px) { .platform-grid { grid-template-columns: 1fr 1fr; gap:12px } }
+
 </style>
 </head>
 <body>
@@ -645,7 +694,7 @@ select.form-input { cursor: pointer; }
 
 <div class="admin-bar">
   <div class="admin-bar__inner">
-    A <strong>JustServicesPro</strong> product &nbsp;·&nbsp; Questions? <a href="mailto:info@justservices.pro">info@justservices.pro</a>
+    AppAholic — Web · Desktop · Mobile Apps &nbsp;·&nbsp; A <strong>JustServicesPro</strong> product &nbsp;·&nbsp; <a href="mailto:info@justservices.pro">info@justservices.pro</a>
   </div>
 </div>
 
@@ -658,14 +707,15 @@ select.form-input { cursor: pointer; }
         AppAholic
       </a>
       <ul class="nav__links">
-        <li><a href="marketplace.html" class="active">Browse Apps</a></li>
-        <li><a href="#categories">Categories</a></li>
+        <li><a href="marketplace.html">All Apps</a></li>
+        <li><a href="marketplace.html?platform=web" style="color:#4B3EFF">🌐 Web</a></li>
+        <li><a href="marketplace.html?platform=desktop" style="color:#5B30C8">🖥 Desktop</a></li>
+        <li><a href="marketplace.html?platform=mobile" style="color:#D4700A">📱 Mobile</a></li>
         <li><a href="#calculator">Budget Calc</a></li>
-        <li><a href="#request">Request an App</a></li>
-        <li><a href="#how">How it Works</a></li>
+        <li><a href="#request">Request App</a></li>
       </ul>
       <div class="nav__actions">
-        <button class="btn btn-ghost" onclick="showToast('Sign in coming soon!', '🔐')">Sign In</button>
+        <a class="btn btn-ghost" href="auth.html">Sign In</a>
         <button class="btn btn-primary" onclick="scrollToSection('request')">Submit Request</button>
         <button class="nav-drawer-toggle" onclick="openDrawer()" aria-label="Open menu">&#9776;</button>
       </div>
@@ -710,13 +760,12 @@ select.form-input { cursor: pointer; }
           The Productivity Marketplace
         </div>
         <h1 class="hero__title">
-          Apps that<br/>
-          <em>actually</em><br/>
-          get work done.
+          Web. Desktop.<br/>
+          <em>Mobile.</em><br/>
+          One marketplace.
         </h1>
         <p class="hero__sub">
-          Discover, buy, and download utility & productivity tools built for real workflows. 
-          Free and premium apps — all in one place.
+          Web apps, Desktop apps (Windows & Mac) and Mobile apps (Android & iOS) — all built for real workflows. Free and paid, all in one marketplace.
         </p>
         <div class="hero__cta">
           <a href="marketplace.html" class="btn btn-volt btn-lg">Browse Apps</a>
@@ -724,16 +773,16 @@ select.form-input { cursor: pointer; }
         </div>
         <div class="hero__stats">
           <div>
-            <div class="hero__stat-num">48+</div>
+            <div class="hero__stat-num">15</div>
             <div class="hero__stat-label">Apps available</div>
           </div>
           <div>
-            <div class="hero__stat-num">12K+</div>
-            <div class="hero__stat-label">Downloads</div>
+            <div class="hero__stat-num">3</div>
+            <div class="hero__stat-label">Platforms</div>
           </div>
           <div>
-            <div class="hero__stat-num">98%</div>
-            <div class="hero__stat-label">Satisfaction rate</div>
+            <div class="hero__stat-num">5</div>
+            <div class="hero__stat-label">Supported OS</div>
           </div>
         </div>
       </div>
@@ -743,32 +792,32 @@ select.form-input { cursor: pointer; }
         <div class="app-card-mini app-card-mini--featured">
           <div class="app-card-mini__icon" style="background:rgba(200,255,0,.15)">📊</div>
           <div class="app-card-mini__name">DataPulse</div>
-          <div class="app-card-mini__cat">Analytics</div>
+          <div class="app-card-mini__cat">Analytics · Web</div>
           <div class="app-card-mini__price">₦3,500</div>
         </div>
         <div class="app-card-mini">
           <div class="app-card-mini__icon" style="background:rgba(75,62,255,.15)">🗂️</div>
           <div class="app-card-mini__name">VaultSync</div>
-          <div class="app-card-mini__cat">Storage</div>
+          <div class="app-card-mini__cat">Storage · Desktop</div>
           <div class="app-card-mini__price">FREE</div>
         </div>
         <div class="app-card-mini">
           <div class="app-card-mini__icon" style="background:rgba(255,62,108,.12)">⏱️</div>
           <div class="app-card-mini__name">FocusClock</div>
-          <div class="app-card-mini__cat">Productivity</div>
+          <div class="app-card-mini__cat">Productivity · Desktop</div>
           <div class="app-card-mini__price">₦1,200</div>
         </div>
         <div class="app-card-mini">
           <div class="app-card-mini__icon" style="background:rgba(255,184,0,.15)">🔐</div>
           <div class="app-card-mini__name">LockBox</div>
-          <div class="app-card-mini__cat">Security</div>
+          <div class="app-card-mini__cat">Security · Desktop</div>
           <div class="app-card-mini__price">₦2,000</div>
         </div>
         <div class="app-card-mini app-card-mini--span">
           <div class="app-card-mini__icon" style="background:rgba(200,255,0,.1);width:52px;height:52px;flex-shrink:0">🤖</div>
           <div>
             <div class="app-card-mini__name" style="font-size:15px">TaskMind AI</div>
-            <div class="app-card-mini__cat">AI Productivity</div>
+            <div class="app-card-mini__cat">AI Tools · Web</div>
             <div class="app-card-mini__price">₦5,000 / mo</div>
           </div>
         </div>
@@ -803,48 +852,45 @@ select.form-input { cursor: pointer; }
 <!-- CATEGORIES -->
 <section class="categories" id="categories">
   <div class="container">
-    <div class="section-eyebrow">Browse by category</div>
-    <h2 class="section-title">What are you building?</h2>
-    <div class="cat-grid">
-      <div class="cat-chip" onclick="filterByCategory('Productivity')">
-        <div class="cat-chip__icon">🎯</div>
-        <div class="cat-chip__label">Productivity</div>
-        <div class="cat-chip__count">14 apps</div>
-      </div>
-      <div class="cat-chip" onclick="filterByCategory('Analytics')">
-        <div class="cat-chip__icon">📊</div>
-        <div class="cat-chip__label">Analytics</div>
-        <div class="cat-chip__count">8 apps</div>
-      </div>
-      <div class="cat-chip" onclick="filterByCategory('Finance')">
-        <div class="cat-chip__icon">💰</div>
-        <div class="cat-chip__label">Finance</div>
-        <div class="cat-chip__count">9 apps</div>
-      </div>
-      <div class="cat-chip" onclick="filterByCategory('Security')">
-        <div class="cat-chip__icon">🔐</div>
-        <div class="cat-chip__label">Security</div>
-        <div class="cat-chip__count">6 apps</div>
-      </div>
-      <div class="cat-chip" onclick="filterByCategory('Communication')">
-        <div class="cat-chip__icon">💬</div>
-        <div class="cat-chip__label">Communication</div>
-        <div class="cat-chip__count">5 apps</div>
-      </div>
-      <div class="cat-chip" onclick="filterByCategory('Storage')">
-        <div class="cat-chip__icon">🗄️</div>
-        <div class="cat-chip__label">Storage</div>
-        <div class="cat-chip__count">4 apps</div>
-      </div>
-      <div class="cat-chip" onclick="filterByCategory('AI Tools')">
-        <div class="cat-chip__icon">🤖</div>
-        <div class="cat-chip__label">AI Tools</div>
-        <div class="cat-chip__count">7 apps</div>
-      </div>
-      <div class="cat-chip" onclick="filterByCategory('Utilities')">
-        <div class="cat-chip__icon">🛠️</div>
-        <div class="cat-chip__label">Utilities</div>
-        <div class="cat-chip__count">11 apps</div>
+    <div class="section-eyebrow">Browse by platform &amp; category</div>
+    <h2 class="section-title">Pick your platform</h2>
+    <!-- Platform tiles -->
+    <div class="platform-grid">
+      <a href="marketplace.html?platform=web" class="platform-tile">
+        <div class="platform-tile__icon">🌐</div>
+        <div class="platform-tile__name">Web Apps</div>
+        <div class="platform-tile__desc">Chrome, Firefox, Safari.<br/>No download, any device.</div>
+        <div class="platform-tile__count">6 apps</div>
+        <div class="platform-tile__arrow">→</div>
+      </a>
+      <a href="marketplace.html?platform=desktop" class="platform-tile platform-tile--dark">
+        <div class="platform-tile__icon">🖥</div>
+        <div class="platform-tile__name">Desktop Apps</div>
+        <div class="platform-tile__desc">Windows, Mac &amp; Linux.<br/>Native, offline-ready.</div>
+        <div class="platform-tile__count">5 apps</div>
+        <div class="platform-tile__arrow">→</div>
+      </a>
+      <a href="marketplace.html?platform=mobile" class="platform-tile">
+        <div class="platform-tile__icon">📱</div>
+        <div class="platform-tile__name">Mobile Apps</div>
+        <div class="platform-tile__desc">Android &amp; iOS.<br/>GPS, camera &amp; offline.</div>
+        <div class="platform-tile__count">4 apps</div>
+        <div class="platform-tile__arrow">→</div>
+      </a>
+    </div>
+
+    <!-- Category chips below platform tiles -->
+    <div style="margin-top:36px">
+      <div class="section-eyebrow" style="margin-bottom:14px">Or browse by category</div>
+      <div class="cat-grid">
+        <div class="cat-chip" onclick="filterByCategory('Productivity')"><div class="cat-chip__icon">🎯</div><div class="cat-chip__label">Productivity</div><div class="cat-chip__count">5 apps</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Finance')"><div class="cat-chip__icon">💰</div><div class="cat-chip__label">Finance</div><div class="cat-chip__count">4 apps</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Analytics')"><div class="cat-chip__icon">📊</div><div class="cat-chip__label">Analytics</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('AI Tools')"><div class="cat-chip__icon">🤖</div><div class="cat-chip__label">AI Tools</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Security')"><div class="cat-chip__icon">🔐</div><div class="cat-chip__label">Security</div><div class="cat-chip__count">3 apps</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Communication')"><div class="cat-chip__icon">💬</div><div class="cat-chip__label">Communication</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Utilities')"><div class="cat-chip__icon">🛠️</div><div class="cat-chip__label">Utilities</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Storage')"><div class="cat-chip__icon">🗄️</div><div class="cat-chip__label">Storage</div><div class="cat-chip__count">1 app</div></div>
       </div>
     </div>
   </div>
@@ -857,7 +903,7 @@ select.form-input { cursor: pointer; }
     <!-- Featured -->
     <div class="featured-banner">
       <div style="position:relative">
-        <div class="featured-banner__tag">⚡ Featured App of the Month</div>
+        <div class="featured-banner__tag">⚡ Featured — Web App of the Month</div>
         <div class="featured-banner__title">TaskMind AI — Smart Task Manager</div>
         <div class="featured-banner__desc">AI-powered task prioritization that learns your workflow. Connect your calendar, email, and notes — let TaskMind build your perfect day automatically.</div>
         <div class="featured-banner__actions">
@@ -873,11 +919,11 @@ select.form-input { cursor: pointer; }
 
     <div class="apps-header">
       <div>
-        <div class="section-eyebrow">App catalogue</div>
+        <div class="section-eyebrow">Web · Desktop · Mobile</div>
         <h2 class="section-title" style="margin-bottom:0">Featured Apps</h2>
       </div>
       <div style="display:flex;align-items:center;gap:12px">
-      <a href="marketplace.html" class="btn btn-ghost btn-sm" style="font-size:13px">View full catalogue →</a>
+      <a href="marketplace.html" class="btn btn-ghost btn-sm" style="font-size:13px">Browse all platforms →</a>
       <div class="filter-tabs">
         <button class="filter-tab active" onclick="setFilter(this,'all')">All</button>
         <button class="filter-tab" onclick="setFilter(this,'free')">Free</button>
@@ -1197,7 +1243,7 @@ select.form-input { cursor: pointer; }
       </div>
     </div>
     <div class="how-cta">
-      <button class="btn btn-primary btn-lg" onclick="scrollToSection('apps')">Start Browsing Apps</button>
+      <a href="marketplace.html" class="btn btn-primary btn-lg">Browse All Apps</a>
       &nbsp;
       <button class="btn btn-ghost btn-lg" onclick="scrollToSection('request')">Request a Custom App</button>
     </div>
@@ -1667,20 +1713,6 @@ function submitRequest(){
   cbs.forEach(function(c){c.checked=false});
   showStep(1);
   showToast('Request submitted! We will review within 48 hours &#127881;','✅');
-}
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showToast('Please enter a valid email address.', '⚠️');
-    return;
-  }
-
-  // Clear all fields
-  const textFields = ['reqName','reqEmail','reqPhone','reqTitle','reqProblem','reqFeatures','reqInspiration','reqExtra'];
-  textFields.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
-  const selectFields = ['reqCategory','reqPlatform','reqAudience','reqUsers','reqTimeline','reqBudget'];
-  selectFields.forEach(id => { const el = document.getElementById(id); if(el) el.selectedIndex = 0; });
-  document.querySelectorAll('#integrationsWrap input[type=checkbox]').forEach(c => c.checked = false);
-
-  showToast('Request submitted! We\'ll review within 48 hours.', '🎉');
 }
 
 /* ── TOAST ─────────────────────────────────────────────────────── */

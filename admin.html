@@ -425,7 +425,7 @@ tbody tr:hover td { background: var(--surface); }
     <!-- ── APPS PAGE ── -->
     <div class="page" id="page-apps">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <div style="font-size:13px;color:var(--muted)">8 apps · 3 free · 5 paid</div>
+        <div style="font-size:13px;color:var(--muted)">15 apps &nbsp;·&nbsp; 🌐 6 Web &nbsp;·&nbsp; 🖥 5 Desktop &nbsp;·&nbsp; 📱 4 Mobile</div>
         <div style="display:flex;gap:10px">
           <button class="btn-primary" onclick="nav(null,'upload')">+ Upload New App</button>
         </div>
@@ -783,14 +783,14 @@ const ORDERS = [
 ];
 
 const APPS_DATA = [
-  {icon:'⏱️',name:'FocusClock',cat:'Productivity',price:1200,dl:'3.2K',rev:'₦374.4K',rating:4.9,status:'live'},
-  {icon:'📊',name:'DataPulse',cat:'Analytics',price:3500,dl:'1.8K',rev:'₦630K',rating:4.8,status:'live'},
-  {icon:'🗂️',name:'VaultSync',cat:'Storage',price:0,dl:'6.1K',rev:'—',rating:4.5,status:'live'},
-  {icon:'🔐',name:'LockBox',cat:'Security',price:2000,dl:'2.4K',rev:'₦286K',rating:4.7,status:'live'},
-  {icon:'🧾',name:'InvoiceKit',cat:'Finance',price:2500,dl:'4.5K',rev:'₦562.5K',rating:4.6,status:'live'},
-  {icon:'📝',name:'QuickNote',cat:'Productivity',price:0,dl:'8.9K',rev:'—',rating:4.3,status:'live'},
-  {icon:'🤖',name:'TaskMind AI',cat:'AI Tools',price:5000,dl:'900',rev:'₦99K',rating:4.9,status:'live'},
-  {icon:'💬',name:'TeamPing',cat:'Communication',price:1800,dl:'1.2K',rev:'₦72K',rating:4.4,status:'draft'},
+  {icon:'⏱️',name:'FocusClock',cat:'Productivity',platform:'Web',price:1200,dl:'3.2K',rev:'₦374.4K',rating:4.9,status:'live'},
+  {icon:'📊',name:'DataPulse',cat:'Analytics',platform:'Web',price:3500,dl:'1.8K',rev:'₦630K',rating:4.8,status:'live'},
+  {icon:'🗂️',name:'VaultSync',cat:'Storage',platform:'Desktop',price:0,dl:'6.1K',rev:'—',rating:4.5,status:'live'},
+  {icon:'🔐',name:'LockBox',cat:'Security',platform:'Desktop',price:2000,dl:'2.4K',rev:'₦286K',rating:4.7,status:'live'},
+  {icon:'🧾',name:'InvoiceKit',cat:'Finance',platform:'Web',price:2500,dl:'4.5K',rev:'₦562.5K',rating:4.6,status:'live'},
+  {icon:'📝',name:'QuickNote',cat:'Productivity',platform:'Web',price:0,dl:'8.9K',rev:'—',rating:4.3,status:'live'},
+  {icon:'🤖',name:'TaskMind AI',cat:'AI Tools',platform:'Web',price:5000,dl:'900',rev:'₦99K',rating:4.9,status:'live'},
+  {icon:'💬',name:'TeamPing',cat:'Communication',platform:'Web',price:1800,dl:'1.2K',rev:'₦72K',rating:4.4,status:'draft'},
 ];
 
 const REQUESTS = [
@@ -838,6 +838,7 @@ document.getElementById('allOrdersBody').innerHTML = ORDERS.map(o => renderOrder
 document.getElementById('appsTableBody').innerHTML = APPS_DATA.map(a => `<tr>
   <td><div class="td-app"><div class="td-icon">${a.icon}</div><div><div class="td-name">${a.name}</div><div class="td-cat">${a.cat}</div></div></div></td>
   <td><span class="pill pill-muted">${a.cat}</span></td>
+  <td><span class="pill" style="background:rgba(75,62,255,.08);color:var(--indigo);border:1px solid rgba(75,62,255,.2)">${a.platform||'Web'}</span></td>
   <td style="font-family:var(--font-m);font-weight:700">${a.price===0?'Free':'₦'+a.price.toLocaleString()}</td>
   <td>${a.dl}</td>
   <td style="font-family:var(--font-m)">${a.rev}</td>
@@ -920,6 +921,23 @@ function showToast(msg, icon='✅') {
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3200);
 }
+
+function toggleOsSelect(){
+  var type=document.getElementById('upPlatformType');
+  if(!type)return;
+  var wrap=document.getElementById('osSelectWrap');
+  var boxes=document.querySelectorAll('#osCheckboxes input');
+  boxes.forEach(function(b){b.checked=false;b.parentElement.style.opacity='1';b.disabled=false});
+  if(type.value==='web'){wrap.style.display='none';}
+  else if(type.value==='desktop'){
+    wrap.style.display='block';
+    ['android','ios'].forEach(function(v){var b=document.querySelector('#osCheckboxes input[value="'+v+'"]');if(b){b.disabled=true;b.parentElement.style.opacity='.35';}});
+  } else {
+    wrap.style.display='block';
+    ['windows','mac','linux'].forEach(function(v){var b=document.querySelector('#osCheckboxes input[value="'+v+'"]');if(b){b.disabled=true;b.parentElement.style.opacity='.35';}});
+  }
+}
+if(document.getElementById('upPlatformType'))toggleOsSelect();
 </script>
 <div style="position:fixed;bottom:0;left:240px;right:0;background:var(--ink-2);border-top:1px solid rgba(255,255,255,.06);padding:8px 28px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.3);z-index:30;font-family:var(--font-m)">
   <span>AppAholic Admin &mdash; JustServicesPro Management and Consulting Ltd</span>
