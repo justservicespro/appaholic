@@ -775,8 +775,36 @@ function openModal(id){
 }
 function mClose(e){if(e.target===document.getElementById('moverlay'))mCloseDirect()}
 function mCloseDirect(){document.getElementById('moverlay').classList.remove('open');document.body.style.overflow=''}
-function doBuy(){if(!curApp)return;mCloseDirect();toast(curApp.price===0?'Downloading '+curApp.name+'...':'Redirecting to Flutterwave...',curApp.price===0?'&#x2B07;&#xFE0F;':'&#x1F4B3;');}
-function qBuy(id){var a=APPS.filter(function(x){return x.id===id})[0];if(!a)return;toast(a.price===0?'Downloading '+a.name+'...':'Opening checkout for '+a.name,a.price===0?'&#x2B07;&#xFE0F;':'&#x1F4B3;');}
+function doBuy(){
+  if(!curApp)return;
+  mCloseDirect();
+  if(curApp.price===0){
+    handleFreeDownload(curApp);
+  } else {
+    // Paid apps route through Flutterwave checkout.
+    // The order-confirmation email is sent server-side from your Flutterwave
+    // webhook handler (POST /api/order-confirmation) after payment succeeds —
+    // not from the browser, so it can't be faked or skipped.
+    toast('Redirecting to Flutterwave...','&#x1F4B3;');
+  }
+}
+function qBuy(id){
+  var a=APPS.filter(function(x){return x.id===id})[0];if(!a)return;
+  if(a.price===0){ handleFreeDownload(a); }
+  else { toast('Opening checkout for '+a.name,'&#x1F4B3;'); }
+}
+function handleFreeDownload(a){
+  toast('Downloading '+a.name+'...','&#x2B07;&#xFE0F;');
+  var email = window.currentUserEmail; // set this once you have auth/session wired up
+  var name  = window.currentUserName;
+  if(email){
+    fetch((window.API_BASE||'') + '/api/order-confirmation', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email:email, name:name, appName:a.name, amount:0 })
+    }).catch(function(){});
+  }
+}
+window.API_BASE = window.API_BASE || '';
 
 function toast(msg,ico){
   ico=ico||'&#x2705;';

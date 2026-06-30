@@ -702,7 +702,7 @@ select.form-input { cursor: pointer; }
 <nav class="nav">
   <div class="container">
     <div class="nav__inner">
-      <a href="#" class="nav__logo">
+      <a href="index.html" class="nav__logo">
         <span class="nav__logo-dot"></span>
         AppAholic
       </a>
@@ -1312,10 +1312,9 @@ select.form-input { cursor: pointer; }
           <span class="payment-badge">&#x20A6; NGN</span>
         </div>
         <div class="footer__social">
-          <a href="#" title="Twitter / X" aria-label="AppAholic on Twitter">&#x1D54F;</a>
-          <a href="#" title="Instagram" aria-label="AppAholic on Instagram">&#x1F4F7;</a>
-          <a href="#" title="LinkedIn" aria-label="AppAholic on LinkedIn">in</a>
-          <a href="#" title="WhatsApp" aria-label="Contact on WhatsApp">&#x1F4AC;</a>
+          <a href="https://wa.me/2348000000000" target="_blank" rel="noopener" title="Chat on WhatsApp" aria-label="Contact on WhatsApp">&#x1F4AC;</a>
+          <a href="mailto:info@justservices.pro" title="Email us" aria-label="Email AppAholic">&#x2709;&#xFE0F;</a>
+          <a href="https://justservices.pro" target="_blank" rel="noopener" title="JustServicesPro website" aria-label="JustServicesPro">&#x1F310;</a>
         </div>
       </div>
       <div>
@@ -1342,18 +1341,18 @@ select.form-input { cursor: pointer; }
         <div class="footer__col-title">Company</div>
         <ul class="footer__links">
           <li><a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro</a></li>
-          <li><a href="#">About AppAholic</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Use</a></li>
+          <li><a href="about.html">About AppAholic</a></li>
+          
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
       <div id="footerCopy">&copy; 2025 AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd. All rights reserved.</div>
       <div class="footer__bottom-right">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
         <a href="mailto:info@justservices.pro">Contact</a>
       </div>
     </div>
@@ -1707,13 +1706,57 @@ function handleCardGet(id) {
 
 /* ── REQUEST FORM ──────────────────────────────────────────────── */
 function submitRequest(){
-  ['reqName','reqEmail','reqPhone','reqTitle','reqProblem','reqFeatures','reqInspiration','reqExtra'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
-  ['reqRole','reqCategory','reqPlatform','reqAudience','reqUsers','reqTimeline','reqBudget','reqSource'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0});
-  var cbs=document.querySelectorAll('#integrationsWrap input[type=checkbox]');
-  cbs.forEach(function(c){c.checked=false});
-  showStep(1);
-  showToast('Request submitted! We will review within 48 hours &#127881;','✅');
+  var btn = document.querySelector('.btn-form-submit');
+  var integrations = Array.from(document.querySelectorAll('#integrationsWrap input[type=checkbox]:checked')).map(function(c){return c.value}).join(', ');
+  var get = function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+  var getSel = function(id){ var el=document.getElementById(id); return el?el.value:''; };
+
+  var payload = {
+    name: get('reqName'), email: get('reqEmail'), phone: get('reqPhone'),
+    role: getSel('reqRole'), title: get('reqTitle'), category: getSel('reqCategory'),
+    platform: getSel('reqPlatform'), audience: getSel('reqAudience'), users: getSel('reqUsers'),
+    problem: get('reqProblem'), features: get('reqFeatures'), inspiration: get('reqInspiration'),
+    integrations: integrations, extra: get('reqExtra'), timeline: getSel('reqTimeline'),
+    budget: getSel('reqBudget'), source: getSel('reqSource'),
+    delivery: Array.from(document.querySelectorAll('.form-step#step-4 .check-chip input:checked')).map(function(c){return c.value}).join(', '),
+  };
+
+  if(!payload.name || !payload.email || !payload.title || !payload.problem){
+    showToast('Please complete all required fields.','⚠️');
+    return;
+  }
+
+  if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
+
+  fetch((window.API_BASE||'') + '/api/request-app', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(data.ok){
+      ['reqName','reqEmail','reqPhone','reqTitle','reqProblem','reqFeatures','reqInspiration','reqExtra'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
+      ['reqRole','reqCategory','reqPlatform','reqAudience','reqUsers','reqTimeline','reqBudget','reqSource'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0});
+      document.querySelectorAll('#integrationsWrap input[type=checkbox]').forEach(function(c){c.checked=false});
+      showStep(1);
+      showToast('Request submitted! Check your email for confirmation 🎉','✅');
+    } else {
+      showToast('Something went wrong. Please try again or email us directly.','⚠️');
+    }
+  })
+  .catch(function(){
+    showToast('Could not reach the server. Please email info@justservices.pro directly.','⚠️');
+  })
+  .finally(function(){
+    if(btn){ btn.disabled = false; btn.textContent = '🚀 Submit Request'; }
+  });
 }
+
+/* ── API base — point this to your deployed email server ──────────
+   Same-origin on Vercel if /api lives in this project; otherwise set
+   window.API_BASE = 'https://your-email-server.vercel.app'; */
+window.API_BASE = window.API_BASE || '';
 
 /* ── TOAST ─────────────────────────────────────────────────────── */
 function showToast(msg, icon='✅') {
