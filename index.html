@@ -532,9 +532,6 @@ select.form-input { cursor: pointer; }
 .btn-form-next,.btn-form-submit{padding:10px 22px;border-radius:999px;font-size:13px;font-weight:700;background:var(--ink);color:var(--white);transition:all .2s;cursor:pointer;border:none;font-family:inherit}
 .btn-form-next:hover,.btn-form-submit:hover{background:var(--indigo)}
 .btn-form-submit{border-radius:var(--r-lg);padding:12px 26px;font-size:14px;font-family:var(--font-display)}
-@media(max-width:960px){.calc-inner{grid-template-columns:1fr;gap:40px}}
-
-
 /* SKIP LINK */
 .skip-link{position:absolute;top:-40px;left:8px;background:var(--volt);color:var(--ink);padding:8px 16px;border-radius:var(--r-md);font-size:13px;font-weight:700;z-index:999;transition:top .2s}
 .skip-link:focus{top:8px}
@@ -682,10 +679,2199 @@ select.form-input { cursor: pointer; }
 }
 .platform-tile:hover .platform-tile__arrow { opacity: 1; transform: translateX(0); }
 .platform-tile--dark .platform-tile__arrow { color: var(--volt); }
-@media(max-width: 700px) { .platform-grid { grid-template-columns: 1fr; } }
-@media(max-width: 480px) { .platform-grid { grid-template-columns: 1fr 1fr; gap:12px } }
+
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   FEATURE CHIPS — Calculator
+   ══════════════════════════════════════════════════════════════ */
+.feat-section{margin-top:32px}
+.feat-section__title{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-.2px}
+.feat-section__sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.feat-chips{display:flex;flex-wrap:wrap;gap:8px}
+.feat-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 13px;border-radius:var(--r-lg);
+  border:1.5px solid var(--border);background:var(--white);
+  cursor:pointer;transition:all .18s;font-size:12px;font-weight:500;
+  font-family:var(--font-body);text-align:left;position:relative;
+}
+.feat-chip:hover{border-color:var(--ink);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.feat-chip.on{
+  background:var(--ink);color:var(--white);
+  border-color:var(--ink);box-shadow:var(--shadow-md);
+}
+.feat-chip__check{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);
+  font-size:9px;font-weight:700;flex-shrink:0;
+  transition:all .18s;opacity:0;transform:scale(.6);
+}
+.feat-chip.on .feat-chip__check{
+  background:var(--volt);border-color:var(--volt);color:var(--ink);
+  opacity:1;transform:scale(1);
+}
+.feat-chip__icon{font-size:14px;flex-shrink:0}
+.feat-chip__label{color:inherit;line-height:1.3}
+.feat-chip__price{
+  font-family:var(--font-mono);font-size:10px;font-weight:700;
+  padding:2px 6px;border-radius:999px;
+  background:rgba(10,10,15,.06);color:var(--muted);
+  transition:all .18s;white-space:nowrap;
+}
+.feat-chip.on .feat-chip__price{background:rgba(200,255,0,.2);color:var(--volt)}
+
+.feat-summary{
+  background:var(--surface);border-radius:var(--r-md);
+  padding:12px 14px;margin-bottom:14px;
+}
+.feat-summary__title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px}
+.feat-summary-item{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);
+}
+.feat-summary-item:last-child{border-bottom:none}
+.feat-summary-item span{color:var(--muted);font-family:var(--font-mono)}
+
+/* ══════════════════════════════════════════════════════════════
+   FULL RESPONSIVE OVERHAUL — Mobile-first
+   Breakpoints: 1200 / 960 / 720 / 480 / 380
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Container max-width clamp ── */
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+
+/* ── Hero ── */
+@media(max-width:960px){
+  .hero__inner{grid-template-columns:1fr;gap:36px}
+  .hero__img-wrap{display:none}
+  .hero__title{font-size:clamp(36px,8vw,56px)}
+  .hero__stats{gap:16px}
+  .hero__actions{flex-direction:column;align-items:flex-start;gap:10px}
+}
+@media(max-width:480px){
+  .hero__title{font-size:clamp(30px,9vw,44px)}
+  .hero__sub{font-size:14px}
+  .hero__stats{flex-wrap:wrap;gap:10px}
+  .hero__stat{flex:1;min-width:80px;text-align:center;justify-content:center}
+  .hero__actions .btn{width:100%;justify-content:center}
+}
+
+/* ── Nav ── */
+@media(max-width:960px){
+  .nav__links{display:none}
+  .nav-drawer-toggle{display:flex}
+}
+@media(max-width:480px){
+  .nav__inner{padding:0 16px}
+  .nav__actions .btn-ghost{display:none}
+  .nav__actions .btn-primary{font-size:12px;padding:8px 14px}
+}
+
+/* ── Platform tiles ── */
+@media(max-width:900px){.platform-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.platform-grid{grid-template-columns:1fr}}
+
+/* ── Category chips ── */
+@media(max-width:600px){
+  .cat-grid{gap:8px}
+  .cat-chip{padding:8px 12px}
+  .cat-chip__icon{font-size:16px}
+  .cat-chip__label{font-size:12px}
+  .cat-chip__count{font-size:10px}
+}
+
+/* ── Apps section ── */
+@media(max-width:960px){
+  .apps-header{flex-direction:column;align-items:flex-start;gap:14px}
+  .apps-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .apps-grid{grid-template-columns:1fr}
+  .filter-tabs{flex-wrap:wrap}
+  .filter-tab{font-size:12px;padding:6px 12px}
+}
+
+/* ── Calculator ── */
+@media(max-width:960px){
+  .calc-inner{grid-template-columns:1fr;gap:32px}
+  .calc-card{padding:24px 20px}
+}
+@media(max-width:600px){
+  .calc-inner{gap:24px}
+  .calc-card{padding:18px 14px}
+  .calc-opt{font-size:12px;padding:7px 10px}
+  .calc-result{flex-direction:column;gap:12px;align-items:flex-start}
+  .calc-result .btn{width:100%;justify-content:center}
+  .feat-chips{gap:6px}
+  .feat-chip{padding:7px 10px;font-size:11px}
+}
+@media(max-width:380px){
+  .calc-opt{font-size:11px;padding:6px 8px}
+  .feat-chip__price{display:none}
+}
+
+/* ── Request / multi-step form ── */
+@media(max-width:960px){
+  .request-inner{max-width:100%}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .step-header{flex-direction:column;align-items:flex-start;gap:6px}
+  .prog-bar{gap:4px}
+  .prog-step{font-size:10px;padding:5px 8px}
+  .prog-step__num{width:22px;height:22px;font-size:10px}
+  .prog-connector{width:16px}
+  .form-step{padding:20px 16px}
+}
+
+/* ── How it works ── */
+@media(max-width:960px){
+  .how-steps{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:540px){
+  .how-steps{grid-template-columns:1fr}
+  .how-cta{display:flex;flex-direction:column;gap:10px}
+  .how-cta .btn{width:100%;justify-content:center}
+}
+
+/* ── Reviews ── */
+@media(max-width:900px){
+  .reviews-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:540px){
+  .reviews-grid{grid-template-columns:1fr}
+}
+
+/* ── Featured banner ── */
+@media(max-width:800px){
+  .featured-banner__inner{flex-direction:column;gap:24px}
+  .featured-banner__meta{flex-direction:column;gap:12px;align-items:flex-start}
+}
+
+/* ── Footer ── */
+@media(max-width:900px){
+  .footer__grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:540px){
+  .footer__grid{grid-template-columns:1fr}
+  .footer__bottom{flex-direction:column;align-items:flex-start;gap:12px}
+  .footer__bottom-right{flex-wrap:wrap;gap:10px}
+}
+
+/* ── Section padding ── */
+@media(max-width:600px){
+  section{padding-top:48px;padding-bottom:48px}
+  .section-title{font-size:clamp(22px,6vw,32px)}
+  .section-eyebrow{font-size:11px}
+}
+
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────────── */
+:root {
+  --ink:       #0A0A0F;
+  --ink-2:     #1C1C26;
+  --ink-3:     #2E2E3E;
+  --muted:     #6B6B85;
+  --border:    #E4E4F0;
+  --surface:   #F7F7FB;
+  --white:     #FFFFFF;
+  --volt:      #C8FF00;       /* signature accent — electric volt */
+  --volt-dim:  #9FCC00;
+  --indigo:    #4B3EFF;
+  --rose:      #FF3E6C;
+  --amber:     #FFB800;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+
+  --shadow-sm: 0 1px 3px rgba(10,10,15,.06), 0 1px 2px rgba(10,10,15,.04);
+  --shadow-md: 0 4px 16px rgba(10,10,15,.08), 0 2px 6px rgba(10,10,15,.05);
+  --shadow-lg: 0 12px 40px rgba(10,10,15,.12), 0 4px 12px rgba(10,10,15,.07);
+  --shadow-volt: 0 0 0 3px rgba(200,255,0,.35);
+
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+}
+
+/* ── RESET ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--white); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+img { max-width: 100%; display: block; }
+input, textarea, select { font-family: inherit; }
+
+/* ── UTILITIES ─────────────────────────────────────────────────── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+/* ── NAV ───────────────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px; gap: 24px;
+}
+.nav__logo {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 800;
+  letter-spacing: -.5px;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav__logo-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--volt); border: 2px solid var(--ink);
+  display: inline-block;
+}
+.nav__links {
+  display: flex; align-items: center; gap: 6px;
+  list-style: none;
+}
+.nav__links a {
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 14px; font-weight: 500; color: var(--muted);
+  transition: color .2s, background .2s;
+}
+.nav__links a:hover { color: var(--ink); background: var(--surface); }
+.nav__links a.active { color: var(--ink); }
+.nav__actions { display: flex; align-items: center; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 999px; font-size: 14px; font-weight: 600; transition: all .2s; }
+.btn-ghost { border: 1.5px solid var(--border); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--ink); }
+.btn-primary { background: var(--ink); color: var(--white); }
+.btn-primary:hover { background: var(--ink-3); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-volt { background: var(--volt); color: var(--ink); font-weight: 700; }
+.btn-volt:hover { background: var(--volt-dim); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(200,255,0,.4); }
+.btn-lg { padding: 14px 32px; font-size: 16px; border-radius: var(--r-lg); }
+
+/* ── HERO ──────────────────────────────────────────────────────── */
+.hero {
+  background: var(--ink);
+  color: var(--white);
+  padding: 100px 0 80px;
+  overflow: hidden;
+  position: relative;
+}
+.hero__grid-bg {
+  position: absolute; inset: 0; opacity: .04;
+  background-image:
+    linear-gradient(var(--white) 1px, transparent 1px),
+    linear-gradient(90deg, var(--white) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero__volt-glow {
+  position: absolute; top: -120px; right: -80px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,255,0,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero__inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: 999px;
+  border: 1px solid rgba(200,255,0,.4);
+  background: rgba(200,255,0,.08);
+  color: var(--volt);
+  font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero__eyebrow-dot { width: 6px; height: 6px; background: var(--volt); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.8vw, 58px);
+  font-weight: 800; line-height: 1.08;
+  letter-spacing: -1.5px;
+  margin-bottom: 24px;
+}
+.hero__title em { font-style: normal; color: var(--volt); }
+.hero__sub { font-size: 17px; color: rgba(255,255,255,.6); line-height: 1.7; margin-bottom: 40px; max-width: 440px; }
+.hero__cta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.hero__stats {
+  display: flex; gap: 32px; margin-top: 48px; padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.hero__stat-num { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--volt); }
+.hero__stat-label { font-size: 13px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+/* hero visual side */
+.hero__visual {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  transform: perspective(900px) rotateY(-8deg) rotateX(4deg);
+}
+.app-card-mini {
+  background: var(--ink-2); border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--r-lg); padding: 20px;
+  transition: transform .3s;
+}
+.app-card-mini:hover { transform: translateY(-4px); }
+.app-card-mini__icon {
+  width: 48px; height: 48px; border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+}
+.app-card-mini__name { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+.app-card-mini__cat { font-size: 11px; color: rgba(255,255,255,.35); font-family: var(--font-mono); }
+.app-card-mini__price { font-size: 13px; font-weight: 700; color: var(--volt); margin-top: 12px; }
+.app-card-mini--span { grid-column: 1/-1; display: flex; align-items: center; gap: 16px; }
+.app-card-mini--span .app-card-mini__icon { flex-shrink: 0; width: 52px; height: 52px; }
+.app-card-mini--featured { border-color: rgba(200,255,0,.3); background: rgba(200,255,0,.06); }
+
+/* ── SEARCH BAR ────────────────────────────────────────────────── */
+.search-section { padding: 40px 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+.search-bar {
+  display: flex; align-items: center; gap: 0;
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r-xl); overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-bar:focus-within { border-color: var(--ink); box-shadow: 0 0 0 4px rgba(10,10,15,.08), var(--shadow-md); }
+.search-bar__icon { padding: 0 16px 0 20px; color: var(--muted); font-size: 18px; }
+.search-bar__input {
+  flex: 1; padding: 16px 0; font-size: 15px;
+  border: none; outline: none; background: transparent; color: var(--ink);
+}
+.search-bar__input::placeholder { color: var(--muted); }
+.search-bar__select {
+  padding: 0 16px; border: none; border-left: 1.5px solid var(--border);
+  background: var(--surface); color: var(--ink); font-size: 14px;
+  height: 100%; outline: none; cursor: pointer;
+}
+.search-bar__btn { margin: 6px; border-radius: var(--r-lg); padding: 10px 24px; font-size: 14px; font-weight: 600; background: var(--ink); color: var(--white); }
+.search-bar__btn:hover { background: var(--ink-3); }
+
+/* ── CATEGORIES ────────────────────────────────────────────────── */
+.categories { padding: 48px 0 0; }
+.section-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-family: var(--font-mono); }
+.section-title { font-family: var(--font-display); font-size: clamp(22px, 2.8vw, 30px); font-weight: 800; letter-spacing: -.6px; margin-bottom: 32px; }
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.cat-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 20px 12px; border-radius: var(--r-lg);
+  border: 1.5px solid var(--border); background: var(--white);
+  cursor: pointer; transition: all .2s; text-align: center;
+}
+.cat-chip:hover { border-color: var(--ink); background: var(--ink); color: var(--white); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.cat-chip:hover .cat-chip__icon { background: rgba(255,255,255,.12); }
+.cat-chip__icon { width: 44px; height: 44px; border-radius: var(--r-md); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.cat-chip__label { font-size: 13px; font-weight: 600; }
+.cat-chip__count { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.cat-chip:hover .cat-chip__count { color: rgba(255,255,255,.5); }
+
+/* ── APP GRID ──────────────────────────────────────────────────── */
+.apps-section { padding: 64px 0; }
+.apps-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; }
+.filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-tab {
+  padding: 7px 16px; border-radius: 999px; font-size: 13px; font-weight: 500;
+  border: 1.5px solid var(--border); color: var(--muted); cursor: pointer; transition: all .18s;
+}
+.filter-tab:hover { border-color: var(--ink); color: var(--ink); }
+.filter-tab.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+
+/* App card */
+.app-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r-xl); overflow: hidden;
+  transition: all .25s; cursor: pointer; position: relative;
+}
+.app-card:hover { border-color: var(--ink); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.app-card__banner {
+  height: 120px; display: flex; align-items: center; justify-content: center;
+  font-size: 48px; position: relative; overflow: hidden;
+}
+.app-card__badge {
+  position: absolute; top: 12px; right: 12px;
+  padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+  font-family: var(--font-mono); letter-spacing: .04em;
+}
+.badge-free { background: rgba(200,255,0,.2); color: #4A7C00; border: 1px solid rgba(200,255,0,.5); }
+.badge-paid { background: rgba(75,62,255,.1); color: var(--indigo); border: 1px solid rgba(75,62,255,.3); }
+.badge-new { background: rgba(255,62,108,.1); color: var(--rose); border: 1px solid rgba(255,62,108,.3); }
+.app-card__body { padding: 20px; }
+.app-card__meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.app-card__icon { width: 48px; height: 48px; border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1.5px solid var(--border); background: var(--white); margin-top: -36px; position: relative; z-index: 1; box-shadow: var(--shadow-sm); }
+.app-card__rating { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--amber); }
+.app-card__name { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.app-card__desc { font-size: 13px; color: var(--muted); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.app-card__footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+.app-card__price { font-family: var(--font-display); font-size: 18px; font-weight: 800; }
+.price-free { color: #4A7C00; }
+.price-paid { color: var(--ink); }
+.app-card__dl { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.app-card__get { padding: 8px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--ink); color: var(--white); transition: all .2s; }
+.app-card__get:hover { background: var(--indigo); }
+.app-card__get.free { background: rgba(200,255,0,.15); color: #3A6200; border: 1.5px solid rgba(200,255,0,.6); }
+.app-card__get.free:hover { background: var(--volt); color: var(--ink); }
+
+/* ── FEATURED BANNER ───────────────────────────────────────────── */
+.featured-banner {
+  background: var(--ink); border-radius: var(--r-xl);
+  padding: 48px; display: grid; grid-template-columns: 1fr auto;
+  align-items: center; gap: 40px; margin: 0 0 48px;
+  position: relative; overflow: hidden;
+}
+.featured-banner::before {
+  content: ''; position: absolute; top: -60px; right: 200px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(75,62,255,.3) 0%, transparent 70%);
+}
+.featured-banner__tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--volt); font-family: var(--font-mono); margin-bottom: 12px; }
+.featured-banner__title { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--white); letter-spacing: -.6px; margin-bottom: 10px; }
+.featured-banner__desc { font-size: 14px; color: rgba(255,255,255,.55); max-width: 420px; line-height: 1.7; margin-bottom: 24px; }
+.featured-banner__actions { display: flex; gap: 12px; align-items: center; }
+.featured-banner__price { font-family: var(--font-display); font-size: 36px; font-weight: 800; color: var(--volt); text-align: right; }
+.featured-banner__price span { display: block; font-size: 12px; color: rgba(255,255,255,.4); font-family: var(--font-body); font-weight: 400; margin-top: 4px; }
+
+/* ── REQUEST FORM ──────────────────────────────────────────────── */
+.request-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+  position: relative; overflow: hidden;
+}
+.request-section::before {
+  content: ''; position: absolute; bottom: -100px; left: -100px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,255,0,.1) 0%, transparent 60%);
+}
+.request-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.request-left h2 { font-family: var(--font-display); font-size: clamp(24px, 3.2vw, 38px); font-weight: 800; color: var(--white); letter-spacing: -1px; margin-bottom: 16px; line-height: 1.15; }
+.request-left p { color: rgba(255,255,255,.55); font-size: 15px; line-height: 1.8; margin-bottom: 32px; }
+.request-promise { display: flex; flex-direction: column; gap: 16px; }
+.request-promise__item { display: flex; align-items: flex-start; gap: 14px; }
+.request-promise__icon { width: 36px; height: 36px; border-radius: var(--r-sm); background: rgba(200,255,0,.12); border: 1px solid rgba(200,255,0,.25); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.request-promise__text strong { display: block; color: var(--white); font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.request-promise__text span { color: rgba(255,255,255,.4); font-size: 13px; }
+
+/* Form */
+.request-form {
+  background: var(--white); border-radius: var(--r-xl); padding: 40px;
+  box-shadow: var(--shadow-lg);
+}
+.form-row { margin-bottom: 20px; }
+.form-row label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--ink-3); }
+.form-row label span { color: var(--rose); margin-left: 2px; }
+.form-input {
+  width: 100%; padding: 12px 16px; border-radius: var(--r-md);
+  border: 1.5px solid var(--border); background: var(--surface);
+  font-size: 14px; color: var(--ink); outline: none; transition: border-color .2s, box-shadow .2s;
+}
+.form-input:focus { border-color: var(--ink); background: var(--white); box-shadow: 0 0 0 3px rgba(10,10,15,.07); }
+.form-input::placeholder { color: var(--muted); }
+textarea.form-input { resize: vertical; min-height: 110px; }
+select.form-input { cursor: pointer; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-submit { width: 100%; padding: 15px; border-radius: var(--r-lg); background: var(--ink); color: var(--white); font-size: 15px; font-weight: 700; font-family: var(--font-display); letter-spacing: -.2px; transition: all .2s; margin-top: 8px; }
+.form-submit:hover { background: var(--indigo); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(75,62,255,.3); }
+.form-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 14px; }
+
+/* ── HOW IT WORKS ──────────────────────────────────────────────── */
+.how-section { padding: 80px 0; background: var(--surface); }
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 48px; position: relative; }
+.step-card {
+  background: var(--white); padding: 32px 28px;
+  border: 1px solid var(--border); position: relative;
+}
+.step-card:first-child { border-radius: var(--r-lg) 0 0 var(--r-lg); }
+.step-card:last-child  { border-radius: 0 var(--r-lg) var(--r-lg) 0; }
+.step-num {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--volt); background: var(--ink); padding: 4px 10px; border-radius: 999px;
+  display: inline-block; margin-bottom: 20px; letter-spacing: .05em;
+}
+.step-icon { font-size: 28px; margin-bottom: 16px; }
+.step-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.step-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── TESTIMONIALS ──────────────────────────────────────────────── */
+.reviews-section { padding: 80px 0; }
+.reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+.review-card {
+  border: 1.5px solid var(--border); border-radius: var(--r-xl); padding: 28px;
+  background: var(--white); transition: all .2s;
+}
+.review-card:hover { border-color: var(--ink); box-shadow: var(--shadow-md); }
+.review-card__stars { color: var(--amber); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+.review-card__text { font-size: 14px; color: var(--ink-3); line-height: 1.75; margin-bottom: 20px; }
+.review-card__user { display: flex; align-items: center; gap: 12px; }
+.review-card__avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; flex-shrink: 0;
+}
+.review-card__name { font-size: 14px; font-weight: 600; }
+.review-card__role { font-size: 12px; color: var(--muted); }
+
+/* ── MODAL ─────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(10,10,15,.7);
+  backdrop-filter: blur(6px); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--white); border-radius: var(--r-xl);
+  max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg); transform: translateY(20px) scale(.97);
+  transition: transform .25s;
+}
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal__header {
+  padding: 28px 32px 0; display: flex; align-items: flex-start; justify-content: space-between;
+}
+.modal__close {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--muted); cursor: pointer; transition: background .2s;
+}
+.modal__close:hover { background: var(--border); }
+.modal__body { padding: 24px 32px 32px; }
+.modal__app-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.modal__app-icon { width: 64px; height: 64px; border-radius: var(--r-lg); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 1.5px solid var(--border); }
+.modal__app-name { font-family: var(--font-display); font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+.modal__app-cat { font-size: 13px; color: var(--muted); font-family: var(--font-mono); margin-top: 3px; }
+.modal__section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-family: var(--font-mono); margin: 20px 0 10px; }
+.modal__desc { font-size: 14px; color: var(--ink-3); line-height: 1.8; }
+.modal__feature-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.modal__feature-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.modal__feature-list li::before { content: '✓'; color: #4A7C00; font-weight: 700; background: rgba(200,255,0,.2); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+.modal__cta { display: flex; align-items: center; gap: 16px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
+.modal__price { font-family: var(--font-display); font-size: 28px; font-weight: 800; }
+.modal__btn-get { flex: 1; padding: 14px; border-radius: var(--r-lg); background: var(--ink); color: var(--white); font-size: 15px; font-weight: 700; font-family: var(--font-display); text-align: center; transition: all .2s; }
+.modal__btn-get:hover { background: var(--indigo); }
+
+/* ── TOAST ─────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 28px; right: 28px; z-index: 300;
+  background: var(--ink); color: var(--white);
+  padding: 14px 22px; border-radius: var(--r-lg);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg);
+  transform: translateY(80px); opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast__icon { font-size: 18px; }
+
+/* ── FOOTER ────────────────────────────────────────────────────── */
+.footer {
+  background: var(--ink); color: rgba(255,255,255,.5);
+  padding: 64px 0 32px;
+}
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer__brand-name { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.footer__tagline { font-size: 13px; line-height: 1.7; max-width: 240px; margin-bottom: 20px; }
+.footer__col-title { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.3); font-family: var(--font-mono); margin-bottom: 16px; }
+.footer__links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer__links a { font-size: 14px; transition: color .2s; }
+.footer__links a:hover { color: var(--white); }
+.footer__bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.08); font-size: 12px; }
+.footer__bottom-right { display: flex; gap: 20px; }
+.payment-badges { display: flex; gap: 8px; margin-top: 16px; }
+.payment-badge {
+  padding: 6px 12px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,.5); font-family: var(--font-mono);
+}
+
+/* ── ADMIN NOTICE BANNER ───────────────────────────────────────── */
+.admin-bar {
+  background: linear-gradient(90deg, var(--volt) 0%, #A8E000 100%);
+  padding: 10px 0; text-align: center;
+}
+.admin-bar__inner { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 13px; font-weight: 600; color: var(--ink); }
+.admin-bar a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── RESPONSIVE ────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__visual { display: none; }
+  .request-inner { grid-template-columns: 1fr; gap: 40px; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .step-card:first-child { border-radius: var(--r-lg) 0 0 0; }
+  .step-card:last-child  { border-radius: 0 0 var(--r-lg) var(--r-lg); }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+  .featured-banner { grid-template-columns: 1fr; }
+  .nav__links { display: none; }
+}
+@media (max-width: 600px) {
+  .apps-grid { grid-template-columns: 1fr; }
+  .cat-grid { grid-template-columns: repeat(3, 1fr); }
+  .steps-grid { grid-template-columns: 1fr; }
+  .step-card:first-child { border-radius: var(--r-lg) var(--r-lg) 0 0; }
+  .step-card:last-child  { border-radius: 0 0 var(--r-lg) var(--r-lg); }
+  .footer__grid { grid-template-columns: 1fr; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+  .modal__body { padding: 16px 20px 24px; }
+  .hero__stats { flex-wrap: wrap; gap: 20px; }
+  .featured-banner { padding: 28px 24px; }
+}
+/* ── CHECK CHIPS ───────────────────────────────────────────────── */
+.check-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 13px; border-radius: 999px; font-size: 13px; font-weight: 500;
+  border: 1.5px solid var(--border); background: var(--surface);
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.check-chip input { display: none; }
+.check-chip:hover { border-color: var(--ink); }
+.check-chip:has(input:checked) {
+  background: var(--ink); color: var(--white); border-color: var(--ink);
+}
+
+.calc-section{padding:76px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.calc-left p{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:24px}
+.calc-hints{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.calc-hint{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--muted);line-height:1.6}
+.calc-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:32px;box-shadow:var(--shadow-md)}
+.calc-row{margin-bottom:20px}
+.calc-row label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--font-mono);margin-bottom:10px}
+.calc-options{display:flex;flex-wrap:wrap;gap:8px}
+.calc-opt{padding:8px 14px;border-radius:var(--r-md);font-size:13px;font-weight:500;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .15s}
+.calc-opt:hover{border-color:var(--ink)}.calc-opt.sel{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.calc-result{background:var(--ink);border-radius:var(--r-lg);padding:22px 24px;margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.calc-result__lbl{font-size:11px;color:rgba(255,255,255,.45);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.calc-result__price{font-family:var(--font-display);font-size:30px;font-weight:800;color:var(--volt);letter-spacing:-.5px}
+.calc-result__range{font-size:12px;color:rgba(255,255,255,.35);margin-top:4px}
+.calc-breakdown{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.calc-brow{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:8px 12px;border-radius:var(--r-sm);background:var(--surface)}
+.calc-brow.total{background:var(--ink)}
+.calc-brow__lbl{color:var(--muted)}.calc-brow.total .calc-brow__lbl{color:rgba(255,255,255,.5)}
+.calc-brow__val{font-weight:600;font-family:var(--font-mono);color:var(--ink)}.calc-brow.total .calc-brow__val{color:var(--volt)}
+.calc-note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+.form-progress{margin-bottom:28px}
+.form-progress__steps{display:flex;align-items:flex-start}
+.form-progress__step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.form-progress__step:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;right:-50%;height:2px;background:var(--border);z-index:0}
+.form-progress__step.done::after,.form-progress__step.active::after{background:var(--volt)}
+.form-progress__dot{width:27px;height:27px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--font-mono);color:var(--muted);position:relative;z-index:1;transition:all .25s}
+.form-progress__step.active .form-progress__dot{border-color:var(--ink);background:var(--ink);color:var(--white)}
+.form-progress__step.done .form-progress__dot{border-color:#4A7C00;background:var(--volt);color:var(--ink)}
+.form-progress__label{font-size:10px;font-weight:600;color:var(--muted);text-align:center;font-family:var(--font-mono);letter-spacing:.04em;text-transform:uppercase;margin-top:7px}
+.form-progress__step.active .form-progress__label{color:var(--ink)}
+.form-progress__step.done .form-progress__label{color:#4A7C00}
+.form-step{display:none}.form-step.active{display:block;animation:stepIn .22s ease}
+@keyframes stepIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.step-heading{font-family:var(--font-display);font-size:17px;font-weight:800;margin-bottom:4px;letter-spacing:-.3px}
+.step-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.check-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.check-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;font-size:13px;font-weight:500;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .15s;user-select:none}
+.check-chip input{display:none}.check-chip:hover{border-color:var(--ink)}
+.check-chip:has(input:checked){background:var(--ink);color:var(--white);border-color:var(--ink)}
+.form-nav{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.btn-form-back{padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--border);color:var(--muted);transition:all .18s;cursor:pointer;background:none;font-family:inherit}
+.btn-form-back:hover{border-color:var(--ink);color:var(--ink)}
+.btn-form-next,.btn-form-submit{padding:10px 22px;border-radius:999px;font-size:13px;font-weight:700;background:var(--ink);color:var(--white);transition:all .2s;cursor:pointer;border:none;font-family:inherit}
+.btn-form-next:hover,.btn-form-submit:hover{background:var(--indigo)}
+.btn-form-submit{border-radius:var(--r-lg);padding:12px 26px;font-size:14px;font-family:var(--font-display)}
+/* SKIP LINK */
+.skip-link{position:absolute;top:-40px;left:8px;background:var(--volt);color:var(--ink);padding:8px 16px;border-radius:var(--r-md);font-size:13px;font-weight:700;z-index:999;transition:top .2s}
+.skip-link:focus{top:8px}
+
+/* MOBILE NAV DRAWER */
+.nav-drawer-toggle{display:none;width:40px;height:40px;border-radius:var(--r-md);align-items:center;justify-content:center;font-size:20px;border:1.5px solid var(--border);cursor:pointer;background:var(--white);transition:all .2s}
+.nav-drawer-toggle:hover{border-color:var(--ink)}
+.nav-drawer{position:fixed;top:0;right:-300px;width:280px;height:100vh;background:var(--white);z-index:200;box-shadow:-8px 0 32px rgba(10,10,15,.12);transition:right .3s cubic-bezier(.4,0,.2,1);padding:24px 20px;display:flex;flex-direction:column;gap:0}
+.nav-drawer.open{right:0}
+.nav-drawer__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.nav-drawer__logo{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:7px}
+.nav-drawer__close{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:var(--muted)}
+.nav-drawer__links{list-style:none;display:flex;flex-direction:column;gap:4px}
+.nav-drawer__links a{display:block;padding:12px 14px;border-radius:var(--r-md);font-size:15px;font-weight:500;color:var(--ink-3);transition:background .15s}
+.nav-drawer__links a:hover{background:var(--surface);color:var(--ink)}
+.nav-drawer__actions{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-top:20px;border-top:1px solid var(--border)}
+.nav-drawer__actions .btn{justify-content:center;border-radius:var(--r-lg)}
+.nav-overlay{position:fixed;inset:0;background:rgba(10,10,15,.5);z-index:150;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
+.nav-overlay.open{opacity:1;pointer-events:all}
+@media(max-width:960px){
+  .nav__links{display:none}
+  .nav-drawer-toggle{display:flex}
+}
+
+/* ACTIVE CATEGORY CHIP */
+.cat-chip.active-cat{border-color:var(--ink);background:var(--ink);color:var(--white)}
+.cat-chip.active-cat .cat-chip__count{color:rgba(255,255,255,.5)}
+
+/* FORM FIELD ERROR */
+.form-input.error{border-color:var(--rose);box-shadow:0 0 0 3px rgba(255,62,108,.1)}
+.field-error{font-size:12px;color:var(--rose);margin-top:5px;display:none}
+.field-error.show{display:block}
+
+/* CLEAR SEARCH BUTTON */
+.search-clear{padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--border);color:var(--muted);cursor:pointer;background:var(--white);transition:all .15s;display:none}
+.search-clear.show{display:block}
+.search-clear:hover{border-color:var(--rose);color:var(--rose)}
+
+/* HOW IT WORKS CTA */
+.how-cta{text-align:center;margin-top:40px}
+
+/* FOOTER SOCIAL ICONS */
+.footer__social{display:flex;gap:10px;margin-top:16px}
+.footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s}
+.footer__social a:hover{background:rgba(255,255,255,.12)}
+
+/* ── IMAGE 1: Hero partial right-side image ─────────────────────────────── */
+.hero__img-wrap {
+  position: absolute;
+  top: 0; right: 0;
+  width: 48%; height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero__img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: .18;
+  -webkit-mask-image:
+    linear-gradient(to left,  black 0%, black 20%, transparent 85%),
+    linear-gradient(to top,   transparent 0%, black 25%, black 100%);
+  mask-image:
+    linear-gradient(to left,  black 0%, black 20%, transparent 85%),
+    linear-gradient(to top,   transparent 0%, black 25%, black 100%);
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+}
+@media (max-width: 960px) {
+  .hero__img-wrap { width: 100%; opacity: .06; }
+}
+
+/* ── IMAGE 2: Request section near-opaque background ───────────────────── */
+.req-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: .07;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+}
+.request-section {
+  position: relative;
+  overflow: hidden;
+}
+.request-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(135deg, rgba(10,10,15,.97) 0%, rgba(28,28,38,.93) 100%);
+}
+.request-inner {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* ── PLATFORM TILES ───────────────────────────────────────── */
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.platform-tile {
+  display: flex; flex-direction: column;
+  padding: 28px 24px;
+  border-radius: var(--r-xl);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  text-decoration: none; color: var(--ink);
+  transition: all .22s;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.platform-tile:hover {
+  border-color: var(--ink);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.platform-tile--dark {
+  background: var(--ink); color: var(--white);
+  border-color: var(--ink);
+}
+.platform-tile--dark .platform-tile__desc { color: rgba(255,255,255,.5); }
+.platform-tile--dark .platform-tile__count { color: var(--volt); }
+.platform-tile--dark:hover { box-shadow: 0 12px 40px rgba(10,10,15,.3); }
+.platform-tile__icon { font-size: 32px; margin-bottom: 14px; }
+.platform-tile__name {
+  font-family: var(--font-display); font-size: 20px; font-weight: 800;
+  letter-spacing: -.4px; margin-bottom: 8px;
+}
+.platform-tile__desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+.platform-tile__count {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+  color: var(--indigo); margin-bottom: 14px;
+}
+.platform-tile__arrow {
+  font-size: 18px; opacity: 0; transform: translateX(-6px);
+  transition: all .2s; position: absolute; bottom: 22px; right: 22px;
+}
+.platform-tile:hover .platform-tile__arrow { opacity: 1; transform: translateX(0); }
+.platform-tile--dark .platform-tile__arrow { color: var(--volt); }
+
+
 
 </style>
+</head>
+<body>
+
+<!-- ADMIN BAR -->
+<a class="skip-link" href="#apps">Skip to content</a>
+
+<div class="admin-bar">
+  <div class="admin-bar__inner">
+    AppAholic — Web · Desktop · Mobile Apps &nbsp;·&nbsp; A <strong>JustServicesPro</strong> product &nbsp;·&nbsp; <a href="mailto:info@justservices.pro">info@justservices.pro</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <span class="nav__logo-dot"></span>
+        AppAholic
+      </a>
+      <ul class="nav__links">
+        <li><a href="marketplace.html">All Apps</a></li>
+        <li><a href="marketplace.html?platform=web" style="color:#4B3EFF">🌐 Web</a></li>
+        <li><a href="marketplace.html?platform=desktop" style="color:#5B30C8">🖥 Desktop</a></li>
+        <li><a href="marketplace.html?platform=mobile" style="color:#D4700A">📱 Mobile</a></li>
+        <li><a href="#calculator">Budget Calc</a></li>
+        <li><a href="#request">Request App</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a class="btn btn-ghost" href="auth.html">Sign In</a>
+        <button class="btn btn-primary" onclick="scrollToSection('request')">Submit Request</button>
+        <button class="nav-drawer-toggle" onclick="openDrawer()" aria-label="Open menu">&#9776;</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
+<nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation">
+  <div class="nav-drawer__header">
+    <div class="nav-drawer__logo"><span style="width:8px;height:8px;background:var(--volt);border-radius:50%;display:inline-block"></span>AppAholic</div>
+    <button class="nav-drawer__close" onclick="closeDrawer()" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <ul class="nav-drawer__links">
+    <li><a href="#apps" onclick="closeDrawer()">Browse Apps</a></li>
+    <li><a href="#categories" onclick="closeDrawer()">Categories</a></li>
+    <li><a href="#calculator" onclick="closeDrawer()">Budget Calculator</a></li>
+    <li><a href="#request" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="#how" onclick="closeDrawer()">How it Works</a></li>
+  </ul>
+  <div class="nav-drawer__actions">
+    <button class="btn btn-ghost" onclick="showToast('Sign in coming soon!','🔐');closeDrawer()">Sign In</button>
+    <button class="btn btn-primary" onclick="scrollToSection('request');closeDrawer()">Submit Request</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__grid-bg"></div>
+  <div class="hero__volt-glow"></div>
+  
+  <div class="hero__img-wrap" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80" alt="" loading="eager"/>
+  </div>
+
+  <div class="container">
+    <div class="hero__inner">
+      <div>
+        <div class="hero__eyebrow">
+          <span class="hero__eyebrow-dot"></span>
+          The Productivity Marketplace
+        </div>
+        <h1 class="hero__title">
+          Web. Desktop.<br/>
+          <em>Mobile.</em><br/>
+          One marketplace.
+        </h1>
+        <p class="hero__sub">
+          Web apps, Desktop apps (Windows & Mac) and Mobile apps (Android & iOS) — all built for real workflows. Free and paid, all in one marketplace.
+        </p>
+        <div class="hero__cta">
+          <a href="marketplace.html" class="btn btn-volt btn-lg">Browse Apps</a>
+          <button class="btn btn-ghost btn-lg" style="color:rgba(255,255,255,.7); border-color:rgba(255,255,255,.2)" onclick="scrollToSection('request')">Request an App →</button>
+        </div>
+        <div class="hero__stats">
+          <div>
+            <div class="hero__stat-num">15</div>
+            <div class="hero__stat-label">Apps available</div>
+          </div>
+          <div>
+            <div class="hero__stat-num">3</div>
+            <div class="hero__stat-label">Platforms</div>
+          </div>
+          <div>
+            <div class="hero__stat-num">5</div>
+            <div class="hero__stat-label">Supported OS</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero visual: mini app cards -->
+      <div class="hero__visual" aria-hidden="true">
+        <div class="app-card-mini app-card-mini--featured">
+          <div class="app-card-mini__icon" style="background:rgba(200,255,0,.15)">📊</div>
+          <div class="app-card-mini__name">DataPulse</div>
+          <div class="app-card-mini__cat">Analytics · Web</div>
+          <div class="app-card-mini__price">₦3,500</div>
+        </div>
+        <div class="app-card-mini">
+          <div class="app-card-mini__icon" style="background:rgba(75,62,255,.15)">🗂️</div>
+          <div class="app-card-mini__name">VaultSync</div>
+          <div class="app-card-mini__cat">Storage · Desktop</div>
+          <div class="app-card-mini__price">FREE</div>
+        </div>
+        <div class="app-card-mini">
+          <div class="app-card-mini__icon" style="background:rgba(255,62,108,.12)">⏱️</div>
+          <div class="app-card-mini__name">FocusClock</div>
+          <div class="app-card-mini__cat">Productivity · Desktop</div>
+          <div class="app-card-mini__price">₦1,200</div>
+        </div>
+        <div class="app-card-mini">
+          <div class="app-card-mini__icon" style="background:rgba(255,184,0,.15)">🔐</div>
+          <div class="app-card-mini__name">LockBox</div>
+          <div class="app-card-mini__cat">Security · Desktop</div>
+          <div class="app-card-mini__price">₦2,000</div>
+        </div>
+        <div class="app-card-mini app-card-mini--span">
+          <div class="app-card-mini__icon" style="background:rgba(200,255,0,.1);width:52px;height:52px;flex-shrink:0">🤖</div>
+          <div>
+            <div class="app-card-mini__name" style="font-size:15px">TaskMind AI</div>
+            <div class="app-card-mini__cat">AI Tools · Web</div>
+            <div class="app-card-mini__price">₦5,000 / mo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<section class="search-section">
+  <div class="container">
+    <div class="search-bar">
+      <span class="search-bar__icon">🔍</span>
+      <input class="search-bar__input" type="text" placeholder="Search apps by name, category, or feature..." id="searchInput" oninput="filterApps()"/>
+      <select class="search-bar__select" id="categoryFilter" onchange="filterApps()">
+        <option value="">All Categories</option>
+        <option>Productivity</option>
+        <option>Analytics</option>
+        <option>Finance</option>
+        <option>Security</option>
+        <option>Communication</option>
+        <option>Storage</option>
+        <option>AI Tools</option>
+        <option>Utilities</option>
+      </select>
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">&#x2715; Clear</button>
+      <button class="search-bar__btn">Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div class="container">
+    <div class="section-eyebrow">Browse by platform &amp; category</div>
+    <h2 class="section-title">Pick your platform</h2>
+    <!-- Platform tiles -->
+    <div class="platform-grid">
+      <a href="marketplace.html?platform=web" class="platform-tile">
+        <div class="platform-tile__icon">🌐</div>
+        <div class="platform-tile__name">Web Apps</div>
+        <div class="platform-tile__desc">Chrome, Firefox, Safari.<br/>No download, any device.</div>
+        <div class="platform-tile__count">6 apps</div>
+        <div class="platform-tile__arrow">→</div>
+      </a>
+      <a href="marketplace.html?platform=desktop" class="platform-tile platform-tile--dark">
+        <div class="platform-tile__icon">🖥</div>
+        <div class="platform-tile__name">Desktop Apps</div>
+        <div class="platform-tile__desc">Windows, Mac &amp; Linux.<br/>Native, offline-ready.</div>
+        <div class="platform-tile__count">5 apps</div>
+        <div class="platform-tile__arrow">→</div>
+      </a>
+      <a href="marketplace.html?platform=mobile" class="platform-tile">
+        <div class="platform-tile__icon">📱</div>
+        <div class="platform-tile__name">Mobile Apps</div>
+        <div class="platform-tile__desc">Android &amp; iOS.<br/>GPS, camera &amp; offline.</div>
+        <div class="platform-tile__count">4 apps</div>
+        <div class="platform-tile__arrow">→</div>
+      </a>
+    </div>
+
+    <!-- Category chips below platform tiles -->
+    <div style="margin-top:36px">
+      <div class="section-eyebrow" style="margin-bottom:14px">Or browse by category</div>
+      <div class="cat-grid">
+        <div class="cat-chip" onclick="filterByCategory('Productivity')"><div class="cat-chip__icon">🎯</div><div class="cat-chip__label">Productivity</div><div class="cat-chip__count">5 apps</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Finance')"><div class="cat-chip__icon">💰</div><div class="cat-chip__label">Finance</div><div class="cat-chip__count">4 apps</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Analytics')"><div class="cat-chip__icon">📊</div><div class="cat-chip__label">Analytics</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('AI Tools')"><div class="cat-chip__icon">🤖</div><div class="cat-chip__label">AI Tools</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Security')"><div class="cat-chip__icon">🔐</div><div class="cat-chip__label">Security</div><div class="cat-chip__count">3 apps</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Communication')"><div class="cat-chip__icon">💬</div><div class="cat-chip__label">Communication</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Utilities')"><div class="cat-chip__icon">🛠️</div><div class="cat-chip__label">Utilities</div><div class="cat-chip__count">1 app</div></div>
+        <div class="cat-chip" onclick="filterByCategory('Storage')"><div class="cat-chip__icon">🗄️</div><div class="cat-chip__label">Storage</div><div class="cat-chip__count">1 app</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPS -->
+<section class="apps-section" id="apps">
+  <div class="container">
+
+    <!-- Featured -->
+    <div class="featured-banner">
+      <div style="position:relative">
+        <div class="featured-banner__tag">⚡ Featured — Web App of the Month</div>
+        <div class="featured-banner__title">TaskMind AI — Smart Task Manager</div>
+        <div class="featured-banner__desc">AI-powered task prioritization that learns your workflow. Connect your calendar, email, and notes — let TaskMind build your perfect day automatically.</div>
+        <div class="featured-banner__actions">
+          <button class="btn btn-volt" onclick="openModal('taskmind')">Get TaskMind AI</button>
+          <button class="btn" style="color:rgba(255,255,255,.6); border:1.5px solid rgba(255,255,255,.15)" onclick="showToast('Preview opening...', '🎬')">Watch Demo</button>
+        </div>
+      </div>
+      <div style="text-align:right;position:relative">
+        <div style="font-size:60px;margin-bottom:12px">🤖</div>
+        <div class="featured-banner__price">₦5,000<span>per month</span></div>
+      </div>
+    </div>
+
+    <div class="apps-header">
+      <div>
+        <div class="section-eyebrow">Web · Desktop · Mobile</div>
+        <h2 class="section-title" style="margin-bottom:0">Featured Apps</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+      <a href="marketplace.html" class="btn btn-ghost btn-sm" style="font-size:13px">Browse all platforms →</a>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setFilter(this,'all')">All</button>
+        <button class="filter-tab" onclick="setFilter(this,'free')">Free</button>
+        <button class="filter-tab" onclick="setFilter(this,'paid')">Paid</button>
+        <button class="filter-tab" onclick="setFilter(this,'new')">New</button>
+        <button class="filter-tab" onclick="setFilter(this,'top')">Top Rated</button>
+      </div>
+      </div>
+    </div>
+
+    <div class="apps-grid" id="appsGrid">
+      <!-- Cards injected by JS -->
+    </div>
+
+  </div>
+</section>
+
+
+<!-- BUDGET CALCULATOR -->
+<section class="calc-section" id="calculator">
+  <div class="container">
+    <div class="calc-inner">
+      <div class="calc-left">
+        <div class="section-eyebrow">Project estimator</div>
+        <h2 class="section-title">How much will your app cost?</h2>
+        <p>Adjust the scope and get an instant ballpark estimate. Every project is quoted individually &mdash; this gives you a realistic starting point before submitting a request.</p>
+        <div class="calc-hints">
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#128203;</span><span>Estimates cover standard builds. Complex AI features or multi-platform needs may shift pricing.</span></div>
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#9889;</span><span>Rush delivery under 2 weeks adds 30% to the estimate.</span></div>
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#127873;</span><span>Apps listed on AppAholic get discounted &mdash; we share revenue instead of charging full rate.</span></div>
+        </div>
+      </div>
+      <div class="calc-card">
+        <div class="calc-row">
+          <label>App Type</label>
+          <div class="calc-options" id="calc-type">
+            <button class="calc-opt sel" data-val="utility" onclick="calcPick(this,'type')">Utility / Tool</button>
+            <button class="calc-opt" data-val="dashboard" onclick="calcPick(this,'type')">Dashboard</button>
+            <button class="calc-opt" data-val="ecommerce" onclick="calcPick(this,'type')">E-commerce</button>
+            <button class="calc-opt" data-val="ai" onclick="calcPick(this,'type')">AI-powered</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Platform</label>
+          <div class="calc-options" id="calc-platform">
+            <button class="calc-opt sel" data-val="web" onclick="calcPick(this,'platform')">Web only</button>
+            <button class="calc-opt" data-val="mobile" onclick="calcPick(this,'platform')">Mobile only</button>
+            <button class="calc-opt" data-val="both" onclick="calcPick(this,'platform')">Web + Mobile</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Complexity</label>
+          <div class="calc-options" id="calc-complexity">
+            <button class="calc-opt sel" data-val="basic" onclick="calcPick(this,'complexity')">Basic (3&ndash;5)</button>
+            <button class="calc-opt" data-val="standard" onclick="calcPick(this,'complexity')">Standard (6&ndash;10)</button>
+            <button class="calc-opt" data-val="advanced" onclick="calcPick(this,'complexity')">Advanced (10+)</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Integrations</label>
+          <div class="calc-options" id="calc-integrations">
+            <button class="calc-opt sel" data-val="none" onclick="calcPick(this,'integrations')">None</button>
+            <button class="calc-opt" data-val="some" onclick="calcPick(this,'integrations')">1&ndash;2 (email, SMS)</button>
+            <button class="calc-opt" data-val="many" onclick="calcPick(this,'integrations')">3+ (APIs, payments)</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Admin Dashboard</label>
+          <div class="calc-options" id="calc-admin">
+            <button class="calc-opt sel" data-val="no" onclick="calcPick(this,'admin')">Not needed</button>
+            <button class="calc-opt" data-val="basic" onclick="calcPick(this,'admin')">Basic</button>
+            <button class="calc-opt" data-val="full" onclick="calcPick(this,'admin')">Full dashboard</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Timeline</label>
+          <div class="calc-options" id="calc-timeline">
+            <button class="calc-opt sel" data-val="normal" onclick="calcPick(this,'timeline')">Flexible</button>
+            <button class="calc-opt" data-val="rush" onclick="calcPick(this,'timeline')">Rush (+30%)</button>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div>
+            <div class="calc-result__lbl">Estimated Cost</div>
+            <div class="calc-result__price" id="calcPrice">&#x20A6;25,000</div>
+            <div class="calc-result__range" id="calcRange">Range: &#x20A6;20,000 &ndash; &#x20A6;33,000</div>
+          </div>
+          <button class="btn btn-volt" style="font-size:13px;padding:10px 18px;flex-shrink:0" onclick="scrollToSection('request')">Request This &rarr;</button>
+        </div>
+        <div class="calc-breakdown" id="calcBreakdown"></div>
+        <div class="calc-note">This is an estimate, not a quote. Submit a request and we will send a detailed proposal within 48 hours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUEST FORM -->
+<section class="request-section" id="request">
+  <img class="req-bg-img" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&auto=format&fit=crop&q=80" alt="" loading="lazy" aria-hidden="true"/>
+
+  <div class="container">
+    <div class="request-inner">
+      <div class="request-left" style="position:relative">
+        <div class="section-eyebrow" style="color:rgba(200,255,0,.7)">Can't find what you need?</div>
+        <h2>Request a<br/><em style="font-style:normal;color:var(--volt)">custom app</em><br/>built for you.</h2>
+        <p>Tell us what you need. Our team reviews every request — popular ideas get built and added to the marketplace.</p>
+        <div class="request-promise">
+          <div class="request-promise__item">
+            <div class="request-promise__icon">⚡</div>
+            <div class="request-promise__text">
+              <strong>Fast review</strong>
+              <span>Every request reviewed within 48 hours</span>
+            </div>
+          </div>
+          <div class="request-promise__item">
+            <div class="request-promise__icon">🗳️</div>
+            <div class="request-promise__text">
+              <strong>Community voting</strong>
+              <span>Most-requested apps get built first</span>
+            </div>
+          </div>
+          <div class="request-promise__item">
+            <div class="request-promise__icon">🎁</div>
+            <div class="request-promise__text">
+              <strong>Early access</strong>
+              <span>Requesters get the app free on launch</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="request-form">
+        <!-- Progress bar -->
+        <div class="form-progress">
+          <div class="form-progress__steps">
+            <div class="form-progress__step active" id="prog-1"><div class="form-progress__dot">1</div><div class="form-progress__label">You</div></div>
+            <div class="form-progress__step" id="prog-2"><div class="form-progress__dot">2</div><div class="form-progress__label">The App</div></div>
+            <div class="form-progress__step" id="prog-3"><div class="form-progress__dot">3</div><div class="form-progress__label">Features</div></div>
+            <div class="form-progress__step" id="prog-4"><div class="form-progress__dot">4</div><div class="form-progress__label">Budget</div></div>
+          </div>
+        </div>
+        <!-- Step 1 -->
+        <div class="form-step active" id="step-1">
+          <div class="step-heading">Tell us about yourself</div>
+          <div class="step-sub">We will use this to send your proposal and follow up.</div>
+          <div class="form-grid-2">
+            <div class="form-row"><label>Full Name <span style="color:var(--rose)">*</span></label><input class="form-input" type="text" id="reqName" placeholder="e.g. Tunde Bakare"/></div>
+            <div class="form-row"><label>Email Address <span style="color:var(--rose)">*</span></label><input class="form-input" type="email" id="reqEmail" placeholder="you@example.com"/></div>
+          </div>
+          <div class="form-row"><label>Phone / WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400">(optional)</span></label><input class="form-input" type="tel" id="reqPhone" placeholder="+234 800 000 0000"/></div>
+          <div class="form-row">
+            <label>Your role <span style="color:var(--rose)">*</span></label>
+            <select class="form-input" id="reqRole">
+              <option value="">Select your role</option>
+              <option>Freelancer / Sole trader</option><option>Business owner / Founder</option>
+              <option>Manager / Team lead</option><option>Developer / Designer</option>
+              <option>Student</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-nav"><div></div><button class="btn-form-next" onclick="nextStep(1)">The App &rarr;</button></div>
+        </div>
+        <!-- Step 2 -->
+        <div class="form-step" id="step-2">
+          <div class="step-heading">About the app</div>
+          <div class="step-sub">Give us the headline &mdash; what is this thing?</div>
+          <div class="form-row"><label>App Name / Title <span style="color:var(--rose)">*</span></label><input class="form-input" type="text" id="reqTitle" placeholder="e.g. Staff Attendance Manager"/></div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label>Category <span style="color:var(--rose)">*</span></label>
+              <select class="form-input" id="reqCategory">
+                <option value="">Select category</option>
+                <option>Productivity</option><option>Finance &amp; Accounting</option><option>Analytics &amp; Reports</option>
+                <option>HR &amp; Team Management</option><option>Inventory &amp; Logistics</option>
+                <option>Customer Management (CRM)</option><option>Security &amp; Privacy</option>
+                <option>Communication &amp; Collaboration</option><option>AI / Automation Tools</option>
+                <option>Education &amp; Training</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Platform <span style="color:var(--rose)">*</span></label>
+              <select class="form-input" id="reqPlatform">
+                <option value="">Select platform</option>
+                <option>Web (Browser)</option><option>Windows Desktop</option><option>Mac Desktop</option>
+                <option>Android Mobile</option><option>iOS Mobile</option><option>Cross-platform</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label>Who will use it? <span style="color:var(--rose)">*</span></label>
+              <select class="form-input" id="reqAudience">
+                <option value="">Select audience</option>
+                <option>Just me</option><option>My small team (2&ndash;10)</option>
+                <option>My company / org</option><option>My customers / clients</option><option>General public</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Est. number of users</label>
+              <select class="form-input" id="reqUsers">
+                <option value="">Not sure yet</option>
+                <option>1&ndash;5</option><option>6&ndash;25</option><option>26&ndash;100</option><option>100&ndash;500</option><option>500+</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row"><label>Similar apps for inspiration?</label><input class="form-input" type="text" id="reqInspiration" placeholder="e.g. Like Clockify but simpler"/></div>
+          <div class="form-nav">
+            <button class="btn-form-back" onclick="prevStep(2)">&larr; Back</button>
+            <button class="btn-form-next" onclick="nextStep(2)">Features &rarr;</button>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="form-step" id="step-3">
+          <div class="step-heading">Problem &amp; features</div>
+          <div class="step-sub">The more specific, the faster we can build it.</div>
+          <div class="form-row"><label>What problem does this solve? <span style="color:var(--rose)">*</span></label><textarea class="form-input" id="reqProblem" placeholder="e.g. I track staff attendance on paper and it is always wrong. Need digital clock-in/out with monthly reports." style="min-height:82px"></textarea></div>
+          <div class="form-row"><label>Must-have features <span style="color:var(--rose)">*</span></label><textarea class="form-input" id="reqFeatures" placeholder="One per line:&#10;Clock-in / clock-out per employee&#10;Monthly PDF report&#10;Admin dashboard&#10;SMS on late arrival" style="min-height:96px"></textarea></div>
+          <div class="form-row">
+            <label>Integrations needed?</label>
+            <div class="check-chips" id="integrationsWrap">
+              <label class="check-chip"><input type="checkbox" value="whatsapp"/> WhatsApp</label>
+              <label class="check-chip"><input type="checkbox" value="email"/> Email / SMTP</label>
+              <label class="check-chip"><input type="checkbox" value="sms"/> SMS</label>
+              <label class="check-chip"><input type="checkbox" value="flutterwave"/> Flutterwave</label>
+              <label class="check-chip"><input type="checkbox" value="paystack"/> Paystack</label>
+              <label class="check-chip"><input type="checkbox" value="google"/> Google Sheets</label>
+              <label class="check-chip"><input type="checkbox" value="excel"/> Excel / CSV</label>
+              <label class="check-chip"><input type="checkbox" value="none"/> None</label>
+            </div>
+          </div>
+          <div class="form-row"><label>Anything else we should know?</label><textarea class="form-input" id="reqExtra" placeholder="Design preferences, existing systems, dealbreakers..." style="min-height:64px"></textarea></div>
+          <div class="form-nav">
+            <button class="btn-form-back" onclick="prevStep(3)">&larr; Back</button>
+            <button class="btn-form-next" onclick="nextStep(3)">Budget &rarr;</button>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="form-step" id="step-4">
+          <div class="step-heading">Timeline &amp; budget</div>
+          <div class="step-sub">Helps us prioritise and quote accurately.</div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label>How soon do you need it?</label>
+              <select class="form-input" id="reqTimeline">
+                <option value="">No rush</option>
+                <option>ASAP (within 2 weeks)</option><option>Within 1 month</option>
+                <option>Within 3 months</option><option>Planning ahead (3&ndash;6 months)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Budget range</label>
+              <select class="form-input" id="reqBudget">
+                <option value="">I am flexible / open</option>
+                <option>Free (add to catalogue)</option><option>&#x20A6;1,000 &ndash; &#x20A6;5,000</option>
+                <option>&#x20A6;5,000 &ndash; &#x20A6;20,000</option><option>&#x20A6;20,000 &ndash; &#x20A6;50,000</option>
+                <option>&#x20A6;50,000 &ndash; &#x20A6;150,000</option><option>&#x20A6;150,000+</option>
+                <option>Discuss with me first</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>How should the app be delivered?</label>
+            <div class="check-chips">
+              <label class="check-chip"><input type="checkbox" value="marketplace" checked/> Add to AppAholic</label>
+              <label class="check-chip"><input type="checkbox" value="private"/> Private use only</label>
+              <label class="check-chip"><input type="checkbox" value="saas"/> SaaS (charge my users)</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>How did you hear about us?</label>
+            <select class="form-input" id="reqSource">
+              <option value="">Select</option>
+              <option>Google Search</option><option>WhatsApp / Referral</option>
+              <option>Social Media</option><option>Friend / Colleague</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-nav">
+            <button class="btn-form-back" onclick="prevStep(4)">&larr; Back</button>
+            <button class="btn-form-submit" onclick="submitRequest()">&#128640; Submit Request</button>
+          </div>
+          <div class="form-note">&#128274; Private. A real person reviews every request within 48 hours.</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="section-eyebrow">Simple process</div>
+    <h2 class="section-title">How AppAholic works</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🔍</div>
+        <div class="step-title">Browse & Discover</div>
+        <div class="step-desc">Search or filter by category. Read what each app does, check reviews, and see screenshots before committing.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">💳</div>
+        <div class="step-title">Buy or Get Free</div>
+        <div class="step-desc">Free apps download instantly. Paid apps go through Flutterwave — card, bank transfer, or USSD supported.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">⬇️</div>
+        <div class="step-title">Download & Install</div>
+        <div class="step-desc">Your download link is sent to your email and available in your account dashboard immediately after purchase.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">🔄</div>
+        <div class="step-title">Updates Included</div>
+        <div class="step-desc">All purchases include lifetime updates. New versions appear automatically in your account — no rebuying needed.</div>
+      </div>
+    </div>
+    <div class="how-cta">
+      <a href="marketplace.html" class="btn btn-primary btn-lg">Browse All Apps</a>
+      &nbsp;
+      <button class="btn btn-ghost btn-lg" onclick="scrollToSection('request')">Request a Custom App</button>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section">
+  <div class="container">
+    <div class="section-eyebrow">User reviews</div>
+    <h2 class="section-title">What people are saying</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-card__stars">★★★★★</div>
+        <div class="review-card__text">"FocusClock transformed how I work. I'm getting 3x more done in my mornings. Bought it, installed it in 2 minutes, and it just works."</div>
+        <div class="review-card__user">
+          <div class="review-card__avatar" style="background:#E8F5E9;color:#2E7D32">A</div>
+          <div>
+            <div class="review-card__name">Amara Nwosu</div>
+            <div class="review-card__role">Freelance Designer, Lagos</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__stars">★★★★★</div>
+        <div class="review-card__text">"DataPulse replaced three separate tools for our small team. The reports are clean and our clients love the exports. Well worth every naira."</div>
+        <div class="review-card__user">
+          <div class="review-card__avatar" style="background:#E3F2FD;color:#1565C0">K</div>
+          <div>
+            <div class="review-card__name">Kayode Bello</div>
+            <div class="review-card__role">Operations Manager, Abuja</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__stars">★★★★☆</div>
+        <div class="review-card__text">"I requested a custom payroll tool and the team actually built it! Got early access before it launched publicly. This platform is different."</div>
+        <div class="review-card__user">
+          <div class="review-card__avatar" style="background:#FFF3E0;color:#E65100">F</div>
+          <div>
+            <div class="review-card__name">Fatimah Isa</div>
+            <div class="review-card__role">HR Lead, Port Harcourt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand-name">
+          <span style="width:8px;height:8px;background:var(--volt);border-radius:50%;display:inline-block"></span>
+          AppAholic
+        </div>
+        <div class="footer__tagline">The marketplace for utility and productivity apps that actually solve real workflows. A <strong style="color:rgba(255,255,255,.7)">JustServicesPro</strong> product.</div>
+        <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,.35)">
+          <a href="mailto:info@justservices.pro" style="color:rgba(255,255,255,.45);transition:color .2s" onmouseover="this.style.color='rgba(200,255,0,.8)'" onmouseout="this.style.color='rgba(255,255,255,.45)'">info@justservices.pro</a>
+        </div>
+        <div class="payment-badges" style="margin-top:14px">
+          <span class="payment-badge">Flutterwave</span>
+          <span class="payment-badge">SSL Secure</span>
+          <span class="payment-badge">&#x20A6; NGN</span>
+        </div>
+        <div class="footer__social">
+          <a href="https://wa.me/2348000000000" target="_blank" rel="noopener" title="Chat on WhatsApp" aria-label="Contact on WhatsApp">&#x1F4AC;</a>
+          <a href="mailto:info@justservices.pro" title="Email us" aria-label="Email AppAholic">&#x2709;&#xFE0F;</a>
+          <a href="https://justservices.pro" target="_blank" rel="noopener" title="JustServicesPro website" aria-label="JustServicesPro">&#x1F310;</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__col-title">Marketplace</div>
+        <ul class="footer__links">
+          <li><a href="#apps">Browse Apps</a></li>
+          <li><a href="#apps" onclick="document.getElementById('categoryFilter').value='';document.querySelectorAll('.filter-tab')[0].click()">Free Apps</a></li>
+          <li><a href="#apps" onclick="document.querySelectorAll('.filter-tab')[3].click()">New Releases</a></li>
+          <li><a href="#apps" onclick="document.querySelectorAll('.filter-tab')[4].click()">Top Rated</a></li>
+          <li><a href="#categories">Categories</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Support</div>
+        <ul class="footer__links">
+          <li><a href="#how">How it Works</a></li>
+          <li><a href="#request">Request an App</a></li>
+          <li><a href="mailto:info@justservices.pro">Download Issues</a></li>
+          <li><a href="mailto:info@justservices.pro">Refund Policy</a></li>
+          <li><a href="mailto:info@justservices.pro">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Company</div>
+        <ul class="footer__links">
+          <li><a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro</a></li>
+          <li><a href="about.html">About AppAholic</a></li>
+          
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div id="footerCopy">&copy; 2025 AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd. All rights reserved.</div>
+      <div class="footer__bottom-right">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:info@justservices.pro">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal__header">
+      <div class="modal__app-meta">
+        <div class="modal__app-icon" id="modalIcon"></div>
+        <div>
+          <div class="modal__app-name" id="modalName"></div>
+          <div class="modal__app-cat" id="modalCat"></div>
+        </div>
+      </div>
+      <button class="modal__close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="modal__section-title">About this app</div>
+      <div class="modal__desc" id="modalDesc"></div>
+      <div class="modal__section-title">Key Features</div>
+      <ul class="modal__feature-list" id="modalFeatures"></ul>
+      <div class="modal__cta">
+        <div class="modal__price" id="modalPrice"></div>
+        <button class="modal__btn-get" id="modalBtn" onclick="handleGetApp()"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast__icon" id="toastIcon"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+
+/* BUDGET CALCULATOR */
+var CS={type:'utility',platform:'web',complexity:'basic',integrations:'none',admin:'no',timeline:'normal'};
+var CB={utility:25000,dashboard:45000,ecommerce:65000,ai:90000};
+var CP={web:1,mobile:1.3,both:1.7};
+var CC={basic:1,standard:1.5,advanced:2.2};
+var CI={none:0,some:8000,many:20000};
+var CA={no:0,basic:12000,full:25000};
+function calcPick(btn,g){
+  document.querySelectorAll('#calc-'+g+' .calc-opt').forEach(function(b){b.classList.remove('sel')});
+  btn.classList.add('sel');CS[g]=btn.dataset.val;updateCalc();
+}
+function toggleFeat(btn){
+  btn.classList.toggle('on');
+  updateCalc();
+  var sel=Array.from(document.querySelectorAll('.feat-chip.on'));
+  var summary=document.getElementById('featSummary');
+  var list=document.getElementById('featSummaryList');
+  if(!sel.length){if(summary)summary.style.display='none';return;}
+  if(summary)summary.style.display='block';
+  var N=String.fromCharCode(8358);
+  if(list)list.innerHTML=sel.map(function(c){
+    return '<div class="feat-summary-item"><span>'+c.querySelector('.feat-chip__label').textContent+'</span><span>+'+N+Number(c.dataset.cost).toLocaleString()+'</span></div>';
+  }).join('');
+}
+function updateCalc(){
+  var b=CB[CS.type]*CP[CS.platform]*CC[CS.complexity]+CI[CS.integrations]+CA[CS.admin];
+  var featCost=0;
+  document.querySelectorAll('.feat-chip.on').forEach(function(c){featCost+=Number(c.dataset.cost)||0;});
+  if(CS.timeline==='rush')b*=1.3;
+  b=Math.round((b+featCost)/1000)*1000;
+  var lo=Math.round(b*.8/1000)*1000,hi=Math.round(b*1.3/1000)*1000;
+  var N=String.fromCharCode(8358);
+  document.getElementById('calcPrice').textContent=N+b.toLocaleString();
+  document.getElementById('calcRange').textContent='Range: '+N+lo.toLocaleString()+' – '+N+hi.toLocaleString();
+  var rows=[
+    {l:'Base ('+CS.type+')',v:N+CB[CS.type].toLocaleString()},
+    {l:'Platform',v:'x'+CP[CS.platform]},
+    {l:'Complexity',v:'x'+CC[CS.complexity]},
+  ];
+  if(CI[CS.integrations])rows.push({l:'Integrations',v:'+'+N+CI[CS.integrations].toLocaleString()});
+  if(CA[CS.admin])rows.push({l:'Admin dashboard',v:'+'+N+CA[CS.admin].toLocaleString()});
+  if(CS.timeline==='rush')rows.push({l:'Rush delivery',v:'+30%'});
+  rows.push({l:'Total estimate',v:N+b.toLocaleString(),t:true});
+  document.getElementById('calcBreakdown').innerHTML=rows.map(function(r){
+    return '<div class="calc-brow'+(r.t?' total':'')+'"><span class="calc-brow__lbl">'+r.l+'</span><span class="calc-brow__val">'+r.v+'</span></div>';
+  }).join('');
+}
+if(document.getElementById('calcBreakdown'))updateCalc();
+
+/* MULTI-STEP FORM */
+var curStep=1;
+function setProgress(s){
+  for(var i=1;i<=4;i++){
+    var el=document.getElementById('prog-'+i);if(!el)continue;
+    el.classList.remove('active','done');
+    if(i<s)el.classList.add('done');
+    else if(i===s)el.classList.add('active');
+  }
+}
+function showStep(s){
+  document.querySelectorAll('.form-step').forEach(function(el){el.classList.remove('active')});
+  var st=document.getElementById('step-'+s);
+  if(st){st.classList.add('active');}
+  setProgress(s);curStep=s;
+}
+function nextStep(from){
+  if(from===1){
+    var n=document.getElementById('reqName').value.trim();
+    var em=document.getElementById('reqEmail').value.trim();
+    var r=document.getElementById('reqRole').value;
+    if(!n||!em||!r){showToast('Please fill all required fields.','⚠️');return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showToast('Please enter a valid email address.','⚠️');return}
+  }
+  if(from===2){
+    var t=document.getElementById('reqTitle').value.trim();
+    var c=document.getElementById('reqCategory').value;
+    var p=document.getElementById('reqPlatform').value;
+    var a=document.getElementById('reqAudience').value;
+    if(!t||!c||!p||!a){showToast('Please fill all required fields.','⚠️');return}
+  }
+  if(from===3){
+    var pr=document.getElementById('reqProblem').value.trim();
+    var f=document.getElementById('reqFeatures').value.trim();
+    if(!pr||!f){showToast('Describe the problem and list the features.','⚠️');return}
+  }
+  showStep(from+1);
+}
+function prevStep(from){showStep(from-1)}
+
+/* ── APP DATA ──────────────────────────────────────────────────── */
+const APPS = [
+  {
+    id: 'focusclock',
+    name: 'FocusClock',
+    category: 'Productivity',
+    icon: '⏱️',
+    banner: '#FFF3E0',
+    price: 1200,
+    rating: 4.9,
+    downloads: '3.2K',
+    tag: 'top',
+    desc: 'Pomodoro-based focus timer with smart break scheduling and distraction blocking.',
+    longDesc: 'FocusClock is a precision focus tool built on the Pomodoro technique, extended with AI-driven break scheduling. It learns your energy patterns over time and suggests optimal work blocks.',
+    features: ['Smart Pomodoro sessions', 'Website blocker', 'Productivity analytics', 'Calendar sync', 'Daily/weekly reports'],
+  },
+  {
+    id: 'datapulse',
+    name: 'DataPulse',
+    category: 'Analytics',
+    icon: '📊',
+    banner: '#E8F5E9',
+    price: 3500,
+    rating: 4.8,
+    downloads: '1.8K',
+    tag: 'paid',
+    desc: 'Business analytics dashboard. Connect data sources and generate beautiful client-ready reports.',
+    longDesc: 'DataPulse connects to your spreadsheets, Google Sheets, or databases and turns raw numbers into clean, shareable dashboards. Perfect for small teams reporting to clients.',
+    features: ['Connect Google Sheets & Excel', 'Auto-generated PDF reports', 'Live dashboard sharing', 'Chart builder', 'Email report scheduling'],
+  },
+  {
+    id: 'vaultsync',
+    name: 'VaultSync',
+    category: 'Storage',
+    icon: '🗂️',
+    banner: '#E3F2FD',
+    price: 0,
+    rating: 4.5,
+    downloads: '6.1K',
+    tag: 'free',
+    desc: 'Free file organizer and sync tool. Keep your local folders structured and backed up.',
+    longDesc: 'VaultSync watches your selected folders and auto-organizes files by type, date, and project. Syncs across two devices on the free plan.',
+    features: ['Auto file sorting', '2-device sync', 'Duplicate finder', 'Folder templates', 'Quick preview'],
+  },
+  {
+    id: 'lockbox',
+    name: 'LockBox',
+    category: 'Security',
+    icon: '🔐',
+    banner: '#FCE4EC',
+    price: 2000,
+    rating: 4.7,
+    downloads: '2.4K',
+    tag: 'paid',
+    desc: 'Password manager and secure note vault. Military-grade AES-256 encryption, offline-first.',
+    longDesc: 'LockBox stores all your credentials and sensitive notes in an encrypted local vault. No cloud dependency — your data never leaves your device unless you choose to sync.',
+    features: ['AES-256 encryption', 'Offline-first storage', 'Password generator', 'Secure notes', 'Browser extension (coming)'],
+  },
+  {
+    id: 'invoicekit',
+    name: 'InvoiceKit',
+    category: 'Finance',
+    icon: '🧾',
+    banner: '#F3E5F5',
+    price: 2500,
+    rating: 4.6,
+    downloads: '4.5K',
+    tag: 'top',
+    desc: 'Professional invoice generator for freelancers and SMEs. PDF export, payment tracking.',
+    longDesc: 'InvoiceKit lets you create, send, and track invoices in under 60 seconds. Set up your brand once and every invoice looks professional. Integrated payment reminders.',
+    features: ['Branded PDF invoices', 'Client database', 'Payment status tracking', 'Recurring invoices', 'Tax calculation (VAT/WHT)'],
+  },
+  {
+    id: 'quicknote',
+    name: 'QuickNote',
+    category: 'Productivity',
+    icon: '📝',
+    banner: '#FFFDE7',
+    price: 0,
+    rating: 4.3,
+    downloads: '8.9K',
+    tag: 'free',
+    desc: 'Lightweight markdown note-taking app. Fast, keyboard-first, with instant local search.',
+    longDesc: 'QuickNote is built for speed. Open it with a hotkey, type in markdown, and it saves automatically. Folders, tags, and full-text search keep everything findable.',
+    features: ['Markdown editor', 'Instant search', 'Tags & folders', 'Keyboard shortcuts', 'Export to PDF/HTML'],
+  },
+  {
+    id: 'taskmind',
+    name: 'TaskMind AI',
+    category: 'AI Tools',
+    icon: '🤖',
+    banner: '#E8EAF6',
+    price: 5000,
+    rating: 4.9,
+    downloads: '900',
+    tag: 'new',
+    desc: 'AI-powered task manager that learns your habits and schedules your optimal work day automatically.',
+    longDesc: 'TaskMind connects to your calendar and to-do list, then uses AI to reorder your tasks based on deadlines, your energy levels, and meeting gaps. It gets smarter every week.',
+    features: ['AI task prioritization', 'Calendar integration', 'Daily focus plan', 'Energy level tracking', 'Progress insights'],
+  },
+  {
+    id: 'teamping',
+    name: 'TeamPing',
+    category: 'Communication',
+    icon: '💬',
+    banner: '#E0F7FA',
+    price: 1800,
+    rating: 4.4,
+    downloads: '1.2K',
+    tag: 'new',
+    desc: 'Minimal team chat for small teams. No noise, no channels — just threads and status.',
+    longDesc: 'TeamPing is a deliberately simple team messaging tool. Threaded conversations, status indicators, and file sharing — nothing more. Designed for teams under 25 people.',
+    features: ['Threaded conversations', 'Status updates', 'File sharing (50MB)', 'Read receipts', 'Mobile-ready web app'],
+  },
+];
+
+let currentFilter = 'all';
+let currentApp = null;
+
+/* ── RENDER APPS ───────────────────────────────────────────────── */
+function renderApps(apps) {
+  const grid = document.getElementById('appsGrid');
+  if (!apps.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--muted)">
+      <div style="font-size:40px;margin-bottom:12px">🔎</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px">No apps found</div>
+      <div style="font-size:14px">Try a different search or <a href="#request" style="color:var(--indigo);text-decoration:underline">request an app</a></div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = apps.map(app => `
+    <div class="app-card" onclick="openModal('${app.id}')">
+      <div class="app-card__banner" style="background:${app.banner}">
+        <span style="font-size:52px">${app.icon}</span>
+        ${app.price === 0 ? '<span class="app-card__badge badge-free">FREE</span>' :
+          app.tag === 'new' ? '<span class="app-card__badge badge-new">NEW</span>' :
+          '<span class="app-card__badge badge-paid">PAID</span>'}
+      </div>
+      <div class="app-card__body">
+        <div class="app-card__meta">
+          <div class="app-card__icon">${app.icon}</div>
+          <div class="app-card__rating">★ ${app.rating}</div>
+        </div>
+        <div class="app-card__name">${app.name}</div>
+        <div class="app-card__desc">${app.desc}</div>
+        <div class="app-card__footer">
+          <div>
+            <div class="app-card__price ${app.price === 0 ? 'price-free' : 'price-paid'}">
+              ${app.price === 0 ? 'Free' : '₦' + app.price.toLocaleString()}
+            </div>
+            <div class="app-card__dl">${app.downloads} downloads</div>
+          </div>
+          <button class="app-card__get ${app.price === 0 ? 'free' : ''}" onclick="event.stopPropagation();handleCardGet('${app.id}')">
+            ${app.price === 0 ? 'Download' : 'Buy Now'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getFilteredApps() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const cat = document.getElementById('categoryFilter').value;
+  return APPS.filter(a => {
+    const matchSearch = !search || a.name.toLowerCase().includes(search) || a.desc.toLowerCase().includes(search) || a.category.toLowerCase().includes(search);
+    const matchCat = !cat || a.category === cat;
+    const matchFilter = currentFilter === 'all' || 
+      (currentFilter === 'free' && a.price === 0) ||
+      (currentFilter === 'paid' && a.price > 0) ||
+      (currentFilter === 'new' && a.tag === 'new') ||
+      (currentFilter === 'top' && a.tag === 'top');
+    return matchSearch && matchCat && matchFilter;
+  });
+}
+
+function filterApps() { renderApps(getFilteredApps()); }
+
+function setFilter(btn, filter) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = filter;
+  filterApps();
+}
+
+function filterByCategory(cat) {
+  document.getElementById('categoryFilter').value = cat;
+  filterApps();
+  scrollToSection('apps');
+}
+
+/* ── MODAL ─────────────────────────────────────────────────────── */
+function openModal(id) {
+  const app = APPS.find(a => a.id === id);
+  if (!app) return;
+  currentApp = app;
+  document.getElementById('modalIcon').textContent = app.icon;
+  document.getElementById('modalName').textContent = app.name;
+  document.getElementById('modalCat').textContent = app.category;
+  document.getElementById('modalDesc').textContent = app.longDesc;
+  document.getElementById('modalPrice').textContent = app.price === 0 ? 'Free' : '₦' + app.price.toLocaleString();
+  document.getElementById('modalPrice').style.color = app.price === 0 ? '#4A7C00' : 'var(--ink)';
+  document.getElementById('modalBtn').textContent = app.price === 0 ? '⬇️  Download Now' : '💳  Buy Now — ₦' + app.price.toLocaleString();
+  document.getElementById('modalFeatures').innerHTML = app.features.map(f => `<li>${f}</li>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleGetApp() {
+  if (!currentApp) return;
+  closeModalDirect();
+  if (currentApp.price === 0) {
+    showToast(`Downloading ${currentApp.name}...`, '⬇️');
+  } else {
+    showToast(`Redirecting to Flutterwave checkout...`, '💳');
+  }
+}
+
+function handleCardGet(id) {
+  const app = APPS.find(a => a.id === id);
+  if (!app) return;
+  if (app.price === 0) {
+    showToast(`Downloading ${app.name}...`, '⬇️');
+  } else {
+    showToast(`Opening checkout for ${app.name}...`, '💳');
+  }
+}
+
+/* ── REQUEST FORM ──────────────────────────────────────────────── */
+function submitRequest(){
+  var btn = document.querySelector('.btn-form-submit');
+  var integrations = Array.from(document.querySelectorAll('#integrationsWrap input[type=checkbox]:checked')).map(function(c){return c.value}).join(', ');
+  var get = function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+  var getSel = function(id){ var el=document.getElementById(id); return el?el.value:''; };
+
+  var payload = {
+    name: get('reqName'), email: get('reqEmail'), phone: get('reqPhone'),
+    role: getSel('reqRole'), title: get('reqTitle'), category: getSel('reqCategory'),
+    platform: getSel('reqPlatform'), audience: getSel('reqAudience'), users: getSel('reqUsers'),
+    problem: get('reqProblem'), features: get('reqFeatures'), inspiration: get('reqInspiration'),
+    integrations: integrations, extra: get('reqExtra'), timeline: getSel('reqTimeline'),
+    budget: getSel('reqBudget'), source: getSel('reqSource'),
+    delivery: Array.from(document.querySelectorAll('.form-step#step-4 .check-chip input:checked')).map(function(c){return c.value}).join(', '),
+  };
+
+  if(!payload.name || !payload.email || !payload.title || !payload.problem){
+    showToast('Please complete all required fields.','⚠️');
+    return;
+  }
+
+  if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
+
+  fetch((window.API_BASE||'') + '/api/request-app', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(data.ok){
+      ['reqName','reqEmail','reqPhone','reqTitle','reqProblem','reqFeatures','reqInspiration','reqExtra'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
+      ['reqRole','reqCategory','reqPlatform','reqAudience','reqUsers','reqTimeline','reqBudget','reqSource'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0});
+      document.querySelectorAll('#integrationsWrap input[type=checkbox]').forEach(function(c){c.checked=false});
+      showStep(1);
+      showToast('Request submitted! Check your email for confirmation 🎉','✅');
+    } else {
+      showToast('Something went wrong. Please try again or email us directly.','⚠️');
+    }
+  })
+  .catch(function(){
+    showToast('Could not reach the server. Please email info@justservices.pro directly.','⚠️');
+  })
+  .finally(function(){
+    if(btn){ btn.disabled = false; btn.textContent = '🚀 Submit Request'; }
+  });
+}
+
+/* ── API base — point this to your deployed email server ──────────
+   Same-origin on Vercel if /api lives in this project; otherwise set
+   window.API_BASE = 'https://your-email-server.vercel.app'; */
+window.API_BASE = window.API_BASE || '';
+
+/* ── TOAST ─────────────────────────────────────────────────────── */
+function showToast(msg, icon='✅') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = icon;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+/* ── UTILS ─────────────────────────────────────────────────────── */
+function scrollToSection(id){
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+/* ── INIT ──────────────────────────────────────────────────────── */
+renderApps(APPS);
+
+/* MOBILE DRAWER */
+function openDrawer(){
+  document.getElementById('navDrawer').classList.add('open');
+  document.getElementById('navOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDrawer(){
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* DYNAMIC COPYRIGHT YEAR */
+(function(){
+  var el=document.getElementById('footerCopy');
+  if(el) el.innerHTML=el.innerHTML.replace('2025', new Date().getFullYear());
+})();
+
+/* SEARCH CLEAR BUTTON */
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchClear').classList.remove('show');
+  filterApps();
+}
+
+/* CATEGORY CHIP ACTIVE STATE */
+(function(){
+  var chips=document.querySelectorAll('.cat-chip');
+  chips.forEach(function(chip){
+    chip.addEventListener('click',function(){
+      chips.forEach(function(c){c.classList.remove('active-cat')});
+      chip.classList.add('active-cat');
+    });
+  });
+})();
+
+/* DYNAMIC CATEGORY COUNTS */
+(function(){
+  var counts={};
+  APPS.forEach(function(a){ counts[a.category]=(counts[a.category]||0)+1; });
+  document.querySelectorAll('.cat-chip').forEach(function(chip){
+    var label=chip.querySelector('.cat-chip__label');
+    var countEl=chip.querySelector('.cat-chip__count');
+    if(label && countEl){
+      var cat=label.textContent.trim();
+      if(counts[cat]) countEl.textContent=counts[cat]+' app'+(counts[cat]>1?'s':'');
+    }
+  });
+})();
+
+</script>
+</body>
+</html><section id="calculator">
+  <div class="container">
+    <div class="calc-inner">
+      <div class="calc-left">
+        <div class="section-eyebrow">Project estimator</div>
+        <h2 class="section-title">How much will your app cost?</h2>
+        <p>Click the features you need and get an instant ballpark estimate. Every project is quoted individually &mdash; this gives you a realistic starting point.</p>
+        <div class="calc-hints">
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#128203;</span><span>Estimates cover standard builds. Complex AI features or multi-platform needs may shift pricing.</span></div>
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#9889;</span><span>Rush delivery under 2 weeks adds 30% to the base estimate.</span></div>
+          <div class="calc-hint"><span style="font-size:18px;flex-shrink:0">&#127873;</span><span>Apps listed on AppAholic get revenue-share pricing — lower upfront cost.</span></div>
+        </div>
+
+        <!-- Popular Frontend Features -->
+        <div class="feat-section">
+          <div class="feat-section__title">Popular frontend features</div>
+          <div class="feat-section__sub">Click any feature to add it to your estimate</div>
+          <div class="feat-chips" id="featChips">
+            <button class="feat-chip" data-cost="15000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128269;</span>
+              <span class="feat-chip__label">Search &amp; Filter</span>
+              <span class="feat-chip__price">+&#x20A6;15K</span>
+            </button>
+            <button class="feat-chip" data-cost="25000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128101;</span>
+              <span class="feat-chip__label">User Auth / Login</span>
+              <span class="feat-chip__price">+&#x20A6;25K</span>
+            </button>
+            <button class="feat-chip" data-cost="30000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128179;</span>
+              <span class="feat-chip__label">Payment Integration</span>
+              <span class="feat-chip__price">+&#x20A6;30K</span>
+            </button>
+            <button class="feat-chip" data-cost="20000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128202;</span>
+              <span class="feat-chip__label">Charts &amp; Analytics</span>
+              <span class="feat-chip__price">+&#x20A6;20K</span>
+            </button>
+            <button class="feat-chip" data-cost="18000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128276;</span>
+              <span class="feat-chip__label">Push Notifications</span>
+              <span class="feat-chip__price">+&#x20A6;18K</span>
+            </button>
+            <button class="feat-chip" data-cost="20000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128441;</span>
+              <span class="feat-chip__label">File Upload / Export</span>
+              <span class="feat-chip__price">+&#x20A6;20K</span>
+            </button>
+            <button class="feat-chip" data-cost="22000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128406;</span>
+              <span class="feat-chip__label">Dark / Light Mode</span>
+              <span class="feat-chip__price">+&#x20A6;22K</span>
+            </button>
+            <button class="feat-chip" data-cost="35000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#129302;</span>
+              <span class="feat-chip__label">AI / Smart Features</span>
+              <span class="feat-chip__price">+&#x20A6;35K</span>
+            </button>
+            <button class="feat-chip" data-cost="16000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128247;</span>
+              <span class="feat-chip__label">Camera / QR Scan</span>
+              <span class="feat-chip__price">+&#x20A6;16K</span>
+            </button>
+            <button class="feat-chip" data-cost="12000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#127760;</span>
+              <span class="feat-chip__label">Multi-language</span>
+              <span class="feat-chip__price">+&#x20A6;12K</span>
+            </button>
+            <button class="feat-chip" data-cost="14000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128263;</span>
+              <span class="feat-chip__label">Live Chat / Support</span>
+              <span class="feat-chip__price">+&#x20A6;14K</span>
+            </button>
+            <button class="feat-chip" data-cost="28000" onclick="toggleFeat(this)">
+              <span class="feat-chip__check">&#10003;</span>
+              <span class="feat-chip__icon">&#128241;</span>
+              <span class="feat-chip__label">Offline / PWA Support</span>
+              <span class="feat-chip__price">+&#x20A6;28K</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <div class="calc-row">
+          <label>App Type</label>
+          <div class="calc-options" id="calc-type">
+            <button class="calc-opt sel" data-val="utility" onclick="calcPick(this,'type')">Utility / Tool</button>
+            <button class="calc-opt" data-val="dashboard" onclick="calcPick(this,'type')">Dashboard</button>
+            <button class="calc-opt" data-val="ecommerce" onclick="calcPick(this,'type')">E-commerce</button>
+            <button class="calc-opt" data-val="ai" onclick="calcPick(this,'type')">AI-powered</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Platform</label>
+          <div class="calc-options" id="calc-platform">
+            <button class="calc-opt sel" data-val="web" onclick="calcPick(this,'platform')">&#x1F310; Web</button>
+            <button class="calc-opt" data-val="desktop" onclick="calcPick(this,'platform')">&#x1F5A5; Desktop</button>
+            <button class="calc-opt" data-val="mobile" onclick="calcPick(this,'platform')">&#x1F4F1; Mobile</button>
+            <button class="calc-opt" data-val="both" onclick="calcPick(this,'platform')">&#x26A1; Web + Mobile</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Complexity</label>
+          <div class="calc-options" id="calc-complexity">
+            <button class="calc-opt sel" data-val="basic" onclick="calcPick(this,'complexity')">Basic (3&ndash;5 screens)</button>
+            <button class="calc-opt" data-val="standard" onclick="calcPick(this,'complexity')">Standard (6&ndash;10)</button>
+            <button class="calc-opt" data-val="advanced" onclick="calcPick(this,'complexity')">Advanced (10+)</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Integrations</label>
+          <div class="calc-options" id="calc-integrations">
+            <button class="calc-opt sel" data-val="none" onclick="calcPick(this,'integrations')">None</button>
+            <button class="calc-opt" data-val="some" onclick="calcPick(this,'integrations')">1&ndash;2 (email, SMS)</button>
+            <button class="calc-opt" data-val="many" onclick="calcPick(this,'integrations')">3+ (APIs, payments)</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Admin Dashboard</label>
+          <div class="calc-options" id="calc-admin">
+            <button class="calc-opt sel" data-val="no" onclick="calcPick(this,'admin')">Not needed</button>
+            <button class="calc-opt" data-val="basic" onclick="calcPick(this,'admin')">Basic</button>
+            <button class="calc-opt" data-val="full" onclick="calcPick(this,'admin')">Full dashboard</button>
+          </div>
+        </div>
+        <div class="calc-row">
+          <label>Timeline</label>
+          <div class="calc-options" id="calc-timeline">
+            <button class="calc-opt sel" data-val="normal" onclick="calcPick(this,'timeline')">Flexible</button>
+            <button class="calc-opt" data-val="rush" onclick="calcPick(this,'timeline')">Rush (+30%)</button>
+          </div>
+        </div>
+
+        <!-- Selected features summary -->
+        <div class="feat-summary" id="featSummary" style="display:none">
+          <div class="feat-summary__title">Added features</div>
+          <div id="featSummaryList"></div>
+        </div>
+
+        <div class="calc-result">
+          <div>
+            <div class="calc-result__lbl">Estimated Cost</div>
+            <div class="calc-result__price" id="calcPrice">&#x20A6;25,000</div>
+            <div class="calc-result__range" id="calcRange">Range: &#x20A6;20,000 &ndash; &#x20A6;33,000</div>
+          </div>
+          <button class="btn btn-volt" style="font-size:13px;padding:10px 18px;flex-shrink:0" onclick="scrollToSection('request')">Request This &rarr;</button>
+        </div>
+        <div class="calc-breakdown" id="calcBreakdown"></div>
+        <div class="calc-note">This is an estimate, not a quote. Submit a request and we will send a detailed proposal within 48 hours.</div>
+      </div>
+    </div>
+  </div>
+</section> html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AppAholic — Utility & Productivity App Marketplace | JustServicesPro</title>
+<meta name="description" content="Browse, buy and download utility and productivity apps built for real workflows. Free and premium tools for freelancers and businesses across Nigeria. A JustServicesPro product."/>
+<meta name="robots" content="index, follow"/>
+<meta name="author" content="JustServicesPro Management and Consulting Ltd"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="AppAholic — Utility & Productivity App Marketplace"/>
+<meta property="og:description" content="Discover and download utility & productivity apps built for real workflows. Free and premium — powered by JustServicesPro."/>
+<meta property="og:url" content="https://appaholic.justservices.pro/"/>
+<meta property="og:image" content="https://appaholic.justservices.pro/og-image.png"/>
+<meta property="og:site_name" content="AppAholic"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="AppAholic — App Marketplace by JustServicesPro"/>
+<meta name="twitter:description" content="Browse utility & productivity apps for Nigerian freelancers and businesses."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap&display=swap" rel="stylesheet"/>
+
 </head>
 <body>
 

@@ -255,6 +255,32 @@ input,select{font-family:inherit}
   .mbody{padding:16px 14px 24px}
   .banner__stats{gap:10px}
 }
+
+@media(max-width:900px){
+  .mkt-layout{grid-template-columns:1fr;padding:16px}
+  .sidebar{display:none}
+  .sidebar.open{display:block;position:fixed;top:0;left:0;width:300px;max-width:88vw;height:100vh;z-index:150;overflow-y:auto;border-radius:0}
+  .filter-btn{display:flex!important}
+  .agrid{grid-template-columns:repeat(2,1fr)}
+  .ptabs__inner{padding:0 12px}
+  .ptab{padding:10px 14px;font-size:13px}
+}
+@media(max-width:600px){
+  .agrid{grid-template-columns:1fr}
+  .banner__title{font-size:clamp(22px,6vw,34px)}
+  .banner__stats{gap:8px}
+  .bstat{padding:7px 11px}
+  .bstat__num{font-size:15px}
+  .mkt-toolbar__inner{flex-wrap:wrap;gap:8px}
+  .tsearch{min-width:100%}
+  .sort-select{flex:1}
+  .rcnt{display:none}
+}
+@media(max-width:380px){
+  .ptab{padding:10px 10px;font-size:12px}
+  .ptab__ico{display:none}
+}
+
 </style>
 </head>
 <body>

@@ -182,6 +182,29 @@ input{font-family:inherit}
   .auth-tab{color:rgba(255,255,255,.4)}
   .btn-social{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:var(--white)}
 }
+
+@media(max-width:860px){
+  body{grid-template-columns:1fr!important}
+  .auth-left{display:none!important}
+  .auth-right{min-height:100vh;padding:24px 16px;background:var(--ink)}
+  .auth-card{background:var(--ink-2);border:1px solid rgba(255,255,255,.08);color:var(--white);max-width:100%}
+  .auth-card__title{color:var(--white)}
+  .auth-card__sub{color:rgba(255,255,255,.55)}
+  .form-row label{color:rgba(255,255,255,.65)}
+  .form-input{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white)}
+  .form-input:focus{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3)}
+  .auth-tabs{border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.05)}
+  .auth-tab{color:rgba(255,255,255,.4)}
+  .auth-tab.active{background:var(--ink);color:var(--white)}
+  .btn-social{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:var(--white)}
+  .auth-terms a{color:rgba(200,255,0,.8)}
+}
+@media(max-width:480px){
+  .auth-right{padding:20px 14px}
+  .auth-card{padding:28px 20px}
+  .profile-grid{grid-template-columns:1fr!important}
+}
+
 </style>
 </head>
 <body>
