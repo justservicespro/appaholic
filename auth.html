@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta name="description" content="Sign in or create your AppAholic account to access purchases, downloads, and app requests."/>
+<link rel="canonical" href="https://appaholic.justservices.pro/auth"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Sign In — AppAholic by JustServicesPro</title>
-<meta name="robots" content="noindex"/>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="description" content="Sign in or create your AppAholic account to manage app purchases, downloads, and requests."/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -208,6 +211,7 @@ input{font-family:inherit}
 </style>
 </head>
 <body>
+<a href="#formSignin" style="position:absolute;top:-40px;left:8px;background:var(--volt);color:var(--ink);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;z-index:999;transition:top .2s;text-decoration:none" onfocus="this.style.top='8px'" onblur="this.style.top='-40px'">Skip to form</a>
 
 <!-- LEFT: BRAND PANEL -->
 <div class="auth-left">
@@ -253,13 +257,13 @@ input{font-family:inherit}
 
       <div class="form-row">
         <label>Email Address</label>
-        <input class="form-input" type="email" id="siEmail" placeholder="you@example.com" autocomplete="email"/>
+        <input class="form-input" type="email" id="siEmail" aria-label="Email address" placeholder="you@example.com" autocomplete="email"/>
         <div class="field-error" id="siEmailErr">Please enter a valid email address.</div>
       </div>
       <div class="form-row">
         <label>Password</label>
         <div class="input-wrap">
-          <input class="form-input" type="password" id="siPassword" placeholder="Your password" autocomplete="current-password"/>
+          <input class="form-input" type="password" id="siPassword" aria-label="Password" placeholder="Your password" autocomplete="current-password"/>
           <button class="pw-toggle" onclick="togglePw('siPassword',this)" tabindex="-1">👁</button>
         </div>
         <div class="field-error" id="siPassErr">Please enter your password.</div>

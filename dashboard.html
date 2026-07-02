@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta name="description" content="Your AppAholic dashboard — manage purchases, downloads, app requests, and account settings."/>
+<link rel="canonical" href="https://appaholic.justservices.pro/dashboard"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>My Dashboard — AppAholic</title>
 <meta name="robots" content="noindex"/>
@@ -197,6 +199,16 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   .topbar{padding:0 16px}
   .app-item__right{flex-direction:column;align-items:flex-end;gap:4px}
   .profile-grid{grid-template-columns:1fr!important}
+}
+
+
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr}
+  .app-item{flex-direction:column;align-items:flex-start;gap:10px}
+  .app-item__right{flex-direction:row;width:100%;justify-content:space-between}
+  .card__body{padding:14px 16px}
+  .topbar__title{font-size:14px}
+  .explore-grid{grid-template-columns:1fr}
 }
 
 </style>
