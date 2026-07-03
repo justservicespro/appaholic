@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/auth/google",          "dest": "/index.js" },
+    { "src": "/auth/google/callback", "dest": "/index.js" },
+    { "src": "/auth/session",         "dest": "/index.js" },
+    { "src": "/auth/logout",          "dest": "/index.js" },
+    { "src": "/api/(.*)",             "dest": "/index.js" }
+  ]
+}

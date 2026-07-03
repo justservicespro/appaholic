@@ -211,6 +211,88 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   .explore-grid{grid-template-columns:1fr}
 }
 
+
+/* ── SKIP LINK ── */
+.skip-link{position:absolute;top:-48px;left:8px;z-index:9999;background:var(--volt);color:var(--ink);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:top .2s}
+.skip-link:focus{top:8px}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;height:64px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav--dark{background:rgba(10,10,15,.92);border-color:rgba(255,255,255,.08)}
+.nav__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px);height:100%;display:flex;align-items:center;gap:12px}
+.nav__logo{display:flex;align-items:center;gap:8px;flex-shrink:0;font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--ink);text-decoration:none}
+.nav--dark .nav__logo{color:var(--white)}
+.nav__logo-dot{width:9px;height:9px;border-radius:50%;background:var(--volt);border:2px solid var(--ink);display:inline-block;flex-shrink:0}
+.nav--dark .nav__logo-dot{border-color:var(--ink-2)}
+.nav__center{flex:1;display:flex;justify-content:center}
+.nav__links{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0}
+.nav__link{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .18s,background .18s;white-space:nowrap}
+.nav__link:hover{color:var(--ink);background:var(--surface)}
+.nav--dark .nav__link{color:rgba(255,255,255,.55)}
+.nav--dark .nav__link:hover{color:var(--white);background:rgba(255,255,255,.08)}
+.nav__link--active{color:var(--ink)!important;font-weight:700}
+.nav--dark .nav__link--active{color:var(--white)!important}
+.nav__actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
+
+/* Hamburger */
+.nav__hamburger{display:none;width:40px;height:40px;border-radius:var(--r-md);align-items:center;justify-content:center;border:1.5px solid var(--border);cursor:pointer;background:none;padding:0;flex-direction:column;gap:5px}
+.nav__hamburger-icon{display:flex;flex-direction:column;gap:5px;width:18px}
+.nav__hamburger-icon span{display:block;height:2px;border-radius:2px;background:var(--ink);transition:all .22s}
+.nav--dark .nav__hamburger{border-color:rgba(255,255,255,.15)}
+.nav--dark .nav__hamburger-icon span{background:var(--white)}
+
+/* ── MOBILE DRAWER ── */
+.drawer-backdrop{position:fixed;inset:0;z-index:190;background:rgba(10,10,15,.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-backdrop.show{opacity:1;pointer-events:all}
+.mobile-drawer{position:fixed;top:0;right:-320px;z-index:200;width:300px;max-width:88vw;height:100vh;background:var(--white);box-shadow:-8px 0 40px rgba(10,10,15,.14);transition:right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;padding:20px}
+.mobile-drawer.open{right:0}
+.mobile-drawer__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.mobile-drawer__close{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--muted);transition:all .15s}
+.mobile-drawer__close:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.mobile-drawer__links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;flex:1}
+.mobile-drawer__link{display:block;padding:11px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;color:var(--ink-3);text-decoration:none;transition:background .15s}
+.mobile-drawer__link:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__subgroup{padding:6px 0}
+.mobile-drawer__sublabel{display:block;padding:0 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:var(--font-mono);margin-bottom:4px;margin-top:8px}
+.mobile-drawer__subgroup ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1px}
+.mobile-drawer__subgroup ul a{display:block;padding:9px 12px 9px 22px;border-radius:var(--r-md);font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:background .15s}
+.mobile-drawer__subgroup ul a:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__actions{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.mobile-drawer__actions .btn{text-align:center;justify-content:center;border-radius:var(--r-lg)}
+
+/* ── FOOTER ── */
+.footer{background:var(--ink-2);color:rgba(255,255,255,.5);padding:56px 0 32px}
+.footer__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px)}
+.footer__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.footer__brand{}
+.footer__logo{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--white);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.footer__logo-dot{width:8px;height:8px;border-radius:50%;background:var(--volt);flex-shrink:0}
+.footer__tagline{font-size:13px;line-height:1.7;margin-bottom:10px}
+.footer__tagline strong{color:rgba(255,255,255,.7)}
+.footer__email{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;display:inline-block;margin-bottom:16px;transition:color .2s}
+.footer__email:hover{color:rgba(200,255,0,.8)}
+.footer__social{display:flex;gap:10px}
+.footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s}
+.footer__social a:hover{background:rgba(255,255,255,.12);color:var(--white)}
+.footer__col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-family:var(--font-mono);color:rgba(255,255,255,.3);margin-bottom:14px;display:block}
+.footer__links{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.footer__links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .18s}
+.footer__links a:hover{color:rgba(255,255,255,.9)}
+.footer__bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap;gap:12px}
+.footer__bottom p{margin:0;color:rgba(255,255,255,.3)}
+.footer__bottom-links{display:flex;gap:16px}
+.footer__bottom-links a{color:rgba(255,255,255,.3);text-decoration:none;transition:color .18s}
+.footer__bottom-links a:hover{color:rgba(255,255,255,.7)}
+
+/* ── ADMIN BAR — hide on mobile ── */
+.admin-bar{display:block}
+@media(max-width:960px){.admin-bar{display:none!important}}
+
+/* ── NAV / DRAWER RESPONSIVE ── */
+@media(max-width:960px){.nav__center{display:none}.nav__hamburger{display:flex}.nav__actions .btn-ghost{display:none}}
+@media(max-width:600px){.nav__actions .btn-primary{font-size:12px;padding:7px 12px}.footer__grid{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:420px){.footer__grid{grid-template-columns:1fr;gap:20px}.footer__bottom{flex-direction:column;align-items:flex-start}}
+
 </style>
 </head>
 <body>
@@ -244,9 +326,9 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </ul>
 
   <div class="sidebar__footer">
-    <a href="marketplace.html"><span style="font-size:16px">🛒</span> Browse Apps</a>
-    <a href="index.html#request"><span style="font-size:16px">📝</span> Request an App</a>
-    <a href="auth.html" onclick="showToast('Signed out','👋')"><span style="font-size:16px">🚪</span> Sign Out</a>
+    <a href="/marketplace"><span style="font-size:16px">🛒</span> Browse Apps</a>
+    <a href="/#request"><span style="font-size:16px">📝</span> Request an App</a>
+    <a href="/auth" onclick="showToast('Signed out','👋')"><span style="font-size:16px">🚪</span> Sign Out</a>
   </div>
 </aside>
 
@@ -266,7 +348,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     </div>
     <div class="topbar__right">
       <button class="topbar__icon-btn" onclick="showToast('No new notifications','🔔')">🔔<span class="notif-dot"></span></button>
-      <a href="marketplace.html" class="btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;background:var(--ink);color:var(--white);text-decoration:none">+ Get More Apps</a>
+      <a href="/marketplace" class="btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;background:var(--ink);color:var(--white);text-decoration:none">+ Get More Apps</a>
     </div>
   </header>
 
@@ -473,7 +555,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
       <div class="card" style="margin-bottom:16px">
         <div class="card__header">
           <div class="card__title">My App Requests (2)</div>
-          <a href="index.html#request" class="card__action">+ New Request</a>
+          <a href="/#request" class="card__action">+ New Request</a>
         </div>
         <div class="card__body" style="padding:0 22px">
           <div class="req-item">
@@ -510,7 +592,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     <!-- ── WISHLIST ── -->
     <div class="page" id="page-wishlist">
       <div class="card">
-        <div class="card__header"><div class="card__title">Saved Apps (2)</div><a href="marketplace.html" class="card__action">Browse more</a></div>
+        <div class="card__header"><div class="card__title">Saved Apps (2)</div><a href="/marketplace" class="card__action">Browse more</a></div>
         <div class="card__body">
           <div class="explore-grid">
             <div class="mini-app-card">

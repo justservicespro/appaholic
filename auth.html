@@ -208,9 +208,143 @@ input{font-family:inherit}
   .profile-grid{grid-template-columns:1fr!important}
 }
 
+
+/* ── SKIP LINK ── */
+.skip-link{position:absolute;top:-48px;left:8px;z-index:9999;background:var(--volt);color:var(--ink);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:top .2s}
+.skip-link:focus{top:8px}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;height:64px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav--dark{background:rgba(10,10,15,.92);border-color:rgba(255,255,255,.08)}
+.nav__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px);height:100%;display:flex;align-items:center;gap:12px}
+.nav__logo{display:flex;align-items:center;gap:8px;flex-shrink:0;font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--ink);text-decoration:none}
+.nav--dark .nav__logo{color:var(--white)}
+.nav__logo-dot{width:9px;height:9px;border-radius:50%;background:var(--volt);border:2px solid var(--ink);display:inline-block;flex-shrink:0}
+.nav--dark .nav__logo-dot{border-color:var(--ink-2)}
+.nav__center{flex:1;display:flex;justify-content:center}
+.nav__links{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0}
+.nav__link{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .18s,background .18s;white-space:nowrap}
+.nav__link:hover{color:var(--ink);background:var(--surface)}
+.nav--dark .nav__link{color:rgba(255,255,255,.55)}
+.nav--dark .nav__link:hover{color:var(--white);background:rgba(255,255,255,.08)}
+.nav__link--active{color:var(--ink)!important;font-weight:700}
+.nav--dark .nav__link--active{color:var(--white)!important}
+.nav__actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
+
+/* Hamburger */
+.nav__hamburger{display:none;width:40px;height:40px;border-radius:var(--r-md);align-items:center;justify-content:center;border:1.5px solid var(--border);cursor:pointer;background:none;padding:0;flex-direction:column;gap:5px}
+.nav__hamburger-icon{display:flex;flex-direction:column;gap:5px;width:18px}
+.nav__hamburger-icon span{display:block;height:2px;border-radius:2px;background:var(--ink);transition:all .22s}
+.nav--dark .nav__hamburger{border-color:rgba(255,255,255,.15)}
+.nav--dark .nav__hamburger-icon span{background:var(--white)}
+
+/* ── MOBILE DRAWER ── */
+.drawer-backdrop{position:fixed;inset:0;z-index:190;background:rgba(10,10,15,.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-backdrop.show{opacity:1;pointer-events:all}
+.mobile-drawer{position:fixed;top:0;right:-320px;z-index:200;width:300px;max-width:88vw;height:100vh;background:var(--white);box-shadow:-8px 0 40px rgba(10,10,15,.14);transition:right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;padding:20px}
+.mobile-drawer.open{right:0}
+.mobile-drawer__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.mobile-drawer__close{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--muted);transition:all .15s}
+.mobile-drawer__close:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.mobile-drawer__links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;flex:1}
+.mobile-drawer__link{display:block;padding:11px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;color:var(--ink-3);text-decoration:none;transition:background .15s}
+.mobile-drawer__link:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__subgroup{padding:6px 0}
+.mobile-drawer__sublabel{display:block;padding:0 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:var(--font-mono);margin-bottom:4px;margin-top:8px}
+.mobile-drawer__subgroup ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1px}
+.mobile-drawer__subgroup ul a{display:block;padding:9px 12px 9px 22px;border-radius:var(--r-md);font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:background .15s}
+.mobile-drawer__subgroup ul a:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__actions{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.mobile-drawer__actions .btn{text-align:center;justify-content:center;border-radius:var(--r-lg)}
+
+/* ── FOOTER ── */
+.footer{background:var(--ink-2);color:rgba(255,255,255,.5);padding:56px 0 32px}
+.footer__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px)}
+.footer__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.footer__brand{}
+.footer__logo{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--white);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.footer__logo-dot{width:8px;height:8px;border-radius:50%;background:var(--volt);flex-shrink:0}
+.footer__tagline{font-size:13px;line-height:1.7;margin-bottom:10px}
+.footer__tagline strong{color:rgba(255,255,255,.7)}
+.footer__email{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;display:inline-block;margin-bottom:16px;transition:color .2s}
+.footer__email:hover{color:rgba(200,255,0,.8)}
+.footer__social{display:flex;gap:10px}
+.footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s}
+.footer__social a:hover{background:rgba(255,255,255,.12);color:var(--white)}
+.footer__col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-family:var(--font-mono);color:rgba(255,255,255,.3);margin-bottom:14px;display:block}
+.footer__links{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.footer__links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .18s}
+.footer__links a:hover{color:rgba(255,255,255,.9)}
+.footer__bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap;gap:12px}
+.footer__bottom p{margin:0;color:rgba(255,255,255,.3)}
+.footer__bottom-links{display:flex;gap:16px}
+.footer__bottom-links a{color:rgba(255,255,255,.3);text-decoration:none;transition:color .18s}
+.footer__bottom-links a:hover{color:rgba(255,255,255,.7)}
+
+/* ── ADMIN BAR — hide on mobile ── */
+.admin-bar{display:block}
+@media(max-width:960px){.admin-bar{display:none!important}}
+
+/* ── NAV / DRAWER RESPONSIVE ── */
+@media(max-width:960px){.nav__center{display:none}.nav__hamburger{display:flex}.nav__actions .btn-ghost{display:none}}
+@media(max-width:600px){.nav__actions .btn-primary{font-size:12px;padding:7px 12px}.footer__grid{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:420px){.footer__grid{grid-template-columns:1fr;gap:20px}.footer__bottom{flex-direction:column;align-items:flex-start}}
+
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home">
+      <span class="nav__logo-dot" aria-hidden="true"></span>
+      <span class="nav__logo-text">AppAholic</span>
+    </a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/marketplace?platform=web" class="nav__link">&#x1F310; Web</a></li>
+        <li><a href="/marketplace?platform=desktop" class="nav__link">&#x1F5A5; Desktop</a></li>
+        <li><a href="/marketplace?platform=mobile" class="nav__link">&#x1F4F1; Mobile</a></li>
+        <li><a href="/#calculator" class="nav__link">Budget Calc</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
+      <a href="/#request" class="btn btn-primary btn-sm">Request App</a>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header">
+    <span class="nav__logo" style="color:var(--ink)"><span class="nav__logo-dot"></span>AppAholic</span>
+    <button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <ul class="mobile-drawer__links" role="list">
+    <li><a href="/" class="mobile-drawer__link" onclick="closeDrawer()">Home</a></li>
+    <li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li>
+    <li class="mobile-drawer__subgroup">
+      <span class="mobile-drawer__sublabel">By Platform</span>
+      <ul role="list">
+        <li><a href="/marketplace?platform=web" onclick="closeDrawer()">&#x1F310; Web Apps</a></li>
+        <li><a href="/marketplace?platform=desktop" onclick="closeDrawer()">&#x1F5A5; Desktop Apps</a></li>
+        <li><a href="/marketplace?platform=mobile" onclick="closeDrawer()">&#x1F4F1; Mobile Apps</a></li>
+      </ul>
+    </li>
+    <li><a href="/#calculator" class="mobile-drawer__link" onclick="closeDrawer()">Budget Calculator</a></li>
+    <li><a href="/#request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="/about" class="mobile-drawer__link" onclick="closeDrawer()">About</a></li>
+  </ul>
+  <div class="mobile-drawer__actions">
+    <a href="/auth" class="btn btn-ghost" onclick="closeDrawer()">Sign In</a>
+    <a href="/#request" class="btn btn-primary" onclick="closeDrawer()">Submit Request</a>
+  </div>
+</nav>
 <a href="#formSignin" style="position:absolute;top:-40px;left:8px;background:var(--volt);color:var(--ink);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;z-index:999;transition:top .2s;text-decoration:none" onfocus="this.style.top='8px'" onblur="this.style.top='-40px'">Skip to form</a>
 
 <!-- LEFT: BRAND PANEL -->
@@ -218,7 +352,7 @@ input{font-family:inherit}
   <div class="auth-left__glow"></div>
   <div class="auth-left__glow2"></div>
 
-  <a href="index.html" class="auth-logo">
+  <a href="/" class="auth-logo">
     <span class="auth-logo__dot"></span>AppAholic
   </a>
 
@@ -275,11 +409,11 @@ input{font-family:inherit}
       <button class="btn-auth" id="btnSignin" onclick="handleSignin()">Sign In to AppAholic</button>
 
       <div class="or-divider">or continue with</div>
-      <button class="btn-social" onclick="showToast('Google sign-in coming soon','🔐')">
+      <a class="btn-social" href="#" id="googleSignIn" role="button">
         <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
         Continue with Google
-      </button>
-      <div class="auth-terms">By signing in you agree to our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</div>
+      </a>
+      <div class="auth-terms">By signing in you agree to our <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</div>
     </div>
 
     <!-- SIGN UP FORM -->
@@ -324,17 +458,17 @@ input{font-family:inherit}
       <div class="form-row" style="margin-bottom:20px">
         <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-weight:400;font-size:13px;color:var(--muted)">
           <input type="checkbox" id="suTerms" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:var(--ink)"/>
-          I agree to the <a href="terms.html" style="color:var(--indigo)" target="_blank">Terms of Service</a> and <a href="privacy.html" style="color:var(--indigo)" target="_blank">Privacy Policy</a>
+          I agree to the <a href="/terms" style="color:var(--indigo)" target="_blank">Terms of Service</a> and <a href="/privacy" style="color:var(--indigo)" target="_blank">Privacy Policy</a>
         </label>
         <div class="field-error" id="suTermsErr">You must agree to continue.</div>
       </div>
       <button class="btn-auth" id="btnSignup" onclick="handleSignup()">Create Account</button>
 
       <div class="or-divider">or</div>
-      <button class="btn-social" onclick="showToast('Google sign-in coming soon','🔐')">
+      <a class="btn-social" href="#" id="googleSignUp" role="button">
         <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
         Sign up with Google
-      </button>
+      </a>
     </div>
 
     <!-- FORGOT PASSWORD -->
@@ -357,7 +491,7 @@ input{font-family:inherit}
       <div class="auth-success__icon">🎉</div>
       <div class="auth-success__title" id="successTitle">Account created!</div>
       <div class="auth-success__sub" id="successSub">Check your email for a confirmation link. Once verified, you're all set.</div>
-      <a href="dashboard.html" class="btn-auth" style="display:block;text-align:center;padding:14px">Go to My Dashboard</a>
+      <a href="/dashboard" class="btn-auth" style="display:block;text-align:center;padding:14px">Go to My Dashboard</a>
     </div>
 
   </div>
@@ -491,6 +625,107 @@ function showToast(msg, icon) {
 
 // Auto-focus
 document.getElementById('siEmail').focus();
+
+/* ── GLOBAL NAV / DRAWER / SESSION ── */
+(function(){
+  var hamburger = document.getElementById('navHamburger');
+  var drawer    = document.getElementById('mobileDrawer');
+  var backdrop  = document.getElementById('drawerBackdrop');
+  var closeBtn  = document.getElementById('drawerClose');
+
+  function openDrawer(){
+    if(!drawer) return;
+    drawer.classList.add('open');
+    if(backdrop) backdrop.classList.add('show');
+    drawer.setAttribute('aria-hidden','false');
+    if(hamburger) hamburger.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+    if(closeBtn) closeBtn.focus();
+  }
+  function closeDrawer(){
+    if(!drawer) return;
+    drawer.classList.remove('open');
+    if(backdrop) backdrop.classList.remove('show');
+    drawer.setAttribute('aria-hidden','true');
+    if(hamburger) hamburger.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+    if(hamburger) hamburger.focus();
+  }
+  window.closeDrawer = closeDrawer;
+  if(hamburger) hamburger.addEventListener('click', openDrawer);
+  if(closeBtn)  closeBtn.addEventListener('click',  closeDrawer);
+  if(backdrop)  backdrop.addEventListener('click',  closeDrawer);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer && drawer.classList.contains('open')) closeDrawer(); });
+
+  /* Copyright year */
+  var yr = document.getElementById('footerYear');
+  if(yr) yr.textContent = new Date().getFullYear();
+
+  /* Google OAuth session restore */
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+    var token  = params.get('oauth_session');
+    if(token){
+      try{
+        var pad = token.replace(/-/g,'+').replace(/_/g,'/');
+        while(pad.length%4) pad+='=';
+        var user = JSON.parse(atob(pad));
+        sessionStorage.setItem('appaholic_user', JSON.stringify(user));
+        window.currentUserEmail = user.email;
+        window.currentUserName  = user.name;
+        params.delete('oauth_session');
+        var clean = window.location.pathname + (params.toString() ? '?'+params.toString() : '');
+        history.replaceState({}, '', clean);
+        updateNavUser(user);
+      } catch(e){}
+    } else {
+      try{
+        var stored = sessionStorage.getItem('appaholic_user');
+        if(stored){ var u=JSON.parse(stored); window.currentUserEmail=u.email; window.currentUserName=u.name; updateNavUser(u); }
+      } catch(e){}
+    }
+  })();
+
+  function updateNavUser(user){
+    var el = document.getElementById('navSignIn');
+    if(!el || !user) return;
+    el.textContent = user.firstName || (user.name||'').split(' ')[0] || 'Account';
+    el.setAttribute('href', '/dashboard');
+    if(user.avatar){
+      var img=document.createElement('img');
+      img.src=user.avatar; img.alt='';
+      img.style.cssText='width:22px;height:22px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;';
+      el.prepend(img);
+    }
+  }
+})();
+
+
+/* ── GOOGLE OAUTH ─────────────────────────────────────────────── */
+(function(){
+  var API = window.API_BASE || '';
+
+  // Set href on both Google buttons dynamically via server redirect
+  function wireGoogleBtn(id, redirect){
+    var btn = document.getElementById(id);
+    if(!btn) return;
+    var url = API + '/auth/google?redirect=' + encodeURIComponent(redirect || window.location.origin + '/dashboard');
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      window.location.href = url;
+    });
+    btn.href = url;
+  }
+  wireGoogleBtn('googleSignIn',  window.location.origin + '/dashboard');
+  wireGoogleBtn('googleSignUp',  window.location.origin + '/dashboard');
+
+  // Show error if OAuth failed
+  var params = new URLSearchParams(window.location.search);
+  var err = params.get('error');
+  if(err === 'oauth_denied')  showToast('Google sign-in was cancelled.', '⚠️');
+  if(err === 'oauth_failed')  showToast('Google sign-in failed. Please try again.', '❌');
+})();
+
 </script>
 </body>
 </html>
