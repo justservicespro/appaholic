@@ -348,7 +348,7 @@ app.get('/', (req, res) => {
 
 app.get('/:page', (req, res, next) => {
   const { page } = req.params;
-  if (page.includes('.') || page.startsWith('api') || page.startsWith('auth')) {
+  if (page.includes('.') || page.startsWith('api')) {
     return next();
   }
 
