@@ -6,6 +6,8 @@
  * Local:  npm install && npm run dev
  */
 
+const path       = require('path');
+const fs         = require('fs');
 const express    = require('express');
 const cors       = require('cors');
 const nodemailer = require('nodemailer');
@@ -14,6 +16,7 @@ require('dotenv').config();
 
 const app = express();
 app.use(express.json());
+app.use(express.static(__dirname, { index: false }));
 app.use(cors({
   origin: process.env.ALLOWED_ORIGIN
     ? process.env.ALLOWED_ORIGIN.split(',').map(s => s.trim())
@@ -339,11 +342,32 @@ app.post('/api/admin-alert', async (req, res) => {
   } catch (err) { console.error('admin-alert:', err); res.status(500).json({ ok: false }); }
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/:page', (req, res, next) => {
+  const { page } = req.params;
+  if (page.includes('.') || page.startsWith('api') || page.startsWith('auth')) {
+    return next();
+  }
+
+  const target = path.join(__dirname, `${page}.html`);
+  if (fs.existsSync(target)) {
+    return res.sendFile(target);
+  }
+
+  next();
+});
+
 /* ── Health ── */
 app.get('/api/health', (req, res) =>
   res.json({ ok: true, smtp: !!process.env.GMAIL_USER, oauth: !!process.env.GOOGLE_CLIENT_ID })
 );
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`✅ AppAholic server on :${PORT}`));
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`✅ AppAholic server on :${PORT}`));
+}
+
 module.exports = app;
