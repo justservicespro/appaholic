@@ -1,12 +1,2 @@
-.env
-.env.local
-.env.production
-server/node_modules/
 node_modules/
-.DS_Store
-Thumbs.db
-*.log
-.vscode/
-.idea/
-dist/
-.vercel/
+package-lock.json
