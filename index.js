@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors({
   origin: process.env.ALLOWED_ORIGIN
     ? process.env.ALLOWED_ORIGIN.split(',').map(s => s.trim())
-    : '*',
+    : ['https://appaholic.justservices.pro', 'http://localhost:3000'],
   credentials: true,
 }));
 
@@ -34,14 +34,13 @@ transporter.verify(err =>
 
 const FROM        = `"AppAholic" <${process.env.GMAIL_USER}>`;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.GMAIL_USER;
-const SITE_URL    = process.env.SITE_URL || 'https://appaholic.justservices.pro';
+const SITE_URL    = process.env.SITE_URL    || 'https://appaholic.justservices.pro';
 
 /* ── GOOGLE OAUTH CLIENT ─────────────────────────────────────────── */
 const oAuth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_CALLBACK_URL ||
-    `${SITE_URL.replace('appaholic.justservices.pro','appaholic-server.vercel.app')}/auth/google/callback`
+  process.env.GOOGLE_CALLBACK_URL || 'https://api.appaholic.justservices.pro/auth/google/callback'
 );
 
 const OAUTH_SCOPES = [

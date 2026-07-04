@@ -3,15 +3,15 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/marketplace",       "destination": "/marketplace.html" },
-    { "source": "/marketplace/:path", "destination": "/marketplace.html" },
-    { "source": "/auth",              "destination": "/auth.html" },
-    { "source": "/dashboard",         "destination": "/dashboard.html" },
-    { "source": "/admin",             "destination": "/admin.html" },
-    { "source": "/invoicekit",        "destination": "/invoicekit.html" },
-    { "source": "/about",             "destination": "/about.html" },
-    { "source": "/privacy",           "destination": "/privacy.html" },
-    { "source": "/terms",             "destination": "/terms.html" }
+    { "source": "/marketplace/:path*", "destination": "/marketplace.html" },
+    { "source": "/marketplace",        "destination": "/marketplace.html" },
+    { "source": "/auth",               "destination": "/auth.html" },
+    { "source": "/dashboard",          "destination": "/dashboard.html" },
+    { "source": "/admin",              "destination": "/admin.html" },
+    { "source": "/invoicekit",         "destination": "/invoicekit.html" },
+    { "source": "/about",              "destination": "/about.html" },
+    { "source": "/privacy",            "destination": "/privacy.html" },
+    { "source": "/terms",              "destination": "/terms.html" }
   ],
   "headers": [
     {
@@ -22,12 +22,6 @@
         { "key": "X-XSS-Protection",          "value": "1; mode=block" },
         { "key": "Referrer-Policy",           "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy",        "value": "camera=(), microphone=(), geolocation=()" }
-      ]
-    },
-    {
-      "source": "/server/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
       ]
     }
   ]

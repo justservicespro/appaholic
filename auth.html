@@ -209,142 +209,11 @@ input{font-family:inherit}
 }
 
 
-/* ── SKIP LINK ── */
-.skip-link{position:absolute;top:-48px;left:8px;z-index:9999;background:var(--volt);color:var(--ink);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:top .2s}
-.skip-link:focus{top:8px}
-
-/* ── NAV ── */
-.nav{position:sticky;top:0;z-index:100;height:64px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.nav--dark{background:rgba(10,10,15,.92);border-color:rgba(255,255,255,.08)}
-.nav__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px);height:100%;display:flex;align-items:center;gap:12px}
-.nav__logo{display:flex;align-items:center;gap:8px;flex-shrink:0;font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--ink);text-decoration:none}
-.nav--dark .nav__logo{color:var(--white)}
-.nav__logo-dot{width:9px;height:9px;border-radius:50%;background:var(--volt);border:2px solid var(--ink);display:inline-block;flex-shrink:0}
-.nav--dark .nav__logo-dot{border-color:var(--ink-2)}
-.nav__center{flex:1;display:flex;justify-content:center}
-.nav__links{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0}
-.nav__link{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .18s,background .18s;white-space:nowrap}
-.nav__link:hover{color:var(--ink);background:var(--surface)}
-.nav--dark .nav__link{color:rgba(255,255,255,.55)}
-.nav--dark .nav__link:hover{color:var(--white);background:rgba(255,255,255,.08)}
-.nav__link--active{color:var(--ink)!important;font-weight:700}
-.nav--dark .nav__link--active{color:var(--white)!important}
-.nav__actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
-
-/* Hamburger */
-.nav__hamburger{display:none;width:40px;height:40px;border-radius:var(--r-md);align-items:center;justify-content:center;border:1.5px solid var(--border);cursor:pointer;background:none;padding:0;flex-direction:column;gap:5px}
-.nav__hamburger-icon{display:flex;flex-direction:column;gap:5px;width:18px}
-.nav__hamburger-icon span{display:block;height:2px;border-radius:2px;background:var(--ink);transition:all .22s}
-.nav--dark .nav__hamburger{border-color:rgba(255,255,255,.15)}
-.nav--dark .nav__hamburger-icon span{background:var(--white)}
-
-/* ── MOBILE DRAWER ── */
-.drawer-backdrop{position:fixed;inset:0;z-index:190;background:rgba(10,10,15,.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
-.drawer-backdrop.show{opacity:1;pointer-events:all}
-.mobile-drawer{position:fixed;top:0;right:-320px;z-index:200;width:300px;max-width:88vw;height:100vh;background:var(--white);box-shadow:-8px 0 40px rgba(10,10,15,.14);transition:right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;padding:20px}
-.mobile-drawer.open{right:0}
-.mobile-drawer__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
-.mobile-drawer__close{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--muted);transition:all .15s}
-.mobile-drawer__close:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.mobile-drawer__links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;flex:1}
-.mobile-drawer__link{display:block;padding:11px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;color:var(--ink-3);text-decoration:none;transition:background .15s}
-.mobile-drawer__link:hover{background:var(--surface);color:var(--ink)}
-.mobile-drawer__subgroup{padding:6px 0}
-.mobile-drawer__sublabel{display:block;padding:0 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:var(--font-mono);margin-bottom:4px;margin-top:8px}
-.mobile-drawer__subgroup ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1px}
-.mobile-drawer__subgroup ul a{display:block;padding:9px 12px 9px 22px;border-radius:var(--r-md);font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:background .15s}
-.mobile-drawer__subgroup ul a:hover{background:var(--surface);color:var(--ink)}
-.mobile-drawer__actions{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
-.mobile-drawer__actions .btn{text-align:center;justify-content:center;border-radius:var(--r-lg)}
-
-/* ── FOOTER ── */
-.footer{background:var(--ink-2);color:rgba(255,255,255,.5);padding:56px 0 32px}
-.footer__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px)}
-.footer__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
-.footer__brand{}
-.footer__logo{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--white);display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.footer__logo-dot{width:8px;height:8px;border-radius:50%;background:var(--volt);flex-shrink:0}
-.footer__tagline{font-size:13px;line-height:1.7;margin-bottom:10px}
-.footer__tagline strong{color:rgba(255,255,255,.7)}
-.footer__email{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;display:inline-block;margin-bottom:16px;transition:color .2s}
-.footer__email:hover{color:rgba(200,255,0,.8)}
-.footer__social{display:flex;gap:10px}
-.footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s}
-.footer__social a:hover{background:rgba(255,255,255,.12);color:var(--white)}
-.footer__col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-family:var(--font-mono);color:rgba(255,255,255,.3);margin-bottom:14px;display:block}
-.footer__links{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
-.footer__links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .18s}
-.footer__links a:hover{color:rgba(255,255,255,.9)}
-.footer__bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap;gap:12px}
-.footer__bottom p{margin:0;color:rgba(255,255,255,.3)}
-.footer__bottom-links{display:flex;gap:16px}
-.footer__bottom-links a{color:rgba(255,255,255,.3);text-decoration:none;transition:color .18s}
-.footer__bottom-links a:hover{color:rgba(255,255,255,.7)}
-
-/* ── ADMIN BAR — hide on mobile ── */
-.admin-bar{display:block}
-@media(max-width:960px){.admin-bar{display:none!important}}
-
-/* ── NAV / DRAWER RESPONSIVE ── */
-@media(max-width:960px){.nav__center{display:none}.nav__hamburger{display:flex}.nav__actions .btn-ghost{display:none}}
-@media(max-width:600px){.nav__actions .btn-primary{font-size:12px;padding:7px 12px}.footer__grid{grid-template-columns:1fr 1fr;gap:24px}}
-@media(max-width:420px){.footer__grid{grid-template-columns:1fr;gap:20px}.footer__bottom{flex-direction:column;align-items:flex-start}}
+/* auth page — no global nav */.footer__bottom{flex-direction:column;align-items:flex-start}}
 
 </style>
 </head>
 <body>
-<a class="skip-link" href="#main-content">Skip to content</a>
-<header class="nav" role="banner">
-  <div class="nav__inner">
-    <a href="/" class="nav__logo" aria-label="AppAholic home">
-      <span class="nav__logo-dot" aria-hidden="true"></span>
-      <span class="nav__logo-text">AppAholic</span>
-    </a>
-    <nav class="nav__center" aria-label="Main navigation">
-      <ul class="nav__links" role="list">
-        <li><a href="/" class="nav__link">Home</a></li>
-        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
-        <li><a href="/marketplace?platform=web" class="nav__link">&#x1F310; Web</a></li>
-        <li><a href="/marketplace?platform=desktop" class="nav__link">&#x1F5A5; Desktop</a></li>
-        <li><a href="/marketplace?platform=mobile" class="nav__link">&#x1F4F1; Mobile</a></li>
-        <li><a href="/#calculator" class="nav__link">Budget Calc</a></li>
-      </ul>
-    </nav>
-    <div class="nav__actions">
-      <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
-      <a href="/#request" class="btn btn-primary btn-sm">Request App</a>
-      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
-        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
-      </button>
-    </div>
-  </div>
-</header>
-<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
-<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
-  <div class="mobile-drawer__header">
-    <span class="nav__logo" style="color:var(--ink)"><span class="nav__logo-dot"></span>AppAholic</span>
-    <button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
-  </div>
-  <ul class="mobile-drawer__links" role="list">
-    <li><a href="/" class="mobile-drawer__link" onclick="closeDrawer()">Home</a></li>
-    <li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li>
-    <li class="mobile-drawer__subgroup">
-      <span class="mobile-drawer__sublabel">By Platform</span>
-      <ul role="list">
-        <li><a href="/marketplace?platform=web" onclick="closeDrawer()">&#x1F310; Web Apps</a></li>
-        <li><a href="/marketplace?platform=desktop" onclick="closeDrawer()">&#x1F5A5; Desktop Apps</a></li>
-        <li><a href="/marketplace?platform=mobile" onclick="closeDrawer()">&#x1F4F1; Mobile Apps</a></li>
-      </ul>
-    </li>
-    <li><a href="/#calculator" class="mobile-drawer__link" onclick="closeDrawer()">Budget Calculator</a></li>
-    <li><a href="/#request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li>
-    <li><a href="/about" class="mobile-drawer__link" onclick="closeDrawer()">About</a></li>
-  </ul>
-  <div class="mobile-drawer__actions">
-    <a href="/auth" class="btn btn-ghost" onclick="closeDrawer()">Sign In</a>
-    <a href="/#request" class="btn btn-primary" onclick="closeDrawer()">Submit Request</a>
-  </div>
-</nav>
 <a href="#formSignin" style="position:absolute;top:-40px;left:8px;background:var(--volt);color:var(--ink);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;z-index:999;transition:top .2s;text-decoration:none" onfocus="this.style.top='8px'" onblur="this.style.top='-40px'">Skip to form</a>
 
 <!-- LEFT: BRAND PANEL -->
@@ -404,7 +273,7 @@ input{font-family:inherit}
       </div>
       <div class="form-row-inline">
         <label><input type="checkbox" id="rememberMe"/> Remember me for 30 days</label>
-        <a class="forgot-link" href="#" onclick="event.preventDefault();showForgot()">Forgot password?</a>
+        <a class="forgot-link" href="#forgot" onclick="event.preventDefault();showForgot()">Forgot password?</a>
       </div>
       <button class="btn-auth" id="btnSignin" onclick="handleSignin()">Sign In to AppAholic</button>
 
@@ -482,7 +351,7 @@ input{font-family:inherit}
       </div>
       <button class="btn-auth" onclick="handleForgot()">Send Reset Link</button>
       <div style="text-align:center;margin-top:16px">
-        <a href="#" onclick="event.preventDefault();showSignin()" style="font-size:13px;color:var(--indigo);font-weight:500">&larr; Back to sign in</a>
+        <a href="#signin" onclick="event.preventDefault();showSignin()" style="font-size:13px;color:var(--indigo);font-weight:500">&larr; Back to sign in</a>
       </div>
     </div>
 
@@ -612,7 +481,7 @@ function handleForgot() {
 }
 
 /* API base — point to your deployed email server if not same-origin */
-window.API_BASE = window.API_BASE || '';
+window.API_BASE = 'https://api.appaholic.justservices.pro';
 
 function showToast(msg, icon) {
   icon = icon || '✅';
@@ -625,82 +494,6 @@ function showToast(msg, icon) {
 
 // Auto-focus
 document.getElementById('siEmail').focus();
-
-/* ── GLOBAL NAV / DRAWER / SESSION ── */
-(function(){
-  var hamburger = document.getElementById('navHamburger');
-  var drawer    = document.getElementById('mobileDrawer');
-  var backdrop  = document.getElementById('drawerBackdrop');
-  var closeBtn  = document.getElementById('drawerClose');
-
-  function openDrawer(){
-    if(!drawer) return;
-    drawer.classList.add('open');
-    if(backdrop) backdrop.classList.add('show');
-    drawer.setAttribute('aria-hidden','false');
-    if(hamburger) hamburger.setAttribute('aria-expanded','true');
-    document.body.style.overflow='hidden';
-    if(closeBtn) closeBtn.focus();
-  }
-  function closeDrawer(){
-    if(!drawer) return;
-    drawer.classList.remove('open');
-    if(backdrop) backdrop.classList.remove('show');
-    drawer.setAttribute('aria-hidden','true');
-    if(hamburger) hamburger.setAttribute('aria-expanded','false');
-    document.body.style.overflow='';
-    if(hamburger) hamburger.focus();
-  }
-  window.closeDrawer = closeDrawer;
-  if(hamburger) hamburger.addEventListener('click', openDrawer);
-  if(closeBtn)  closeBtn.addEventListener('click',  closeDrawer);
-  if(backdrop)  backdrop.addEventListener('click',  closeDrawer);
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer && drawer.classList.contains('open')) closeDrawer(); });
-
-  /* Copyright year */
-  var yr = document.getElementById('footerYear');
-  if(yr) yr.textContent = new Date().getFullYear();
-
-  /* Google OAuth session restore */
-  (function(){
-    var params = new URLSearchParams(window.location.search);
-    var token  = params.get('oauth_session');
-    if(token){
-      try{
-        var pad = token.replace(/-/g,'+').replace(/_/g,'/');
-        while(pad.length%4) pad+='=';
-        var user = JSON.parse(atob(pad));
-        sessionStorage.setItem('appaholic_user', JSON.stringify(user));
-        window.currentUserEmail = user.email;
-        window.currentUserName  = user.name;
-        params.delete('oauth_session');
-        var clean = window.location.pathname + (params.toString() ? '?'+params.toString() : '');
-        history.replaceState({}, '', clean);
-        updateNavUser(user);
-      } catch(e){}
-    } else {
-      try{
-        var stored = sessionStorage.getItem('appaholic_user');
-        if(stored){ var u=JSON.parse(stored); window.currentUserEmail=u.email; window.currentUserName=u.name; updateNavUser(u); }
-      } catch(e){}
-    }
-  })();
-
-  function updateNavUser(user){
-    var el = document.getElementById('navSignIn');
-    if(!el || !user) return;
-    el.textContent = user.firstName || (user.name||'').split(' ')[0] || 'Account';
-    el.setAttribute('href', '/dashboard');
-    if(user.avatar){
-      var img=document.createElement('img');
-      img.src=user.avatar; img.alt='';
-      img.style.cssText='width:22px;height:22px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;';
-      el.prepend(img);
-    }
-  }
-})();
-
-
 /* ── GOOGLE OAUTH ─────────────────────────────────────────────── */
 (function(){
   var API = window.API_BASE || '';
@@ -726,6 +519,19 @@ document.getElementById('siEmail').focus();
   if(err === 'oauth_failed')  showToast('Google sign-in failed. Please try again.', '❌');
 })();
 
+
+/* ── AUTO-REDIRECT IF ALREADY SIGNED IN ── */
+(function(){
+  try {
+    var stored = sessionStorage.getItem('appaholic_user');
+    if(stored) {
+      var user = JSON.parse(stored);
+      if(user && user.email) {
+        window.location.href = '/dashboard';
+      }
+    }
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
