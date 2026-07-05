@@ -5,6 +5,19 @@
 <meta name="description" content="Sign in or create your AppAholic account to access purchases, downloads, and app requests."/>
 <link rel="canonical" href="https://appaholic.justservices.pro/auth"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#0A0A0F"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="AppAholic"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png"/>
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png"/>
+<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png"/>
+<link rel="apple-touch-startup-image" href="/icons/icon-512.png"/>
+<meta name="msapplication-TileImage" content="/icons/icon-144.png"/>
+<meta name="msapplication-TileColor" content="#0A0A0F"/>
 <title>Sign In — AppAholic by JustServicesPro</title>
 <meta name="robots" content="noindex, nofollow"/>
 <meta name="description" content="Sign in or create your AppAholic account to manage app purchases, downloads, and requests."/>
@@ -496,27 +509,42 @@ function showToast(msg, icon) {
 document.getElementById('siEmail').focus();
 /* ── GOOGLE OAUTH ─────────────────────────────────────────────── */
 (function(){
-  var API = window.API_BASE || '';
+  var API_SERVER = 'https://api.appaholic.justservices.pro';
+  var REDIRECT   = window.location.origin + '/dashboard';
 
-  // Set href on both Google buttons dynamically via server redirect
-  function wireGoogleBtn(id, redirect){
+  function wireGoogleBtn(id){
     var btn = document.getElementById(id);
     if(!btn) return;
-    var url = API + '/auth/google?redirect=' + encodeURIComponent(redirect || window.location.origin + '/dashboard');
+    var oauthUrl = API_SERVER + '/auth/google?redirect=' + encodeURIComponent(REDIRECT);
+    btn.href = oauthUrl;
     btn.addEventListener('click', function(e){
       e.preventDefault();
-      window.location.href = url;
+      window.location.href = oauthUrl;
     });
-    btn.href = url;
   }
-  wireGoogleBtn('googleSignIn',  window.location.origin + '/dashboard');
-  wireGoogleBtn('googleSignUp',  window.location.origin + '/dashboard');
 
-  // Show error if OAuth failed
+  // Wire both buttons on DOM ready
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      wireGoogleBtn('googleSignIn');
+      wireGoogleBtn('googleSignUp');
+    });
+  } else {
+    wireGoogleBtn('googleSignIn');
+    wireGoogleBtn('googleSignUp');
+  }
+
+  // Show error messages from OAuth redirect
   var params = new URLSearchParams(window.location.search);
   var err = params.get('error');
-  if(err === 'oauth_denied')  showToast('Google sign-in was cancelled.', '⚠️');
+  if(err === 'oauth_denied') showToast('Google sign-in was cancelled.', '⚠️');
   if(err === 'oauth_failed')  showToast('Google sign-in failed. Please try again.', '❌');
+
+  // Clean error param from URL
+  if(err){
+    params.delete('error');
+    history.replaceState({}, '', window.location.pathname + (params.toString() ? '?'+params : ''));
+  }
 })();
 
 
@@ -532,6 +560,43 @@ document.getElementById('siEmail').focus();
     }
   } catch(e) {}
 })();
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(function(reg){
+        console.log('SW registered:', reg.scope);
+        // Check for updates every 60s
+        setInterval(function(){ reg.update(); }, 60000);
+      })
+      .catch(function(err){ console.warn('SW registration failed:', err); });
+  });
+}
+// PWA install prompt
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner if it exists
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'flex';
+});
+window.addEventListener('appinstalled', function(){
+  deferredPrompt = null;
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'none';
+});
+function installPWA(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    deferredPrompt = null;
+    var banner = document.getElementById('pwaInstallBanner');
+    if(banner) banner.style.display = 'none';
+  });
+}
 </script>
 </body>
 </html>
