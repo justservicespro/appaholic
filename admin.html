@@ -7,6 +7,19 @@
 <meta name="description" content="AppAholic Admin Dashboard — manage apps, orders, requests and users."/>
 <meta name="author" content="JustServicesPro Management and Consulting Ltd"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#0A0A0F"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="AppAholic"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png"/>
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png"/>
+<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png"/>
+<link rel="apple-touch-startup-image" href="/icons/icon-512.png"/>
+<meta name="msapplication-TileImage" content="/icons/icon-144.png"/>
+<meta name="msapplication-TileColor" content="#0A0A0F"/>
 <title>AppAholic — Admin Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -1055,5 +1068,42 @@ if(document.getElementById('upPlatformType'))toggleOsSelect();
   <span>AppAholic Admin &mdash; JustServicesPro Management and Consulting Ltd</span>
   <a href="mailto:info@justservices.pro" style="color:rgba(255,255,255,.35);transition:color .15s" onmouseover="this.style.color='rgba(200,255,0,.7)'" onmouseout="this.style.color='rgba(255,255,255,.35)'">info@justservices.pro</a>
 </div>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(function(reg){
+        console.log('SW registered:', reg.scope);
+        // Check for updates every 60s
+        setInterval(function(){ reg.update(); }, 60000);
+      })
+      .catch(function(err){ console.warn('SW registration failed:', err); });
+  });
+}
+// PWA install prompt
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner if it exists
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'flex';
+});
+window.addEventListener('appinstalled', function(){
+  deferredPrompt = null;
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'none';
+});
+function installPWA(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    deferredPrompt = null;
+    var banner = document.getElementById('pwaInstallBanner');
+    if(banner) banner.style.display = 'none';
+  });
+}
+</script>
 </body>
 </html>

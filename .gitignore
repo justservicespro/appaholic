@@ -1,7 +1,19 @@
+# Environment — NEVER commit real credentials
 .env
 .env.local
+.env.production
+
+# Server dependencies
 server/node_modules/
 node_modules/
+
+# OS / editor
 .DS_Store
+Thumbs.db
 *.log
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
 .vercel/

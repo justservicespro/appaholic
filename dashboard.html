@@ -5,6 +5,19 @@
 <meta name="description" content="Your AppAholic dashboard — manage purchases, downloads, app requests, and account settings."/>
 <link rel="canonical" href="https://appaholic.justservices.pro/dashboard"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#0A0A0F"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="AppAholic"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png"/>
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png"/>
+<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png"/>
+<link rel="apple-touch-startup-image" href="/icons/icon-512.png"/>
+<meta name="msapplication-TileImage" content="/icons/icon-144.png"/>
+<meta name="msapplication-TileColor" content="#0A0A0F"/>
 <title>My Dashboard — AppAholic</title>
 <meta name="robots" content="noindex"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
@@ -760,6 +773,43 @@ function showToast(msg, icon) {
   document.getElementById('toastIcon').textContent = icon + ' ';
   t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); }, 3500);
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(function(reg){
+        console.log('SW registered:', reg.scope);
+        // Check for updates every 60s
+        setInterval(function(){ reg.update(); }, 60000);
+      })
+      .catch(function(err){ console.warn('SW registration failed:', err); });
+  });
+}
+// PWA install prompt
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner if it exists
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'flex';
+});
+window.addEventListener('appinstalled', function(){
+  deferredPrompt = null;
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'none';
+});
+function installPWA(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    deferredPrompt = null;
+    var banner = document.getElementById('pwaInstallBanner');
+    if(banner) banner.style.display = 'none';
+  });
 }
 </script>
 </body>
