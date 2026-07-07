@@ -9,11 +9,13 @@
     "dev":   "node --watch index.js"
   },
   "dependencies": {
-    "express":    "^4.19.2",
-    "nodemailer": "^6.9.14",
-    "cors":       "^2.8.5",
-    "dotenv":     "^16.4.5",
-    "googleapis": "^140.0.0"
+    "express":            "^4.21.2",
+    "nodemailer":         "^6.9.16",
+    "cors":               "^2.8.5",
+    "dotenv":             "^16.4.7",
+    "googleapis":         "^144.0.0",
+    "helmet":             "^7.2.0",
+    "express-rate-limit": "^7.4.1"
   },
   "engines": { "node": ">=18" }
 }
