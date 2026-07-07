@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description" content="Your AppAholic dashboard — manage purchases, downloads, app requests, and account settings."/>
+<link rel="canonical" href="https://appaholic.justservices.pro/dashboard"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#0A0A0F"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="AppAholic"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png"/>
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png"/>
+<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png"/>
+<link rel="apple-touch-startup-image" href="/icons/icon-512.png"/>
+<meta name="msapplication-TileImage" content="/icons/icon-144.png"/>
+<meta name="msapplication-TileColor" content="#0A0A0F"/>
+<title>My Dashboard — AppAholic</title>
+<meta name="robots" content="noindex"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#0A0A0F;--ink-2:#1C1C26;--ink-3:#2E2E3E;--muted:#6B6B85;
+  --border:#E4E4F0;--surface:#F7F7FB;--white:#FFFFFF;
+  --volt:#C8FF00;--volt-dim:#9FCC00;--indigo:#4B3EFF;--rose:#FF3E6C;
+  --amber:#FFB800;--green:#00C875;
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;
+  --shadow-sm:0 1px 3px rgba(10,10,15,.06);
+  --shadow-md:0 4px 16px rgba(10,10,15,.08),0 2px 6px rgba(10,10,15,.05);
+  --shadow-lg:0 12px 40px rgba(10,10,15,.12),0 4px 12px rgba(10,10,15,.07);
+  --font-display:'Plus Jakarta Sans',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --sidebar-w:240px;
+  --topbar-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--surface);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);background:var(--ink);color:var(--white);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;z-index:50;overflow-y:auto;
+}
+.sidebar__logo{
+  padding:22px 20px 18px;display:flex;align-items:center;gap:9px;
+  font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sidebar__logo-dot{width:9px;height:9px;border-radius:50%;background:var(--volt);border:2px solid var(--ink-2);display:inline-block}
+.sidebar__user{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07);
+  margin-bottom:8px;
+}
+.sidebar__avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--volt) 0%,var(--volt-dim) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:15px;color:var(--ink);flex-shrink:0;
+}
+.sidebar__user-name{font-size:14px;font-weight:600;color:var(--white)}
+.sidebar__user-email{font-size:11px;color:rgba(255,255,255,.35);font-family:var(--font-mono);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+
+.sidebar__section{padding:16px 20px 8px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);font-family:var(--font-mono)}
+.sidebar__nav{list-style:none;padding:0 10px}
+.sidebar__nav li a{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-md);
+  font-size:13.5px;font-weight:500;color:rgba(255,255,255,.55);transition:all .18s;
+}
+.sidebar__nav li a:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
+.sidebar__nav li a.active{background:rgba(200,255,0,.12);color:var(--volt)}
+.sidebar__nav li a .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.sidebar__nav li a .nav-badge{margin-left:auto;background:var(--rose);color:var(--white);font-size:10px;font-weight:700;padding:2px 6px;border-radius:999px;font-family:var(--font-mono)}
+
+.sidebar__footer{margin-top:auto;padding:16px 12px;border-top:1px solid rgba(255,255,255,.07)}
+.sidebar__footer a{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-md);font-size:13px;color:rgba(255,255,255,.4);transition:all .18s}
+.sidebar__footer a:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column}
+
+/* ── TOPBAR ── */
+.topbar{
+  height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:40;gap:20px;
+}
+.topbar__left{display:flex;flex-direction:column;gap:1px}
+.topbar__title{font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.2px}
+.topbar__crumb{font-size:11px;color:var(--muted);font-family:var(--font-mono)}
+.topbar__right{display:flex;align-items:center;gap:10px}
+.topbar__icon-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative;transition:all .18s}
+.topbar__icon-btn:hover{border-color:var(--ink)}
+.notif-dot{position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--rose);border-radius:50%;border:1.5px solid var(--white)}
+.topbar__search{display:flex;align-items:center;gap:8px;border:1.5px solid var(--border);border-radius:999px;padding:7px 16px;background:var(--surface);transition:border-color .2s}
+.topbar__search:focus-within{border-color:var(--ink)}
+.topbar__search input{border:none;outline:none;background:transparent;font-size:13px;width:180px;color:var(--ink)}
+.topbar__search input::placeholder{color:var(--muted)}
+
+/* ── CONTENT ── */
+.content{padding:28px;flex:1}
+.page{display:none}.page.active{display:block}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:22px 24px;transition:box-shadow .2s}
+.stat-card:hover{box-shadow:var(--shadow-md)}
+.stat-card__icon{width:40px;height:40px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px}
+.stat-card__val{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:4px}
+.stat-card__label{font-size:12px;color:var(--muted);font-family:var(--font-mono)}
+.stat-card__change{font-size:12px;margin-top:6px}
+.change-up{color:var(--green)}.change-neutral{color:var(--muted)}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;margin-bottom:20px}
+.card__header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card__title{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:-.2px}
+.card__action{font-size:13px;font-weight:600;color:var(--indigo);cursor:pointer;transition:opacity .15s}
+.card__action:hover{opacity:.7}
+.card__body{padding:20px 22px}
+
+/* ── APP ITEM (purchase row) ── */
+.app-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.app-item:last-child{border-bottom:none;padding-bottom:0}
+.app-item__icon{width:46px;height:46px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:22px;border:1.5px solid var(--border);background:var(--surface);flex-shrink:0}
+.app-item__info{flex:1}
+.app-item__name{font-size:14px;font-weight:600;margin-bottom:3px}
+.app-item__meta{font-size:12px;color:var(--muted);font-family:var(--font-mono)}
+.app-item__right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700;font-family:var(--font-mono)}
+.pill-green{background:rgba(0,200,117,.1);color:#007A4A;border:1px solid rgba(0,200,117,.25)}
+.pill-blue{background:rgba(75,62,255,.1);color:var(--indigo);border:1px solid rgba(75,62,255,.25)}
+.pill-amber{background:rgba(255,184,0,.15);color:#7A5700;border:1px solid rgba(255,184,0,.4)}
+.pill-muted{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+.btn-dl{padding:7px 14px;border-radius:999px;font-size:12px;font-weight:600;background:var(--ink);color:var(--white);transition:all .18s;white-space:nowrap}
+.btn-dl:hover{background:var(--indigo)}
+.btn-dl.free-style{background:rgba(200,255,0,.15);color:#3A6200;border:1.5px solid rgba(200,255,0,.5)}
+.btn-dl.free-style:hover{background:var(--volt);color:var(--ink)}
+
+/* ── REQUEST ITEM ── */
+.req-item{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--border)}
+.req-item:last-child{border-bottom:none;padding-bottom:0}
+.req-item__icon{width:40px;height:40px;border-radius:var(--r-md);background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-top:2px}
+.req-item__info{flex:1}
+.req-item__title{font-size:14px;font-weight:600;margin-bottom:4px}
+.req-item__desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.req-item__meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* ── PROFILE FORM ── */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row{margin-bottom:16px}
+.form-row label{display:block;font-size:12px;font-weight:600;margin-bottom:7px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;font-family:var(--font-mono)}
+.form-input{width:100%;padding:11px 14px;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--surface);font-size:14px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus{border-color:var(--ink);background:var(--white);box-shadow:0 0 0 3px rgba(10,10,15,.06)}
+.btn-primary{background:var(--ink);color:var(--white);padding:10px 22px;border-radius:999px;font-size:13px;font-weight:600;transition:all .2s}
+.btn-primary:hover{background:var(--indigo)}
+.btn-ghost{border:1.5px solid var(--border);color:var(--ink);padding:10px 22px;border-radius:999px;font-size:13px;font-weight:600;transition:all .2s}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-danger{background:rgba(255,62,108,.08);color:var(--rose);border:1.5px solid rgba(255,62,108,.25);padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;transition:all .2s}
+.btn-danger:hover{background:var(--rose);color:var(--white)}
+
+/* ── WISHLIST / EXPLORE ── */
+.explore-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.mini-app-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:18px;cursor:pointer;transition:all .2s}
+.mini-app-card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.mini-app-card__icon{font-size:28px;margin-bottom:12px}
+.mini-app-card__name{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:4px}
+.mini-app-card__cat{font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:10px}
+.mini-app-card__price{font-family:var(--font-display);font-size:16px;font-weight:800}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:48px 24px}
+.empty__icon{font-size:44px;margin-bottom:14px}
+.empty__title{font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+.empty__sub{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;z-index:300;background:var(--ink);color:var(--white);padding:13px 20px;border-radius:var(--r-lg);display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){#sidebarToggle{display:flex!important}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .profile-grid{grid-template-columns:1fr}
+  .sidebar{transform:translateX(-100%)}
+  .main{margin-left:0}
+}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr}}
+
+@media(max-width:900px){
+  body{display:block!important}
+  .sidebar{position:fixed;left:-100%;width:240px;transition:left .28s cubic-bezier(.4,0,.2,1);z-index:150}
+  .sidebar.mobile-open{left:0}
+  .main{margin-left:0!important}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .topbar__search{display:none}
+}
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr}
+  .content{padding:16px}
+  .topbar{padding:0 16px}
+  .app-item__right{flex-direction:column;align-items:flex-end;gap:4px}
+  .profile-grid{grid-template-columns:1fr!important}
+}
+
+
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr}
+  .app-item{flex-direction:column;align-items:flex-start;gap:10px}
+  .app-item__right{flex-direction:row;width:100%;justify-content:space-between}
+  .card__body{padding:14px 16px}
+  .topbar__title{font-size:14px}
+  .explore-grid{grid-template-columns:1fr}
+}
+
+
+/* ── SKIP LINK ── */
+.skip-link{position:absolute;top:-48px;left:8px;z-index:9999;background:var(--volt);color:var(--ink);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:top .2s}
+.skip-link:focus{top:8px}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;height:64px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav--dark{background:rgba(10,10,15,.92);border-color:rgba(255,255,255,.08)}
+.nav__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px);height:100%;display:flex;align-items:center;gap:12px}
+.nav__logo{display:flex;align-items:center;gap:8px;flex-shrink:0;font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--ink);text-decoration:none}
+.nav--dark .nav__logo{color:var(--white)}
+.nav__logo-dot{width:9px;height:9px;border-radius:50%;background:var(--volt);border:2px solid var(--ink);display:inline-block;flex-shrink:0}
+.nav--dark .nav__logo-dot{border-color:var(--ink-2)}
+.nav__center{flex:1;display:flex;justify-content:center}
+.nav__links{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0}
+.nav__link{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .18s,background .18s;white-space:nowrap}
+.nav__link:hover{color:var(--ink);background:var(--surface)}
+.nav--dark .nav__link{color:rgba(255,255,255,.55)}
+.nav--dark .nav__link:hover{color:var(--white);background:rgba(255,255,255,.08)}
+.nav__link--active{color:var(--ink)!important;font-weight:700}
+.nav--dark .nav__link--active{color:var(--white)!important}
+.nav__actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
+
+/* Hamburger */
+.nav__hamburger{display:none;width:40px;height:40px;border-radius:var(--r-md);align-items:center;justify-content:center;border:1.5px solid var(--border);cursor:pointer;background:none;padding:0;flex-direction:column;gap:5px}
+.nav__hamburger-icon{display:flex;flex-direction:column;gap:5px;width:18px}
+.nav__hamburger-icon span{display:block;height:2px;border-radius:2px;background:var(--ink);transition:all .22s}
+.nav--dark .nav__hamburger{border-color:rgba(255,255,255,.15)}
+.nav--dark .nav__hamburger-icon span{background:var(--white)}
+
+/* ── MOBILE DRAWER ── */
+.drawer-backdrop{position:fixed;inset:0;z-index:190;background:rgba(10,10,15,.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-backdrop.show{opacity:1;pointer-events:all}
+.mobile-drawer{position:fixed;top:0;right:-320px;z-index:200;width:300px;max-width:88vw;height:100vh;background:var(--white);box-shadow:-8px 0 40px rgba(10,10,15,.14);transition:right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;padding:20px}
+.mobile-drawer.open{right:0}
+.mobile-drawer__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.mobile-drawer__close{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--muted);transition:all .15s}
+.mobile-drawer__close:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.mobile-drawer__links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;flex:1}
+.mobile-drawer__link{display:block;padding:11px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;color:var(--ink-3);text-decoration:none;transition:background .15s}
+.mobile-drawer__link:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__subgroup{padding:6px 0}
+.mobile-drawer__sublabel{display:block;padding:0 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:var(--font-mono);margin-bottom:4px;margin-top:8px}
+.mobile-drawer__subgroup ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1px}
+.mobile-drawer__subgroup ul a{display:block;padding:9px 12px 9px 22px;border-radius:var(--r-md);font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:background .15s}
+.mobile-drawer__subgroup ul a:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__actions{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.mobile-drawer__actions .btn{text-align:center;justify-content:center;border-radius:var(--r-lg)}
+
+/* ── FOOTER ── */
+.footer{background:var(--ink-2);color:rgba(255,255,255,.5);padding:56px 0 32px}
+.footer__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px)}
+.footer__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.footer__brand{}
+.footer__logo{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--white);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.footer__logo-dot{width:8px;height:8px;border-radius:50%;background:var(--volt);flex-shrink:0}
+.footer__tagline{font-size:13px;line-height:1.7;margin-bottom:10px}
+.footer__tagline strong{color:rgba(255,255,255,.7)}
+.footer__email{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;display:inline-block;margin-bottom:16px;transition:color .2s}
+.footer__email:hover{color:rgba(200,255,0,.8)}
+.footer__social{display:flex;gap:10px}
+.footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s}
+.footer__social a:hover{background:rgba(255,255,255,.12);color:var(--white)}
+.footer__col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-family:var(--font-mono);color:rgba(255,255,255,.3);margin-bottom:14px;display:block}
+.footer__links{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.footer__links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .18s}
+.footer__links a:hover{color:rgba(255,255,255,.9)}
+.footer__bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap;gap:12px}
+.footer__bottom p{margin:0;color:rgba(255,255,255,.3)}
+.footer__bottom-links{display:flex;gap:16px}
+.footer__bottom-links a{color:rgba(255,255,255,.3);text-decoration:none;transition:color .18s}
+.footer__bottom-links a:hover{color:rgba(255,255,255,.7)}
+
+/* ── ADMIN BAR — hide on mobile ── */
+.admin-bar{display:block}
+@media(max-width:960px){.admin-bar{display:none!important}}
+
+/* ── NAV / DRAWER RESPONSIVE ── */
+@media(max-width:960px){.nav__center{display:none}.nav__hamburger{display:flex}.nav__actions .btn-ghost{display:none}}
+@media(max-width:600px){.nav__actions .btn-primary{font-size:12px;padding:7px 12px}.footer__grid{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:420px){.footer__grid{grid-template-columns:1fr;gap:20px}.footer__bottom{flex-direction:column;align-items:flex-start}}
+
+.btn-sm{padding:7px 14px;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar__logo"><span class="sidebar__logo-dot"></span>AppAholic</div>
+
+  <div class="sidebar__user">
+    <div class="sidebar__avatar">T</div>
+    <div>
+      <div class="sidebar__user-name">Tunde Bakare</div>
+      <div class="sidebar__user-email">tunde@example.com</div>
+    </div>
+  </div>
+
+  <div class="sidebar__section">My Account</div>
+  <ul class="sidebar__nav">
+    <li><a href="#" class="active" onclick="nav(event,'overview')"><span class="nav-icon">📊</span>Overview</a></li>
+    <li><a href="#" onclick="nav(event,'purchases')"><span class="nav-icon">📦</span>My Purchases</a></li>
+    <li><a href="#" onclick="nav(event,'downloads')"><span class="nav-icon">⬇️</span>Downloads</a></li>
+    <li><a href="#" onclick="nav(event,'requests')"><span class="nav-icon">📬</span>My Requests <span class="nav-badge">2</span></a></li>
+    <li><a href="#" onclick="nav(event,'wishlist')"><span class="nav-icon">❤️</span>Wishlist</a></li>
+  </ul>
+
+  <div class="sidebar__section">Settings</div>
+  <ul class="sidebar__nav">
+    <li><a href="#" onclick="nav(event,'profile')"><span class="nav-icon">👤</span>Profile</a></li>
+    <li><a href="#" onclick="nav(event,'billing')"><span class="nav-icon">💳</span>Billing</a></li>
+    <li><a href="#" onclick="nav(event,'notifications')"><span class="nav-icon">🔔</span>Notifications</a></li>
+  </ul>
+
+  <div class="sidebar__footer">
+    <a href="/marketplace"><span style="font-size:16px">🛒</span> Browse Apps</a>
+    <a href="/request"><span style="font-size:16px">📝</span> Request an App</a>
+    <a href="/auth" onclick="showToast('Signed out','👋')"><span style="font-size:16px">🚪</span> Sign Out</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button onclick="document.getElementById('sidebar').classList.toggle('mobile-open')" style="display:none;width:36px;height:36px;border:1.5px solid var(--border);border-radius:var(--r-md);align-items:center;justify-content:center;font-size:18px;cursor:pointer;background:none;flex-shrink:0;margin-right:8px" id="sidebarToggle" aria-label="Menu">&#9776;</button>
+    <div class="topbar__left">
+      <div class="topbar__title" id="pageTitle">Overview</div>
+      <div class="topbar__crumb" id="pageCrumb">My Dashboard → Overview</div>
+    </div>
+    <div class="topbar__search">
+      <span style="color:var(--muted);font-size:15px">🔍</span>
+      <input type="text" placeholder="Search my apps..."/>
+    </div>
+    <div class="topbar__right">
+      <button class="topbar__icon-btn" onclick="showToast('No new notifications','🔔')">🔔<span class="notif-dot"></span></button>
+      <a href="/marketplace" class="btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;background:var(--ink);color:var(--white);text-decoration:none">+ Get More Apps</a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── OVERVIEW ── -->
+    <div class="page active" id="page-overview">
+      <div style="margin-bottom:24px">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:4px">Good morning 👋</div>
+        <div style="font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.4px">Welcome back, Tunde.</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background:#E8EAF6">📦</div>
+          <div class="stat-card__val">3</div>
+          <div class="stat-card__label">Apps purchased</div>
+          <div class="stat-card__change change-up">↑ 1 this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background:#E8F5E9">⬇️</div>
+          <div class="stat-card__val">7</div>
+          <div class="stat-card__label">Total downloads</div>
+          <div class="stat-card__change change-neutral">Across 3 devices</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background:#FFF3E0">📬</div>
+          <div class="stat-card__val">2</div>
+          <div class="stat-card__label">App requests</div>
+          <div class="stat-card__change" style="color:var(--amber)">1 in progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background:#FCE4EC">💰</div>
+          <div class="stat-card__val">₦7,700</div>
+          <div class="stat-card__label">Total spent</div>
+          <div class="stat-card__change change-neutral">3 transactions</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card__header">
+            <div class="card__title">Recent Purchases</div>
+            <span class="card__action" onclick="nav(null,'purchases')">View all</span>
+          </div>
+          <div class="card__body" style="padding:0 22px">
+            <div class="app-item">
+              <div class="app-item__icon">🧾</div>
+              <div class="app-item__info">
+                <div class="app-item__name">InvoiceKit</div>
+                <div class="app-item__meta">Finance · Purchased Jun 22, 2025 · ₦2,500</div>
+              </div>
+              <div class="app-item__right">
+                <span class="pill pill-green">Active</span>
+                <button class="btn-dl" onclick="showToast('Downloading InvoiceKit...','⬇️')">⬇ Download</button>
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-item__icon">⏱️</div>
+              <div class="app-item__info">
+                <div class="app-item__name">FocusClock</div>
+                <div class="app-item__meta">Productivity · Purchased Jun 10, 2025 · ₦1,200</div>
+              </div>
+              <div class="app-item__right">
+                <span class="pill pill-green">Active</span>
+                <button class="btn-dl" onclick="showToast('Downloading FocusClock...','⬇️')">⬇ Download</button>
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-item__icon">🗂️</div>
+              <div class="app-item__info">
+                <div class="app-item__name">VaultSync</div>
+                <div class="app-item__meta">Storage · Downloaded May 30, 2025 · Free</div>
+              </div>
+              <div class="app-item__right">
+                <span class="pill pill-muted">Free</span>
+                <button class="btn-dl free-style" onclick="showToast('Downloading VaultSync...','⬇️')">⬇ Download</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="card__header">
+              <div class="card__title">Request Status</div>
+              <span class="card__action" onclick="nav(null,'requests')">View all</span>
+            </div>
+            <div class="card__body" style="padding:0 22px">
+              <div class="req-item">
+                <div class="req-item__icon">🏗️</div>
+                <div class="req-item__info">
+                  <div class="req-item__title">Payroll Manager</div>
+                  <div class="req-item__desc">HR & Team Management · Web</div>
+                  <div class="req-item__meta">
+                    <span class="pill pill-blue">In Progress</span>
+                    <span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">Est. 2 weeks</span>
+                  </div>
+                </div>
+              </div>
+              <div class="req-item">
+                <div class="req-item__icon">📋</div>
+                <div class="req-item__info">
+                  <div class="req-item__title">Inventory Tracker</div>
+                  <div class="req-item__desc">Utilities · Cross-platform</div>
+                  <div class="req-item__meta">
+                    <span class="pill pill-amber">Under Review</span>
+                    <span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">47 votes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__header"><div class="card__title">Recommended for You</div></div>
+            <div class="card__body" style="padding:0 22px">
+              <div class="app-item">
+                <div class="app-item__icon">📊</div>
+                <div class="app-item__info">
+                  <div class="app-item__name">DataPulse</div>
+                  <div class="app-item__meta">Analytics · ₦3,500</div>
+                </div>
+                <button class="btn-dl" onclick="showToast('Opening DataPulse...','📊')">View</button>
+              </div>
+              <div class="app-item">
+                <div class="app-item__icon">🤖</div>
+                <div class="app-item__info">
+                  <div class="app-item__name">TaskMind AI</div>
+                  <div class="app-item__meta">AI Tools · ₦5,000/mo</div>
+                </div>
+                <button class="btn-dl" onclick="showToast('Opening TaskMind AI...','🤖')">View</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PURCHASES ── -->
+    <div class="page" id="page-purchases">
+      <div class="card">
+        <div class="card__header">
+          <div class="card__title">My Purchases (3)</div>
+          <span class="card__action" onclick="showToast('Exporting receipt PDF...','📄')">Export receipts</span>
+        </div>
+        <div class="card__body" style="padding:0 22px">
+          <div class="app-item">
+            <div class="app-item__icon">🧾</div>
+            <div class="app-item__info">
+              <div class="app-item__name">InvoiceKit</div>
+              <div class="app-item__meta">Finance · v1.2.0 · One-time purchase · ₦2,500 · Jun 22, 2025 · Ref: FLW-2841</div>
+            </div>
+            <div class="app-item__right">
+              <span class="pill pill-green">Latest</span>
+              <button class="btn-dl" onclick="showToast('Downloading InvoiceKit v1.2.0...','⬇️')">⬇ v1.2.0</button>
+            </div>
+          </div>
+          <div class="app-item">
+            <div class="app-item__icon">⏱️</div>
+            <div class="app-item__info">
+              <div class="app-item__name">FocusClock</div>
+              <div class="app-item__meta">Productivity · v2.1.0 · One-time purchase · ₦1,200 · Jun 10, 2025 · Ref: FLW-2791</div>
+            </div>
+            <div class="app-item__right">
+              <span class="pill pill-blue">Update available</span>
+              <button class="btn-dl" onclick="showToast('Downloading FocusClock v2.2.0...','⬇️')">⬇ v2.2.0</button>
+            </div>
+          </div>
+          <div class="app-item">
+            <div class="app-item__icon">🗂️</div>
+            <div class="app-item__info">
+              <div class="app-item__name">VaultSync</div>
+              <div class="app-item__meta">Storage · v1.0.4 · Free download · ₦0 · May 30, 2025</div>
+            </div>
+            <div class="app-item__right">
+              <span class="pill pill-muted">Free</span>
+              <button class="btn-dl free-style" onclick="showToast('Downloading VaultSync v1.0.4...','⬇️')">⬇ v1.0.4</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DOWNLOADS ── -->
+    <div class="page" id="page-downloads">
+      <div class="card">
+        <div class="card__header">
+          <div class="card__title">Download History</div>
+          <span style="font-size:12px;color:var(--muted);font-family:var(--font-mono)">7 total downloads</span>
+        </div>
+        <div class="card__body" style="padding:0 22px">
+          <div class="app-item"><div class="app-item__icon">🧾</div><div class="app-item__info"><div class="app-item__name">InvoiceKit v1.2.0</div><div class="app-item__meta">Jun 23, 2025 · 14:32 · MacBook Pro · 4.2 MB</div></div><span class="pill pill-green">Success</span></div>
+          <div class="app-item"><div class="app-item__icon">⏱️</div><div class="app-item__info"><div class="app-item__name">FocusClock v2.1.0</div><div class="app-item__meta">Jun 10, 2025 · 09:14 · Windows PC · 6.8 MB</div></div><span class="pill pill-green">Success</span></div>
+          <div class="app-item"><div class="app-item__icon">🗂️</div><div class="app-item__info"><div class="app-item__name">VaultSync v1.0.4</div><div class="app-item__meta">May 30, 2025 · 17:55 · Windows PC · 3.1 MB</div></div><span class="pill pill-green">Success</span></div>
+          <div class="app-item"><div class="app-item__icon">🗂️</div><div class="app-item__info"><div class="app-item__name">VaultSync v1.0.3</div><div class="app-item__meta">May 12, 2025 · 11:20 · Windows PC · 3.0 MB</div></div><span class="pill pill-muted">Older</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REQUESTS ── -->
+    <div class="page" id="page-requests">
+      <div class="card" style="margin-bottom:16px">
+        <div class="card__header">
+          <div class="card__title">My App Requests (2)</div>
+          <a href="/request" class="card__action">+ New Request</a>
+        </div>
+        <div class="card__body" style="padding:0 22px">
+          <div class="req-item">
+            <div class="req-item__icon">🏗️</div>
+            <div class="req-item__info">
+              <div class="req-item__title">Payroll Manager</div>
+              <div class="req-item__desc">A web-based payroll tool that handles salary computation, deductions, PAYE tax, and generates pay slips automatically for small teams.</div>
+              <div class="req-item__meta">
+                <span class="pill pill-blue">In Progress</span>
+                <span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">Submitted Jun 5, 2025</span>
+                <span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">Est. completion: Jul 10, 2025</span>
+              </div>
+            </div>
+          </div>
+          <div class="req-item">
+            <div class="req-item__icon">📋</div>
+            <div class="req-item__info">
+              <div class="req-item__title">Inventory Tracker</div>
+              <div class="req-item__desc">Simple inventory management for small retail businesses. Track stock levels, get low-stock alerts, and generate reorder reports.</div>
+              <div class="req-item__meta">
+                <span class="pill pill-amber">Under Review</span>
+                <span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">Submitted May 28, 2025</span>
+                <span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">47 community votes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(200,255,0,.06);border:1px solid rgba(200,255,0,.25);border-radius:var(--r-lg);padding:16px 20px;font-size:13px;color:var(--ink-3);line-height:1.6">
+        🎁 <strong>Early access benefit:</strong> When your requested app launches, you'll get it free and be the first to know. We'll email you at tunde@example.com.
+      </div>
+    </div>
+
+    <!-- ── WISHLIST ── -->
+    <div class="page" id="page-wishlist">
+      <div class="card">
+        <div class="card__header"><div class="card__title">Saved Apps (2)</div><a href="/marketplace" class="card__action">Browse more</a></div>
+        <div class="card__body">
+          <div class="explore-grid">
+            <div class="mini-app-card">
+              <div class="mini-app-card__icon">📊</div>
+              <div class="mini-app-card__name">DataPulse</div>
+              <div class="mini-app-card__cat">Analytics</div>
+              <div class="mini-app-card__price" style="color:var(--ink)">₦3,500</div>
+              <button class="btn-dl" style="margin-top:12px;width:100%;text-align:center" onclick="showToast('Redirecting to checkout for DataPulse...','💳')">Buy Now</button>
+            </div>
+            <div class="mini-app-card">
+              <div class="mini-app-card__icon">🤖</div>
+              <div class="mini-app-card__name">TaskMind AI</div>
+              <div class="mini-app-card__cat">AI Tools</div>
+              <div class="mini-app-card__price" style="color:var(--ink)">₦5,000/mo</div>
+              <button class="btn-dl" style="margin-top:12px;width:100%;text-align:center" onclick="showToast('Redirecting to checkout for TaskMind AI...','💳')">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE ── -->
+    <div class="page" id="page-profile">
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+        <div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="card__header"><div class="card__title">Personal Information</div></div>
+            <div class="card__body">
+              <div class="profile-grid">
+                <div class="form-row"><label>First Name</label><input class="form-input" value="Tunde"/></div>
+                <div class="form-row"><label>Last Name</label><input class="form-input" value="Bakare"/></div>
+              </div>
+              <div class="form-row"><label>Email Address</label><input class="form-input" value="tunde@example.com"/></div>
+              <div class="form-row"><label>Phone / WhatsApp</label><input class="form-input" value="+234 801 234 5678"/></div>
+              <div class="form-row">
+                <label>Role</label>
+                <select class="form-input">
+                  <option selected>Business owner / Founder</option>
+                  <option>Freelancer / Sole trader</option>
+                  <option>Manager / Team lead</option>
+                  <option>Developer / Designer</option>
+                </select>
+              </div>
+              <button class="btn-primary" onclick="showToast('Profile saved','✅')">Save Changes</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__header"><div class="card__title">Change Password</div></div>
+            <div class="card__body">
+              <div class="form-row"><label>Current Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+              <div class="form-row"><label>New Password</label><input class="form-input" type="password" placeholder="Min. 8 characters"/></div>
+              <div class="form-row" style="margin-bottom:20px"><label>Confirm New Password</label><input class="form-input" type="password" placeholder="Repeat new password"/></div>
+              <button class="btn-primary" onclick="showToast('Password updated','🔐')">Update Password</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card__header"><div class="card__title">Account</div></div>
+            <div class="card__body">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+                <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--volt),var(--volt-dim));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--ink)">T</div>
+                <div>
+                  <div style="font-size:14px;font-weight:600">Tunde Bakare</div>
+                  <div style="font-size:12px;color:var(--muted)">Member since May 2025</div>
+                </div>
+              </div>
+              <button class="btn-ghost" style="width:100%;justify-content:center;margin-bottom:10px" onclick="showToast('Photo upload coming soon','📷')">Upload Photo</button>
+              <button class="btn-danger" style="width:100%;justify-content:center" onclick="showToast('Contact support to delete account','⚠️')">Delete Account</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__header"><div class="card__title">Linked Accounts</div></div>
+            <div class="card__body">
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)">
+                <span>Google</span><span style="color:var(--muted)">Not connected</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:8px 0">
+                <span>WhatsApp</span><span style="color:var(--green)">Connected</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BILLING ── -->
+    <div class="page" id="page-billing">
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat-card"><div class="stat-card__icon" style="background:#E8F5E9">💰</div><div class="stat-card__val">₦7,700</div><div class="stat-card__label">Total spent</div></div>
+        <div class="stat-card"><div class="stat-card__icon" style="background:#E3F2FD">📦</div><div class="stat-card__val">3</div><div class="stat-card__label">Purchases</div></div>
+        <div class="stat-card"><div class="stat-card__icon" style="background:#F3E5F5">🎟️</div><div class="stat-card__val">₦0</div><div class="stat-card__label">Pending</div></div>
+      </div>
+      <div class="card">
+        <div class="card__header"><div class="card__title">Transaction History</div><span class="card__action" onclick="showToast('Exporting transactions...','📄')">Export CSV</span></div>
+        <div class="card__body" style="padding:0 22px">
+          <div class="app-item"><div class="app-item__icon">🧾</div><div class="app-item__info"><div class="app-item__name">InvoiceKit</div><div class="app-item__meta">Jun 22, 2025 · Card · Ref: FLW-2841</div></div><div class="app-item__right"><span class="pill pill-green">Paid</span><span style="font-family:var(--font-display);font-size:16px;font-weight:800">₦2,500</span></div></div>
+          <div class="app-item"><div class="app-item__icon">⏱️</div><div class="app-item__info"><div class="app-item__name">FocusClock</div><div class="app-item__meta">Jun 10, 2025 · Bank Transfer · Ref: FLW-2791</div></div><div class="app-item__right"><span class="pill pill-green">Paid</span><span style="font-family:var(--font-display);font-size:16px;font-weight:800">₦1,200</span></div></div>
+          <div class="app-item"><div class="app-item__icon">🗂️</div><div class="app-item__info"><div class="app-item__name">VaultSync</div><div class="app-item__meta">May 30, 2025 · Free download</div></div><div class="app-item__right"><span class="pill pill-muted">Free</span><span style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--muted)">₦0</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NOTIFICATIONS ── -->
+    <div class="page" id="page-notifications">
+      <div class="card">
+        <div class="card__header"><div class="card__title">Notification Preferences</div></div>
+        <div class="card__body">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)">
+              <div><div style="font-size:14px;font-weight:600;margin-bottom:3px">Purchase receipts</div><div style="font-size:12px;color:var(--muted)">Email confirmation after every purchase</div></div>
+              <input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--ink);cursor:pointer"/>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)">
+              <div><div style="font-size:14px;font-weight:600;margin-bottom:3px">App update alerts</div><div style="font-size:12px;color:var(--muted)">When a new version of your apps is released</div></div>
+              <input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--ink);cursor:pointer"/>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)">
+              <div><div style="font-size:14px;font-weight:600;margin-bottom:3px">Request status updates</div><div style="font-size:12px;color:var(--muted)">When your app request moves to a new stage</div></div>
+              <input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--ink);cursor:pointer"/>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)">
+              <div><div style="font-size:14px;font-weight:600;margin-bottom:3px">New app announcements</div><div style="font-size:12px;color:var(--muted)">When new apps are added to the marketplace</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--ink);cursor:pointer"/>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0">
+              <div><div style="font-size:14px;font-weight:600;margin-bottom:3px">Promotional emails</div><div style="font-size:12px;color:var(--muted)">Discounts, early access, and platform news</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--ink);cursor:pointer"/>
+            </div>
+          </div>
+          <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+            <button class="btn-primary" onclick="showToast('Notification preferences saved','✅')">Save Preferences</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toastIcon" style="font-size:18px"></span><span id="toastMsg"></span></div>
+
+<script>
+var pages = ['overview','purchases','downloads','requests','wishlist','profile','billing','notifications'];
+var titles = {overview:'Overview',purchases:'My Purchases',downloads:'Downloads',requests:'My Requests',wishlist:'Wishlist',profile:'Profile',billing:'Billing',notifications:'Notifications'};
+
+function nav(e, page) {
+  if(e) e.preventDefault();
+  pages.forEach(function(p) {
+    var el = document.getElementById('page-'+p);
+    if(el) el.classList.toggle('active', p === page);
+  });
+  document.querySelectorAll('.sidebar__nav li a').forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('onclick') && a.getAttribute('onclick').indexOf("'"+page+"'") >= 0);
+  });
+  document.getElementById('pageTitle').textContent = titles[page] || page;
+  document.getElementById('pageCrumb').textContent = 'My Dashboard \u2192 ' + (titles[page] || page);
+}
+
+function showToast(msg, icon) {
+  icon = icon || '✅';
+  var t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = icon + ' ';
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3500);
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(function(reg){
+        console.log('SW registered:', reg.scope);
+        // Check for updates every 60s
+        setInterval(function(){ reg.update(); }, 60000);
+      })
+      .catch(function(err){ console.warn('SW registration failed:', err); });
+  });
+}
+// PWA install prompt
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner if it exists
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'flex';
+});
+window.addEventListener('appinstalled', function(){
+  deferredPrompt = null;
+  var banner = document.getElementById('pwaInstallBanner');
+  if(banner) banner.style.display = 'none';
+});
+function installPWA(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    deferredPrompt = null;
+    var banner = document.getElementById('pwaInstallBanner');
+    if(banner) banner.style.display = 'none';
+  });
+}
+</script>
+</body>
+</html>
