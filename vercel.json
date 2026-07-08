@@ -3,114 +3,42 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/marketplace/:path*",
-      "destination": "/marketplace.html"
-    },
-    {
-      "source": "/marketplace",
-      "destination": "/marketplace.html"
-    },
-    {
-      "source": "/request",
-      "destination": "/request.html"
-    },
-    {
-      "source": "/contact",
-      "destination": "/contact.html"
-    },
-    {
-      "source": "/auth",
-      "destination": "/auth.html"
-    },
-    {
-      "source": "/dashboard",
-      "destination": "/dashboard.html"
-    },
-    {
-      "source": "/admin",
-      "destination": "/admin.html"
-    },
-    {
-      "source": "/invoicekit",
-      "destination": "/invoicekit.html"
-    },
-    {
-      "source": "/about",
-      "destination": "/about.html"
-    },
-    {
-      "source": "/privacy",
-      "destination": "/privacy.html"
-    },
-    {
-      "source": "/terms",
-      "destination": "/terms.html"
-    },
-    {
-      "source": "/offline",
-      "destination": "/offline.html"
-    }
+    { "source": "/marketplace", "destination": "/marketplace.html" },
+    { "source": "/request", "destination": "/request.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/auth", "destination": "/auth.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/offline", "destination": "/offline.html" }
   ],
   "headers": [
     {
-      "source": "/sw.js",
+      "source": "/(.*)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        },
-        {
-          "key": "Service-Worker-Allowed",
-          "value": "/"
-        }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
       ]
     },
     {
-      "source": "/manifest.json",
+      "source": "/assets/(.*)",
       "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/manifest+json"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=86400"
-        }
+        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
       ]
     },
     {
       "source": "/icons/(.*)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=2592000, immutable"
-        }
+        { "key": "Cache-Control", "value": "public, max-age=604800, immutable" }
       ]
     },
     {
-      "source": "/(.*)",
+      "source": "/sw.js",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        }
+        { "key": "Cache-Control", "value": "no-cache" }
       ]
     }
   ]

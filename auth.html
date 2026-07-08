@@ -2,602 +2,142 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="description" content="Sign in or create your AppAholic account to access purchases, downloads, and app requests."/>
-<link rel="canonical" href="https://appaholic.justservices.pro/auth"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="manifest" href="/manifest.json"/>
-<meta name="theme-color" content="#0A0A0F"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="AppAholic"/>
-<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
-<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png"/>
-<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png"/>
-<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png"/>
-<link rel="apple-touch-startup-image" href="/icons/icon-512.png"/>
-<meta name="msapplication-TileImage" content="/icons/icon-144.png"/>
-<meta name="msapplication-TileColor" content="#0A0A0F"/>
-<title>Sign In — AppAholic by JustServicesPro</title>
-<meta name="robots" content="noindex, nofollow"/>
-<meta name="description" content="Sign in or create your AppAholic account to manage app purchases, downloads, and requests."/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<meta name="theme-color" content="#14213D"/>
+<title>Sign In — AppAholic</title>
+<meta name="description" content="Sign in to AppAholic with Google to access your dashboard, purchases and downloads."/>
+<meta name="robots" content="noindex, follow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/auth"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
 <style>
-:root{
-  --ink:#0A0A0F;--ink-2:#1C1C26;--ink-3:#2E2E3E;--muted:#6B6B85;
-  --border:#E4E4F0;--surface:#F7F7FB;--white:#FFFFFF;
-  --volt:#C8FF00;--volt-dim:#9FCC00;--indigo:#4B3EFF;--rose:#FF3E6C;
-  --green:#00C875;
-  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;
-  --shadow-md:0 4px 16px rgba(10,10,15,.08),0 2px 6px rgba(10,10,15,.05);
-  --shadow-lg:0 12px 40px rgba(10,10,15,.12),0 4px 12px rgba(10,10,15,.07);
-  --font-display:'Plus Jakarta Sans',sans-serif;
-  --font-body:'Inter',sans-serif;
-  --font-mono:'JetBrains Mono',monospace;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{height:100%}
-body{font-family:var(--font-body);background:var(--ink);color:var(--white);min-height:100vh;display:grid;grid-template-columns:1fr 1fr;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-button{cursor:pointer;border:none;background:none;font-family:inherit}
-input{font-family:inherit}
-
-/* ── LEFT PANEL ── */
-.auth-left{
-  background:var(--ink);
-  display:flex;flex-direction:column;
-  padding:40px;
-  position:relative;overflow:hidden;
-}
-.auth-left__glow{
-  position:absolute;bottom:-100px;left:-80px;
-  width:400px;height:400px;border-radius:50%;
-  background:radial-gradient(circle,rgba(200,255,0,.12) 0%,transparent 70%);
-  pointer-events:none;
-}
-.auth-left__glow2{
-  position:absolute;top:-60px;right:-40px;
-  width:280px;height:280px;border-radius:50%;
-  background:radial-gradient(circle,rgba(75,62,255,.15) 0%,transparent 70%);
-  pointer-events:none;
-}
-.auth-logo{
-  font-family:var(--font-display);font-size:22px;font-weight:800;
-  letter-spacing:-.5px;display:flex;align-items:center;gap:8px;
-  margin-bottom:auto;
-}
-.auth-logo__dot{width:10px;height:10px;border-radius:50%;background:var(--volt);border:2px solid var(--ink-2);display:inline-block}
-.auth-left__content{margin-bottom:auto;padding:60px 0 40px}
-.auth-left__eyebrow{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:5px 12px;border-radius:999px;
-  border:1px solid rgba(200,255,0,.3);background:rgba(200,255,0,.07);
-  color:var(--volt);font-size:11px;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;font-family:var(--font-mono);margin-bottom:20px;
-}
-.auth-left__title{
-  font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);
-  font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin-bottom:16px;
-}
-.auth-left__title em{font-style:normal;color:var(--volt)}
-.auth-left__sub{font-size:15px;color:rgba(255,255,255,.55);line-height:1.75;max-width:380px;margin-bottom:36px}
-.auth-perks{display:flex;flex-direction:column;gap:14px}
-.auth-perk{display:flex;align-items:center;gap:12px;font-size:14px;color:rgba(255,255,255,.7)}
-.auth-perk__icon{
-  width:32px;height:32px;border-radius:var(--r-sm);
-  background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.2);
-  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
-}
-.auth-left__footer{font-size:12px;color:rgba(255,255,255,.3)}
-.auth-left__footer a{color:rgba(255,255,255,.4)}
-
-/* ── RIGHT PANEL ── */
-.auth-right{
-  background:var(--surface);
-  display:flex;align-items:center;justify-content:center;
-  padding:40px 24px;
-}
-.auth-card{
-  width:100%;max-width:420px;
-  background:var(--white);border-radius:var(--r-xl);
-  padding:40px;box-shadow:var(--shadow-lg);
-}
-.auth-card__title{
-  font-family:var(--font-display);font-size:22px;font-weight:800;
-  letter-spacing:-.4px;margin-bottom:6px;
-}
-.auth-card__sub{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6}
-
-/* Tabs */
-.auth-tabs{display:flex;gap:0;margin-bottom:28px;border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
-.auth-tab{flex:1;padding:10px;font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:all .18s;color:var(--muted);background:none;border:none;font-family:inherit}
-.auth-tab.active{background:var(--ink);color:var(--white)}
-
-/* Form */
-.form-row{margin-bottom:16px}
-.form-row label{display:block;font-size:12px;font-weight:600;margin-bottom:7px;color:var(--ink-3)}
-.form-input{
-  width:100%;padding:12px 14px;border-radius:var(--r-md);
-  border:1.5px solid var(--border);background:var(--surface);
-  font-size:14px;color:var(--ink);outline:none;
-  transition:border-color .2s,box-shadow .2s;
-}
-.form-input:focus{border-color:var(--ink);background:var(--white);box-shadow:0 0 0 3px rgba(10,10,15,.06)}
-.form-input::placeholder{color:var(--muted)}
-.form-input.error{border-color:var(--rose);box-shadow:0 0 0 3px rgba(255,62,108,.08)}
-.field-error{font-size:12px;color:var(--rose);margin-top:5px;display:none}
-.field-error.show{display:block}
-
-/* Password toggle */
-.input-wrap{position:relative}
-.input-wrap .form-input{padding-right:44px}
-.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;cursor:pointer;color:var(--muted);transition:color .15s;background:none;border:none;padding:4px}
-.pw-toggle:hover{color:var(--ink)}
-
-/* Forgot */
-.form-row-inline{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.form-row-inline label{font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer}
-.form-row-inline label input[type=checkbox]{width:16px;height:16px;accent-color:var(--ink)}
-.forgot-link{font-size:13px;color:var(--indigo);font-weight:500;transition:opacity .15s}
-.forgot-link:hover{opacity:.7}
-
-/* Submit */
-.btn-auth{
-  width:100%;padding:14px;border-radius:var(--r-lg);
-  font-size:15px;font-weight:700;font-family:var(--font-display);
-  background:var(--ink);color:var(--white);
-  transition:all .2s;letter-spacing:-.2px;
-}
-.btn-auth:hover{background:var(--indigo);transform:translateY(-1px);box-shadow:0 6px 20px rgba(75,62,255,.3)}
-.btn-auth:active{transform:translateY(0)}
-.btn-auth.loading{opacity:.7;pointer-events:none}
-
-/* Divider */
-.or-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:12px}
-.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* Social / Google */
-.btn-social{
-  width:100%;padding:12px;border-radius:var(--r-lg);
-  border:1.5px solid var(--border);background:var(--white);
-  font-size:14px;font-weight:600;color:var(--ink);
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  transition:all .18s;
-}
-.btn-social:hover{border-color:var(--ink);box-shadow:var(--shadow-md)}
-
-/* Terms */
-.auth-terms{font-size:12px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.6}
-.auth-terms a{color:var(--indigo)}
-
-/* Success state */
-.auth-success{display:none;text-align:center;padding:20px 0}
-.auth-success__icon{font-size:52px;margin-bottom:16px}
-.auth-success__title{font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px;letter-spacing:-.3px}
-.auth-success__sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;z-index:300;background:var(--ink);color:var(--white);padding:13px 20px;border-radius:var(--r-lg);display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
-.toast.show{transform:translateY(0);opacity:1}
-
-/* ── RESPONSIVE ── */
-@media(max-width:860px){
-  body{grid-template-columns:1fr}
-  .auth-left{display:none}
-  .auth-right{min-height:100vh;background:var(--ink)}
-  .auth-card{background:var(--ink-2);border:1px solid rgba(255,255,255,.08);color:var(--white)}
-  .auth-card__title{color:var(--white)}
-  .auth-card__sub{color:rgba(255,255,255,.5)}
-  .form-input{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white)}
-  .form-input:focus{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);box-shadow:0 0 0 3px rgba(255,255,255,.06)}
-  .form-row label{color:rgba(255,255,255,.6)}
-  .auth-tabs{border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.05)}
-  .auth-tab{color:rgba(255,255,255,.4)}
-  .btn-social{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:var(--white)}
-}
-
-@media(max-width:860px){
-  body{grid-template-columns:1fr!important}
-  .auth-left{display:none!important}
-  .auth-right{min-height:100vh;padding:24px 16px;background:var(--ink)}
-  .auth-card{background:var(--ink-2);border:1px solid rgba(255,255,255,.08);color:var(--white);max-width:100%}
-  .auth-card__title{color:var(--white)}
-  .auth-card__sub{color:rgba(255,255,255,.55)}
-  .form-row label{color:rgba(255,255,255,.65)}
-  .form-input{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:var(--white)}
-  .form-input:focus{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3)}
-  .auth-tabs{border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.05)}
-  .auth-tab{color:rgba(255,255,255,.4)}
-  .auth-tab.active{background:var(--ink);color:var(--white)}
-  .btn-social{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:var(--white)}
-  .auth-terms a{color:rgba(200,255,0,.8)}
-}
-@media(max-width:480px){
-  .auth-right{padding:20px 14px}
-  .auth-card{padding:28px 20px}
-  .profile-grid{grid-template-columns:1fr!important}
-}
-
-
-/* auth page — no global nav */.footer__bottom{flex-direction:column;align-items:flex-start}}
-
-.btn-sm{padding:7px 14px;font-size:13px}
+.auth-wrap{min-height:calc(100vh - 66px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.auth-card{width:100%;max-width:400px;background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:40px 34px;text-align:center}
+.auth-card__mark{width:48px;height:48px;border-radius:10px;background:var(--ink);color:var(--ochre);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:22px;margin:0 auto 20px}
+.auth-card h1{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:-.4px;margin-bottom:8px}
+.auth-card p{font-size:13.5px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;border-radius:10px;border:1.5px solid var(--line);background:var(--white);font-size:14.5px;font-weight:600;color:var(--ink);transition:all .18s}
+.google-btn:hover{border-color:var(--ink);box-shadow:0 2px 8px rgba(20,33,61,.08)}
+.google-btn:disabled{opacity:.6;cursor:default}
+.auth-error{margin-top:16px;padding:11px 14px;background:#FBEAE9;border:1.5px solid var(--stamp-red);border-radius:8px;font-size:12.5px;color:var(--stamp-red);text-align:left;display:none}
+.auth-error.show{display:block}
+.auth-note{margin-top:22px;font-size:12px;color:var(--muted)}
+.auth-signedin{display:none}
+.auth-signedin.show{display:block}
+.auth-signedin .avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 14px;object-fit:cover;border:2px solid var(--line)}
 </style>
 </head>
 <body>
-<a href="#formSignin" style="position:absolute;top:-40px;left:8px;background:var(--volt);color:var(--ink);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;z-index:999;transition:top .2s;text-decoration:none" onfocus="this.style.top='8px'" onblur="this.style.top='-40px'">Skip to form</a>
-
-<!-- LEFT: BRAND PANEL -->
-<div class="auth-left">
-  <div class="auth-left__glow"></div>
-  <div class="auth-left__glow2"></div>
-
-  <a href="/" class="auth-logo">
-    <span class="auth-logo__dot"></span>AppAholic
-  </a>
-
-  <div class="auth-left__content">
-    <div class="auth-left__eyebrow">Your account</div>
-    <h1 class="auth-left__title">Your apps.<br/><em>One place.</em><br/>Always.</h1>
-    <p class="auth-left__sub">Sign in to access your purchases, re-download apps, track your request status, and get early access to new releases.</p>
-    <div class="auth-perks">
-      <div class="auth-perk"><div class="auth-perk__icon">⬇️</div>Re-download any purchase instantly</div>
-      <div class="auth-perk"><div class="auth-perk__icon">📬</div>Track your custom app request status</div>
-      <div class="auth-perk"><div class="auth-perk__icon">🔄</div>Lifetime updates delivered automatically</div>
-      <div class="auth-perk"><div class="auth-perk__icon">🎁</div>Early access to new releases</div>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home">
+      <span class="nav__logo-mark" aria-hidden="true">A</span>
+      <span>AppAholic</span>
+    </a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/request" class="nav__link">Request App</a></li>
+        <li><a href="/contact" class="nav__link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
     </div>
   </div>
-
-  <div class="auth-left__footer">
-    A product of <a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro Management and Consulting Ltd</a><br/>
-    Questions? <a href="mailto:info@justservices.pro">info@justservices.pro</a>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header">
+    <span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span>
+    <button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
   </div>
-</div>
+  <ul class="mobile-drawer__links" role="list">
+    <li><a href="/" class="mobile-drawer__link" onclick="closeDrawer()">Home</a></li>
+    <li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li>
+    <li><a href="/request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li>
+  </ul>
+</nav>
 
-<!-- RIGHT: FORM PANEL -->
-<div class="auth-right">
+<main id="main-content" class="auth-wrap">
   <div class="auth-card">
-
-    <!-- Tabs -->
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tabSignin" onclick="switchTab('signin')">Sign In</button>
-      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Create Account</button>
+    <div id="signedOutView">
+      <div class="auth-card__mark">A</div>
+      <h1>Welcome to AppAholic</h1>
+      <p>Sign in with Google to access your dashboard, track requests and re-download anything you've bought.</p>
+      <button class="google-btn" id="googleBtn" onclick="startGoogleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.9-2.26c-.81.54-1.85.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.9v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.69A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.16.28-1.69V4.98H.9A9 9 0 0 0 0 9c0 1.45.35 2.83.9 4.02l3.05-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .9 4.98l3.05 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+        <span id="googleBtnText">Continue with Google</span>
+      </button>
+      <div class="auth-error" id="authError"></div>
+      <p class="auth-note">🔒 We only use your name, email and photo — nothing is posted on your behalf.</p>
     </div>
 
-    <!-- SIGN IN FORM -->
-    <div id="formSignin">
-      <div class="auth-card__title">Welcome back</div>
-      <div class="auth-card__sub">Enter your credentials to access your account.</div>
-
-      <div class="form-row">
-        <label>Email Address</label>
-        <input class="form-input" type="email" id="siEmail" aria-label="Email address" placeholder="you@example.com" autocomplete="email"/>
-        <div class="field-error" id="siEmailErr">Please enter a valid email address.</div>
-      </div>
-      <div class="form-row">
-        <label>Password</label>
-        <div class="input-wrap">
-          <input class="form-input" type="password" id="siPassword" aria-label="Password" placeholder="Your password" autocomplete="current-password"/>
-          <button class="pw-toggle" onclick="togglePw('siPassword',this)" tabindex="-1">👁</button>
-        </div>
-        <div class="field-error" id="siPassErr">Please enter your password.</div>
-      </div>
-      <div class="form-row-inline">
-        <label><input type="checkbox" id="rememberMe"/> Remember me for 30 days</label>
-        <a class="forgot-link" href="#forgot" onclick="event.preventDefault();showForgot()">Forgot password?</a>
-      </div>
-      <button class="btn-auth" id="btnSignin" onclick="handleSignin()">Sign In to AppAholic</button>
-
-      <div class="or-divider">or continue with</div>
-      <a class="btn-social" href="#" id="googleSignIn" role="button">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
-        Continue with Google
-      </a>
-      <div class="auth-terms">By signing in you agree to our <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</div>
+    <div id="signedInView" class="auth-signedin">
+      <img class="avatar" id="signedInAvatar" src="" alt=""/>
+      <h1 id="signedInName">You're signed in</h1>
+      <p id="signedInEmail" style="font-family:var(--font-mono);font-size:12.5px;"></p>
+      <a href="/dashboard" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px">Go to Dashboard</a>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:10px" onclick="signOut()">Sign Out</button>
     </div>
-
-    <!-- SIGN UP FORM -->
-    <div id="formSignup" style="display:none">
-      <div class="auth-card__title">Create your account</div>
-      <div class="auth-card__sub">Free to join. Download free apps instantly. Buy premium apps at your own pace.</div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-row" style="margin-bottom:0">
-          <label>First Name</label>
-          <input class="form-input" type="text" id="suFirst" placeholder="Tunde" autocomplete="given-name"/>
-        </div>
-        <div class="form-row" style="margin-bottom:0">
-          <label>Last Name</label>
-          <input class="form-input" type="text" id="suLast" placeholder="Bakare" autocomplete="family-name"/>
-        </div>
-      </div>
-      <div class="form-row" style="margin-top:16px">
-        <label>Email Address</label>
-        <input class="form-input" type="email" id="suEmail" placeholder="you@example.com" autocomplete="email"/>
-        <div class="field-error" id="suEmailErr">Please enter a valid email address.</div>
-      </div>
-      <div class="form-row">
-        <label>Phone / WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400">(optional)</span></label>
-        <input class="form-input" type="tel" id="suPhone" placeholder="+234 800 000 0000" autocomplete="tel"/>
-      </div>
-      <div class="form-row">
-        <label>Password</label>
-        <div class="input-wrap">
-          <input class="form-input" type="password" id="suPassword" placeholder="Min. 8 characters" autocomplete="new-password" oninput="checkPwStrength(this.value)"/>
-          <button class="pw-toggle" onclick="togglePw('suPassword',this)" tabindex="-1">👁</button>
-        </div>
-        <div id="pwStrength" style="margin-top:8px;display:flex;gap:4px">
-          <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s" id="pwBar1"></div>
-          <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s" id="pwBar2"></div>
-          <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s" id="pwBar3"></div>
-          <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s" id="pwBar4"></div>
-        </div>
-        <div id="pwStrengthLabel" style="font-size:11px;color:var(--muted);margin-top:5px;font-family:var(--font-mono)"></div>
-        <div class="field-error" id="suPassErr">Password must be at least 8 characters.</div>
-      </div>
-      <div class="form-row" style="margin-bottom:20px">
-        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-weight:400;font-size:13px;color:var(--muted)">
-          <input type="checkbox" id="suTerms" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:var(--ink)"/>
-          I agree to the <a href="/terms" style="color:var(--indigo)" target="_blank">Terms of Service</a> and <a href="/privacy" style="color:var(--indigo)" target="_blank">Privacy Policy</a>
-        </label>
-        <div class="field-error" id="suTermsErr">You must agree to continue.</div>
-      </div>
-      <button class="btn-auth" id="btnSignup" onclick="handleSignup()">Create Account</button>
-
-      <div class="or-divider">or</div>
-      <a class="btn-social" href="#" id="googleSignUp" role="button">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
-        Sign up with Google
-      </a>
-    </div>
-
-    <!-- FORGOT PASSWORD -->
-    <div id="formForgot" style="display:none">
-      <div class="auth-card__title">Reset password</div>
-      <div class="auth-card__sub">Enter your email and we'll send a reset link within 2 minutes.</div>
-      <div class="form-row">
-        <label>Email Address</label>
-        <input class="form-input" type="email" id="fpEmail" placeholder="you@example.com"/>
-        <div class="field-error" id="fpEmailErr">Please enter a valid email address.</div>
-      </div>
-      <button class="btn-auth" onclick="handleForgot()">Send Reset Link</button>
-      <div style="text-align:center;margin-top:16px">
-        <a href="#signin" onclick="event.preventDefault();showSignin()" style="font-size:13px;color:var(--indigo);font-weight:500">&larr; Back to sign in</a>
-      </div>
-    </div>
-
-    <!-- SUCCESS STATE -->
-    <div class="auth-success" id="authSuccess">
-      <div class="auth-success__icon">🎉</div>
-      <div class="auth-success__title" id="successTitle">Account created!</div>
-      <div class="auth-success__sub" id="successSub">Check your email for a confirmation link. Once verified, you're all set.</div>
-      <a href="/dashboard" class="btn-auth" style="display:block;text-align:center;padding:14px">Go to My Dashboard</a>
-    </div>
-
   </div>
-</div>
+</main>
 
-<!-- TOAST -->
-<div class="toast" id="toast"><span id="toastIcon" style="font-size:18px"></span><span id="toastMsg"></span></div>
-
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
 <script>
-function switchTab(tab) {
-  var isSignin = tab === 'signin';
-  document.getElementById('tabSignin').classList.toggle('active', isSignin);
-  document.getElementById('tabSignup').classList.toggle('active', !isSignin);
-  document.getElementById('formSignin').style.display = isSignin ? 'block' : 'none';
-  document.getElementById('formSignup').style.display = !isSignin ? 'block' : 'none';
-  document.getElementById('formForgot').style.display = 'none';
-  document.getElementById('authSuccess').style.display = 'none';
-}
-function showForgot() {
-  document.getElementById('formSignin').style.display = 'none';
-  document.getElementById('formForgot').style.display = 'block';
-}
-function showSignin() {
-  document.getElementById('formForgot').style.display = 'none';
-  document.getElementById('formSignin').style.display = 'block';
+var ERROR_MESSAGES = {
+  oauth_denied: 'Sign-in was cancelled. Please try again.',
+  oauth_failed: 'Something went wrong signing you in. Please try again.',
+  oauth_not_configured: 'Google sign-in is not available right now. Please email info@justservices.pro.',
+};
+
+function startGoogleSignIn(){
+  var btn = document.getElementById('googleBtn');
+  btn.disabled = true;
+  document.getElementById('googleBtnText').textContent = 'Redirecting…';
+  var redirect = encodeURIComponent(window.location.origin + '/dashboard');
+  window.location.href = window.API_BASE + '/auth/google?redirect=' + redirect;
 }
 
-function togglePw(id, btn) {
-  var input = document.getElementById(id);
-  var isText = input.type === 'text';
-  input.type = isText ? 'password' : 'text';
-  btn.textContent = isText ? '👁' : '🙈';
+function signOut(){
+  Session.clear();
+  document.getElementById('signedInView').classList.remove('show');
+  document.getElementById('signedOutView').style.display = 'block';
+  showToast('Signed out.', '👋');
 }
 
-function checkPwStrength(pw) {
-  var score = 0;
-  if(pw.length >= 8) score++;
-  if(/[A-Z]/.test(pw)) score++;
-  if(/[0-9]/.test(pw)) score++;
-  if(/[^A-Za-z0-9]/.test(pw)) score++;
-  var colors = ['','#FF3E6C','#FFB800','#00C875','#00C875'];
-  var labels = ['','Weak','Fair','Strong','Very strong'];
-  for(var i=1;i<=4;i++) {
-    document.getElementById('pwBar'+i).style.background = i <= score ? colors[score] : 'var(--border)';
-  }
-  document.getElementById('pwStrengthLabel').textContent = pw.length > 0 ? labels[score] : '';
-  document.getElementById('pwStrengthLabel').style.color = colors[score] || 'var(--muted)';
+function renderSignedIn(){
+  authFetch('/auth/me').then(function(r){ return r.json(); }).then(function(data){
+    if(!data.ok){ Session.clear(); return; }
+    var u = data.user;
+    document.getElementById('signedOutView').style.display = 'none';
+    document.getElementById('signedInView').classList.add('show');
+    document.getElementById('signedInName').textContent = 'Welcome back, ' + (u.name ? u.name.split(' ')[0] : 'there');
+    document.getElementById('signedInEmail').textContent = u.email || '';
+    var avatar = document.getElementById('signedInAvatar');
+    if(u.avatar){ avatar.src = u.avatar; } else { avatar.style.display = 'none'; }
+  }).catch(function(){ /* token invalid/expired — leave signed-out view showing */ Session.clear(); });
 }
 
-function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-function setErr(id, show) {
-  var input = document.getElementById(id.replace('Err',''));
-  var err = document.getElementById(id);
-  if(input) input.classList.toggle('error', show);
-  if(err) err.classList.toggle('show', show);
-  return show;
-}
-
-function handleSignin() {
-  var email = document.getElementById('siEmail').value.trim();
-  var pass  = document.getElementById('siPassword').value;
-  var ok = true;
-  if(setErr('siEmailErr', !validateEmail(email))) ok = false;
-  if(setErr('siPassErr', pass.length < 1)) ok = false;
-  if(!ok) return;
-
-  var btn = document.getElementById('btnSignin');
-  btn.classList.add('loading'); btn.textContent = 'Signing in…';
-  setTimeout(function(){
-    btn.classList.remove('loading'); btn.textContent = 'Sign In to AppAholic';
-    // Demo: go to dashboard
-    window.location.href = 'dashboard.html';
-  }, 1400);
-}
-
-function handleSignup() {
-  var first = document.getElementById('suFirst').value.trim();
-  var email = document.getElementById('suEmail').value.trim();
-  var pass  = document.getElementById('suPassword').value;
-  var terms = document.getElementById('suTerms').checked;
-  var ok = true;
-  if(setErr('suEmailErr', !validateEmail(email))) ok = false;
-  if(setErr('suPassErr', pass.length < 8)) ok = false;
-  if(setErr('suTermsErr', !terms)) ok = false;
-  if(!ok) return;
-
-  var btn = document.getElementById('btnSignup');
-  btn.classList.add('loading'); btn.textContent = 'Creating account…';
-
-  fetch((window.API_BASE||'') + '/api/signup', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ firstName: first, email: email })
-  })
-  .catch(function(){ /* still show success in demo even if email fails to send */ })
-  .finally(function(){
-    btn.classList.remove('loading'); btn.textContent = 'Create Account';
-    document.getElementById('formSignup').style.display = 'none';
-    var s = document.getElementById('authSuccess');
-    s.style.display = 'block';
-    document.getElementById('successTitle').textContent = 'Welcome, ' + (first || 'there') + '! 🎉';
-    document.getElementById('successSub').textContent = 'Your account is ready. Check your email for a confirmation link, then explore your new dashboard.';
-  }, 1600);
-}
-
-function handleForgot() {
-  var email = document.getElementById('fpEmail').value.trim();
-  if(setErr('fpEmailErr', !validateEmail(email))) return;
-
-  fetch((window.API_BASE||'') + '/api/forgot-password', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ email: email })
-  }).catch(function(){});
-
-  showToast('Reset link sent to ' + email, '📧');
-  setTimeout(showSignin, 2000);
-}
-
-/* API base — point to your deployed email server if not same-origin */
-window.API_BASE = 'https://api.appaholic.justservices.pro';
-
-function showToast(msg, icon) {
-  icon = icon || '✅';
-  var t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  document.getElementById('toastIcon').textContent = icon + ' ';
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 3500);
-}
-
-// Auto-focus
-document.getElementById('siEmail').focus();
-/* ── GOOGLE OAUTH ─────────────────────────────────────────────── */
-(function(){
-  var API_SERVER = 'https://api.appaholic.justservices.pro';
-  var REDIRECT   = window.location.origin + '/dashboard';
-
-  function wireGoogleBtn(id){
-    var btn = document.getElementById(id);
-    if(!btn) return;
-    var oauthUrl = API_SERVER + '/auth/google?redirect=' + encodeURIComponent(REDIRECT);
-    btn.href = oauthUrl;
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      window.location.href = oauthUrl;
-    });
-  }
-
-  // Wire both buttons on DOM ready
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', function(){
-      wireGoogleBtn('googleSignIn');
-      wireGoogleBtn('googleSignUp');
-    });
-  } else {
-    wireGoogleBtn('googleSignIn');
-    wireGoogleBtn('googleSignUp');
-  }
-
-  // Show error messages from OAuth redirect
+(function init(){
   var params = new URLSearchParams(window.location.search);
   var err = params.get('error');
-  if(err === 'oauth_denied') showToast('Google sign-in was cancelled.', '⚠️');
-  if(err === 'oauth_failed')  showToast('Google sign-in failed. Please try again.', '❌');
-
-  // Clean error param from URL
   if(err){
-    params.delete('error');
-    history.replaceState({}, '', window.location.pathname + (params.toString() ? '?'+params : ''));
+    var el = document.getElementById('authError');
+    el.textContent = ERROR_MESSAGES[err] || 'Something went wrong. Please try again.';
+    el.classList.add('show');
   }
+  if(Session.isSignedIn()) renderSignedIn();
 })();
-
-
-/* ── AUTO-REDIRECT IF ALREADY SIGNED IN ── */
-(function(){
-  try {
-    var stored = sessionStorage.getItem('appaholic_user');
-    if(stored) {
-      var user = JSON.parse(stored);
-      if(user && user.email) {
-        window.location.href = '/dashboard';
-      }
-    }
-  } catch(e) {}
-})();
-</script>
-
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/sw.js', { scope: '/' })
-      .then(function(reg){
-        console.log('SW registered:', reg.scope);
-        // Check for updates every 60s
-        setInterval(function(){ reg.update(); }, 60000);
-      })
-      .catch(function(err){ console.warn('SW registration failed:', err); });
-  });
-}
-// PWA install prompt
-var deferredPrompt;
-window.addEventListener('beforeinstallprompt', function(e){
-  e.preventDefault();
-  deferredPrompt = e;
-  // Show install banner if it exists
-  var banner = document.getElementById('pwaInstallBanner');
-  if(banner) banner.style.display = 'flex';
-});
-window.addEventListener('appinstalled', function(){
-  deferredPrompt = null;
-  var banner = document.getElementById('pwaInstallBanner');
-  if(banner) banner.style.display = 'none';
-});
-function installPWA(){
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(function(r){
-    deferredPrompt = null;
-    var banner = document.getElementById('pwaInstallBanner');
-    if(banner) banner.style.display = 'none';
-  });
-}
 </script>
 </body>
 </html>

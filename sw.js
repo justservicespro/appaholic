@@ -1,152 +1,74 @@
-/**
- * AppAholic Service Worker
- * Caches HTML pages and assets for offline use.
- * Strategy: Cache-first for static assets, Network-first for pages.
- */
+// AppAholic Service Worker — v3 (rebuild)
+const CACHE_NAME    = 'appaholic-v3';
+const STATIC_CACHE  = 'appaholic-static-v3';
+const DYNAMIC_CACHE = 'appaholic-dynamic-v3';
 
-const CACHE_NAME    = 'appaholic-v2';
-const STATIC_CACHE  = 'appaholic-static-v2';
-const DYNAMIC_CACHE = 'appaholic-dynamic-v2';
-
-// Pages and assets to pre-cache on install
 const PRE_CACHE = [
   '/',
   '/marketplace',
   '/auth',
-  '/about',
   '/request',
   '/contact',
   '/offline',
   '/manifest.json',
+  '/assets/theme.css',
+  '/assets/app.js',
 ];
 
-// Pages — network first, fallback to cache
-const PAGE_ROUTES = ['/', '/marketplace', '/auth', '/dashboard', '/about', '/privacy', '/terms', '/admin', '/invoicekit', '/request', '/contact'];
+const PAGE_ROUTES = ['/', '/marketplace', '/auth', '/dashboard', '/about', '/privacy', '/terms', '/request', '/contact'];
 
-// ── INSTALL ───────────────────────────────────────────────────
-self.addEventListener('install', function(e){
-  e.waitUntil(
-    caches.open(STATIC_CACHE).then(function(cache){
-      return cache.addAll(PRE_CACHE);
-    }).catch(function(err){
-      console.warn('Pre-cache failed (some URLs may not exist yet):', err.message);
-    })
-  );
+self.addEventListener('install', function (e) {
   self.skipWaiting();
-});
-
-// ── ACTIVATE ──────────────────────────────────────────────────
-self.addEventListener('activate', function(e){
   e.waitUntil(
-    caches.keys().then(function(keys){
-      return Promise.all(
-        keys.filter(function(k){ return k !== STATIC_CACHE && k !== DYNAMIC_CACHE; })
-            .map(function(k){ return caches.delete(k); })
-      );
+    caches.open(STATIC_CACHE).then(function (cache) {
+      return cache.addAll(PRE_CACHE).catch(function () { /* tolerate individual failures */ });
     })
   );
-  self.clients.claim();
 });
 
-// ── FETCH ─────────────────────────────────────────────────────
-self.addEventListener('fetch', function(e){
-  var url = new URL(e.request.url);
+self.addEventListener('activate', function (e) {
+  e.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(
+        keys.filter(function (k) { return k !== STATIC_CACHE && k !== DYNAMIC_CACHE; })
+            .map(function (k) { return caches.delete(k); })
+      );
+    }).then(function () { return self.clients.claim(); })
+  );
+});
 
-  // Skip non-GET and cross-origin (API calls etc.)
-  if(e.request.method !== 'GET') return;
-  if(url.origin !== self.location.origin) return;
+self.addEventListener('fetch', function (e) {
+  const url = new URL(e.request.url);
+  if (url.origin !== self.location.origin) return; // never intercept cross-origin (API) requests
+  if (e.request.method !== 'GET') return;
 
-  // Skip Vercel internals
-  if(url.pathname.startsWith('/_next') || url.pathname.startsWith('/_vercel')) return;
+  const isPage = PAGE_ROUTES.some(function (r) { return url.pathname === r || url.pathname === r + '.html'; });
 
-  var isPage = PAGE_ROUTES.some(function(r){ return url.pathname === r || url.pathname === r + '.html'; });
-
-  if(isPage){
-    // Network-first for HTML pages
+  if (isPage) {
+    // Network-first for pages, fallback to cache, then offline page.
     e.respondWith(
-      fetch(e.request)
-        .then(function(res){
-          var clone = res.clone();
-          caches.open(DYNAMIC_CACHE).then(function(c){ c.put(e.request, clone); });
-          return res;
-        })
-        .catch(function(){
-          return caches.match(e.request)
-            .then(function(cached){ return cached || caches.match('/offline'); });
-        })
-    );
-  } else {
-    // Cache-first for static assets (fonts, images, icons)
-    e.respondWith(
-      caches.match(e.request).then(function(cached){
-        if(cached) return cached;
-        return fetch(e.request).then(function(res){
-          if(res && res.status === 200){
-            var clone = res.clone();
-            caches.open(STATIC_CACHE).then(function(c){ c.put(e.request, clone); });
-          }
-          return res;
-        });
+      fetch(e.request).then(function (res) {
+        const clone = res.clone();
+        caches.open(DYNAMIC_CACHE).then(function (c) { c.put(e.request, clone); });
+        return res;
+      }).catch(function () {
+        return caches.match(e.request).then(function (cached) { return cached || caches.match('/offline'); });
       })
     );
+    return;
   }
-});
 
-// ── BACKGROUND SYNC (app request form retry) ──────────────────
-self.addEventListener('sync', function(e){
-  if(e.tag === 'sync-app-request'){
-    e.waitUntil(syncAppRequests());
-  }
-});
-
-async function syncAppRequests(){
-  try {
-    var cache = await caches.open('appaholic-pending');
-    var keys  = await cache.keys();
-    for(var req of keys){
-      var pending = await cache.match(req);
-      var data    = await pending.json();
-      var res = await fetch('https://api.appaholic.justservices.pro/api/request-app', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      if(res.ok) await cache.delete(req);
-    }
-  } catch(err){
-    console.warn('Background sync failed:', err);
-  }
-}
-
-// ── PUSH NOTIFICATIONS (future) ───────────────────────────────
-self.addEventListener('push', function(e){
-  if(!e.data) return;
-  var data = e.data.json();
-  e.waitUntil(
-    self.registration.showNotification(data.title || 'AppAholic', {
-      body:    data.body    || 'New update from AppAholic',
-      icon:    '/icons/icon-192.png',
-      badge:   '/icons/icon-72.png',
-      vibrate: [100, 50, 100],
-      data:    { url: data.url || '/' },
-      actions: [
-        { action: 'open',    title: 'Open App' },
-        { action: 'dismiss', title: 'Dismiss'  }
-      ]
-    })
-  );
-});
-
-self.addEventListener('notificationclick', function(e){
-  e.notification.close();
-  if(e.action === 'dismiss') return;
-  var target = (e.notification.data && e.notification.data.url) || '/';
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list){
-      for(var c of list){
-        if(c.url === target && 'focus' in c) return c.focus();
-      }
-      if(clients.openWindow) return clients.openWindow(target);
+  // Cache-first for static assets.
+  e.respondWith(
+    caches.match(e.request).then(function (cached) {
+      if (cached) return cached;
+      return fetch(e.request).then(function (res) {
+        if (res && res.status === 200) {
+          const clone = res.clone();
+          caches.open(STATIC_CACHE).then(function (c) { c.put(e.request, clone); });
+        }
+        return res;
+      }).catch(function () { /* offline and not cached — let it fail naturally for non-page assets */ });
     })
   );
 });
