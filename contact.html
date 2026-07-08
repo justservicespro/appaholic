@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<title>Contact AppAholic — JustServicesPro</title>
+<meta name="description" content="Questions, support, partnerships or press — reach the AppAholic team directly. We reply within one business day."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/contact"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.contact-layout{max-width:1200px;margin:0 auto;padding:44px 24px 90px;display:grid;grid-template-columns:340px 1fr;gap:32px;align-items:start}
+@media(max-width:900px){.contact-layout{grid-template-columns:1fr;padding:28px 20px 70px}}
+.reach-card{background:var(--ink);color:var(--white);border-radius:var(--r-xl);padding:26px 24px;box-shadow:var(--shadow-lg);margin-bottom:16px}
+.reach-clock{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,.55);margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed rgba(255,255,255,.15)}
+.reach-clock__dot{width:7px;height:7px;border-radius:50%;background:var(--ochre);flex-shrink:0}
+.reach-clock strong{color:var(--white)}
+.reach-row{display:flex;gap:12px;margin-bottom:16px}
+.reach-row:last-child{margin-bottom:0}
+.reach-row__icon{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.reach-row__text strong{display:block;font-size:13px;font-weight:700}
+.reach-row__text a, .reach-row__text span{font-size:12.5px;color:rgba(255,255,255,.55)}
+.reach-row__text a:hover{color:var(--ochre)}
+.topic-list{display:flex;flex-direction:column;gap:8px}
+.topic-item{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-md);padding:13px 15px;display:flex;gap:10px}
+.topic-item__text strong{display:block;font-size:12.5px;font-weight:700}
+.topic-item__text span{font-size:11.5px;color:var(--muted)}
+.contact-card{padding:36px}
+.contact-card h2{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px}
+.contact-card .sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.topic-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.topic-chip{padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);font-size:12.5px;font-weight:600;color:var(--ink-3);background:var(--white)}
+.topic-chip.active{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:-14px;margin-bottom:16px}
+.char-count.warn{color:var(--stamp-red)}
+.btn-submit{width:100%;padding:14px 26px;border-radius:var(--r-lg);font-size:14px;font-weight:700;font-family:var(--font-display);background:var(--ink);color:var(--white);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:hover{background:var(--ink-2)}
+.form-note{margin-top:14px;font-size:12px;color:var(--muted);text-align:center}
+.preview-wrap{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+.preview-label{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;gap:7px}
+.inbox-card{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.inbox-card__head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--white)}
+.inbox-card__avatar{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--ochre);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:13px;flex-shrink:0}
+.inbox-card__from{font-size:13px;font-weight:700}
+.inbox-card__from.placeholder{color:var(--muted);font-weight:500}
+.inbox-card__email{font-size:11.5px;color:var(--muted)}
+.inbox-card__topic{margin-left:auto;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--ink);color:var(--ochre);font-family:var(--font-mono);text-transform:uppercase}
+.inbox-card__body{padding:16px;font-size:13px;color:var(--ink-3);line-height:1.7;min-height:60px;white-space:pre-wrap;word-break:break-word}
+.inbox-card__body.placeholder{color:var(--muted);font-style:italic}
+.form-success{display:none;text-align:center;padding:40px 12px}
+.form-success.active{display:block;animation:stepIn .3s ease}
+@keyframes stepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.form-success__badge{width:64px;height:64px;border-radius:50%;background:var(--ochre);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 18px}
+.form-success h2{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:8px}
+.form-success p{font-size:14px;color:var(--muted);max-width:340px;margin:0 auto 22px;line-height:1.7}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home"><span class="nav__logo-mark" aria-hidden="true">A</span><span>AppAholic</span></a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/request" class="nav__link">Request App</a></li>
+        <li><a href="/contact" class="nav__link nav__link--active">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
+      <a href="/request" class="btn btn-ochre btn-sm">Request App</a>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer"><span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span></button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
+  <ul class="mobile-drawer__links" role="list"><li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li><li><a href="/request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li></ul>
+  <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
+</nav>
+
+<section class="page-hero" id="main-content">
+  <div class="container">
+    <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>We reply within one business day</div>
+    <h1>Talk to <em>a real person.</em></h1>
+    <p>Questions, support, partnerships or press — every message goes straight to the team behind AppAholic.</p>
+  </div>
+</section>
+
+<div class="contact-layout">
+  <div>
+    <div class="reach-card">
+      <div class="reach-clock"><span class="reach-clock__dot"></span><span>Based in <strong>Abuja, Nigeria</strong> &middot; <span id="watTime">--:--</span> WAT</span></div>
+      <div class="reach-row"><div class="reach-row__icon">✉️</div><div class="reach-row__text"><strong>Email</strong><a href="mailto:info@justservices.pro">info@justservices.pro</a></div></div>
+      <div class="reach-row"><div class="reach-row__icon">💬</div><div class="reach-row__text"><strong>WhatsApp</strong><a href="https://wa.me/2348000000000" target="_blank" rel="noopener">+234 800 000 0000</a></div></div>
+      <div class="reach-row"><div class="reach-row__icon">🏢</div><div class="reach-row__text"><strong>Company</strong><span>JustServicesPro Management &amp; Consulting Ltd</span></div></div>
+    </div>
+    <div class="topic-list">
+      <div class="topic-item">💳<div class="topic-item__text"><strong>Billing question?</strong><span>Include your order reference</span></div></div>
+      <div class="topic-item">🐛<div class="topic-item__text"><strong>Found a bug?</strong><span>Tell us which app and what happened</span></div></div>
+      <div class="topic-item">🤝<div class="topic-item__text"><strong>Partnership idea?</strong><span>Tell us who you are</span></div></div>
+    </div>
+  </div>
+
+  <div class="card contact-card">
+    <h2>Send us a message</h2>
+    <div class="sub">Pick what this is about — it helps route your message to the right person.</div>
+    <div class="topic-chips" id="topicChips">
+      <button type="button" class="topic-chip active" data-topic="General">General</button>
+      <button type="button" class="topic-chip" data-topic="Support">Support</button>
+      <button type="button" class="topic-chip" data-topic="Partnership">Partnership</button>
+      <button type="button" class="topic-chip" data-topic="Press">Press</button>
+      <button type="button" class="topic-chip" data-topic="Billing">Billing</button>
+    </div>
+    <form id="contactForm" novalidate>
+      <div class="form-grid-2">
+        <div class="form-row"><label>Your Name <span>*</span></label><input class="form-input" type="text" id="cName" placeholder="e.g. Amina Yusuf" autocomplete="name"/></div>
+        <div class="form-row"><label>Email Address <span>*</span></label><input class="form-input" type="email" id="cEmail" placeholder="you@example.com" autocomplete="email"/></div>
+      </div>
+      <div class="form-row"><label>Message <span>*</span></label><textarea class="form-input" id="cMessage" maxlength="5000" style="min-height:130px" placeholder="What's on your mind?"></textarea></div>
+      <div class="char-count" id="charCount">0 / 5000</div>
+      <button type="button" class="btn-submit" id="contactSubmitBtn" onclick="submitContact()">Send Message</button>
+      <div class="form-note">🔒 Private. Read by a real person, usually within one business day.</div>
+    </form>
+
+    <div class="preview-wrap" id="previewWrap">
+      <div class="preview-label">How this lands in our inbox</div>
+      <div class="inbox-card">
+        <div class="inbox-card__head">
+          <div class="inbox-card__avatar" id="previewInitial">?</div>
+          <div><div class="inbox-card__from placeholder" id="previewName">Your name</div><div class="inbox-card__email" id="previewEmail"></div></div>
+          <div class="inbox-card__topic" id="previewTopic">General</div>
+        </div>
+        <div class="inbox-card__body placeholder" id="previewBody">Your message will appear here as you type…</div>
+      </div>
+    </div>
+
+    <div class="form-success" id="contactSuccess">
+      <div class="form-success__badge">📬</div>
+      <h2>Message sent</h2>
+      <p>Thanks for reaching out — check your email for confirmation. We typically reply within one business day.</p>
+      <a href="/marketplace" class="btn btn-primary">Browse the catalogue</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+<script>
+function updateWATClock(){
+  var now = new Date(); var utc = now.getTime() + (now.getTimezoneOffset()*60000); var wat = new Date(utc + 3600000);
+  var el = document.getElementById('watTime'); if(el) el.textContent = String(wat.getHours()).padStart(2,'0') + ':' + String(wat.getMinutes()).padStart(2,'0');
+}
+updateWATClock(); setInterval(updateWATClock, 30000);
+
+var selectedTopic = 'General';
+document.getElementById('topicChips').addEventListener('click', function(e){
+  var chip = e.target.closest('.topic-chip'); if(!chip) return;
+  document.querySelectorAll('.topic-chip').forEach(function(c){c.classList.remove('active')}); chip.classList.add('active');
+  selectedTopic = chip.dataset.topic;
+  document.getElementById('previewTopic').textContent = selectedTopic;
+  var ph = { General:"What's on your mind?", Support:"Tell us which app and what went wrong.", Partnership:'Tell us who you are and what you have in mind.', Press:'Tell us who you write for.', Billing:'Include your order reference.' };
+  document.getElementById('cMessage').placeholder = ph[selectedTopic] || ph.General;
+});
+
+function refreshPreview(){
+  var name = document.getElementById('cName').value.trim();
+  var email = document.getElementById('cEmail').value.trim();
+  var msg = document.getElementById('cMessage').value.trim();
+  var nameEl = document.getElementById('previewName');
+  if(name){ nameEl.textContent = name; nameEl.classList.remove('placeholder'); } else { nameEl.textContent = 'Your name'; nameEl.classList.add('placeholder'); }
+  document.getElementById('previewEmail').textContent = email || '';
+  document.getElementById('previewInitial').textContent = name ? name.trim()[0].toUpperCase() : '?';
+  var bodyEl = document.getElementById('previewBody');
+  if(msg){ bodyEl.textContent = msg; bodyEl.classList.remove('placeholder'); } else { bodyEl.textContent = 'Your message will appear here as you type…'; bodyEl.classList.add('placeholder'); }
+  var len = document.getElementById('cMessage').value.length;
+  var cc = document.getElementById('charCount'); cc.textContent = len + ' / 5000'; cc.classList.toggle('warn', len > 4700);
+}
+document.getElementById('contactForm').addEventListener('input', refreshPreview);
+
+function submitContact(){
+  var btn = document.getElementById('contactSubmitBtn');
+  var name = document.getElementById('cName').value.trim();
+  var email = document.getElementById('cEmail').value.trim();
+  var message = document.getElementById('cMessage').value.trim();
+  if(!name || !email || !message){ showToast('Please fill in your name, email and message.','⚠️'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('Please enter a valid email address.','⚠️'); return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  authFetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name:name, email:email, topic:selectedTopic, message:message }) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok){
+        document.getElementById('contactForm').style.display='none'; document.getElementById('previewWrap').style.display='none';
+        document.querySelector('.contact-card h2').style.display='none'; document.querySelector('.contact-card .sub').style.display='none';
+        document.getElementById('topicChips').style.display='none'; document.getElementById('contactSuccess').classList.add('active');
+      } else { showToast(data.error || 'Something went wrong. Please try again.','⚠️'); }
+    })
+    .catch(function(){ showToast('Could not reach the server. Please email info@justservices.pro directly.','⚠️'); })
+    .finally(function(){ btn.disabled = false; btn.textContent = 'Send Message'; });
+}
+</script>
+</body>
+</html>

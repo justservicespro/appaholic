@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<title>Request a Custom App — AppAholic</title>
+<meta name="description" content="Tell us what you need built. Every request is reviewed within 48 hours — popular ideas get built and added to the marketplace, free for requesters."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/request"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Request a Custom App — AppAholic"/>
+<meta property="og:description" content="Tell us what you need. Reviewed within 48 hours — popular ideas get built, free for requesters."/>
+<meta property="og:url" content="https://appaholic.justservices.pro/request"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.request-layout{max-width:1200px;margin:0 auto;padding:40px 24px 90px;display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+@media(max-width:960px){.request-layout{grid-template-columns:1fr;padding:28px 20px 70px}}
+.form-progress{margin-bottom:28px}
+.form-progress__steps{display:flex;align-items:flex-start}
+.form-progress__step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.form-progress__step:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;right:-50%;height:2px;background:var(--line);z-index:0}
+.form-progress__step.done::after,.form-progress__step.active::after{background:var(--ochre)}
+.form-progress__dot{width:27px;height:27px;border-radius:50%;border:2px solid var(--line);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--font-mono);color:var(--muted);position:relative;z-index:1;transition:all .25s}
+.form-progress__step.active .form-progress__dot{border-color:var(--ink);background:var(--ink);color:var(--white)}
+.form-progress__step.done .form-progress__dot{border-color:var(--stamp-green);background:var(--ochre);color:var(--ink)}
+.form-progress__label{font-size:10px;font-weight:600;color:var(--muted);text-align:center;font-family:var(--font-mono);letter-spacing:.04em;text-transform:uppercase;margin-top:7px}
+.form-progress__step.active .form-progress__label{color:var(--ink)}
+.step-heading{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px}
+.step-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.form-step{display:none}
+.form-step.active{display:block;animation:stepIn .25s ease}
+@keyframes stepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.form-nav{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.form-note{margin-top:16px;font-size:12px;color:var(--muted);text-align:center}
+.form-success{display:none;text-align:center;padding:40px 12px}
+.form-success.active{display:block;animation:stepIn .3s ease}
+.form-success__badge{width:64px;height:64px;border-radius:50%;background:var(--ochre);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 18px}
+.form-success h2{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:8px}
+.form-success p{font-size:14px;color:var(--muted);max-width:340px;margin:0 auto 22px;line-height:1.7}
+.ticket-wrap{position:sticky;top:88px}
+.ticket{background:var(--ink);color:var(--white);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-lg)}
+.ticket__head{padding:20px 24px 16px;border-bottom:1px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:space-between}
+.ticket__head-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.ticket__id{font-family:var(--font-mono);font-size:13px;color:var(--ochre);font-weight:700}
+.ticket__body{padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+.ticket__title{font-family:var(--font-display);font-size:18px;font-weight:700;min-height:24px}
+.ticket__title.placeholder{color:rgba(255,255,255,.28);font-weight:500}
+.ticket__row{display:flex;justify-content:space-between;font-size:12.5px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.ticket__row:last-child{border-bottom:none}
+.ticket__row-label{color:rgba(255,255,255,.4);font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase}
+.ticket__row-val{font-weight:600;text-align:right;max-width:60%}
+.ticket__row-val.placeholder{color:rgba(255,255,255,.28);font-weight:500}
+.ticket__progress-track{height:6px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
+.ticket__progress-fill{height:100%;background:var(--ochre);border-radius:3px;width:0%;transition:width .35s ease}
+.ticket__foot{padding:14px 24px 20px;display:flex;gap:10px;align-items:center}
+.ticket__foot-dot{width:8px;height:8px;border-radius:50%;background:var(--ochre);flex-shrink:0}
+.ticket__foot-text{font-size:11.5px;color:rgba(255,255,255,.5);line-height:1.5}
+.promise-list{margin-top:20px;display:flex;flex-direction:column;gap:12px}
+.promise-item{display:flex;gap:12px;background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-md);padding:14px 16px}
+.promise-item__text strong{display:block;font-size:13px;font-weight:700}
+.promise-item__text span{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home"><span class="nav__logo-mark" aria-hidden="true">A</span><span>AppAholic</span></a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/request" class="nav__link nav__link--active">Request App</a></li>
+        <li><a href="/contact" class="nav__link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer"><span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span></button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
+  <ul class="mobile-drawer__links" role="list"><li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li><li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li></ul>
+  <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
+</nav>
+
+<section class="page-hero" id="main-content">
+  <div class="container">
+    <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>Not on the shelf yet?</div>
+    <h1>Order something <em>custom-built.</em></h1>
+    <p>Tell us what you need. We review every request within 48 hours — the most-requested ideas get built and added to the shelf, free for requesters.</p>
+  </div>
+</section>
+
+<div class="request-layout">
+  <div class="card" style="padding:36px">
+    <div class="form-progress" id="formProgress">
+      <div class="form-progress__steps">
+        <div class="form-progress__step active" id="prog-1"><div class="form-progress__dot">1</div><div class="form-progress__label">You</div></div>
+        <div class="form-progress__step" id="prog-2"><div class="form-progress__dot">2</div><div class="form-progress__label">The App</div></div>
+        <div class="form-progress__step" id="prog-3"><div class="form-progress__dot">3</div><div class="form-progress__label">Features</div></div>
+        <div class="form-progress__step" id="prog-4"><div class="form-progress__dot">4</div><div class="form-progress__label">Budget</div></div>
+      </div>
+    </div>
+
+    <form id="requestForm" novalidate>
+      <div class="form-step active" id="step-1">
+        <div class="step-heading">Tell us about yourself</div>
+        <div class="step-sub">We'll use this to send your proposal and follow up.</div>
+        <div class="form-grid-2">
+          <div class="form-row"><label>Full Name <span>*</span></label><input class="form-input" type="text" id="reqName" placeholder="e.g. Tunde Bakare" autocomplete="name"/></div>
+          <div class="form-row"><label>Email Address <span>*</span></label><input class="form-input" type="email" id="reqEmail" placeholder="you@example.com" autocomplete="email"/></div>
+        </div>
+        <div class="form-row"><label>Phone / WhatsApp <span style="color:var(--muted);font-weight:400">(optional)</span></label><input class="form-input" type="tel" id="reqPhone" placeholder="+234 800 000 0000"/></div>
+        <div class="form-row"><label>Your role <span>*</span></label>
+          <select class="form-input" id="reqRole"><option value="">Select your role</option><option>Freelancer / Sole trader</option><option>Business owner / Founder</option><option>Manager / Team lead</option><option>Developer / Designer</option><option>Student</option><option>Other</option></select>
+        </div>
+        <div class="form-nav"><div></div><button type="button" class="btn btn-primary" onclick="nextStep(1)">The App &rarr;</button></div>
+      </div>
+
+      <div class="form-step" id="step-2">
+        <div class="step-heading">About the app</div>
+        <div class="step-sub">Give us the headline — what is this thing?</div>
+        <div class="form-row"><label>App Name / Title <span>*</span></label><input class="form-input" type="text" id="reqTitle" placeholder="e.g. Staff Attendance Manager"/></div>
+        <div class="form-grid-2">
+          <div class="form-row"><label>Category <span>*</span></label><select class="form-input" id="reqCategory"><option value="">Select category</option><option>Productivity</option><option>Finance &amp; Accounting</option><option>Analytics &amp; Reports</option><option>HR &amp; Team Management</option><option>Inventory &amp; Logistics</option><option>Customer Management (CRM)</option><option>Security &amp; Privacy</option><option>Communication</option><option>AI / Automation Tools</option><option>Other</option></select></div>
+          <div class="form-row"><label>Platform <span>*</span></label><select class="form-input" id="reqPlatform"><option value="">Select platform</option><option>Web (Browser)</option><option>Windows Desktop</option><option>Mac Desktop</option><option>Android Mobile</option><option>iOS Mobile</option><option>Cross-platform</option></select></div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row"><label>Who will use it? <span>*</span></label><select class="form-input" id="reqAudience"><option value="">Select audience</option><option>Just me</option><option>My small team (2&ndash;10)</option><option>My company / org</option><option>My customers / clients</option><option>General public</option></select></div>
+          <div class="form-row"><label>Est. number of users</label><select class="form-input" id="reqUsers"><option value="">Not sure yet</option><option>1&ndash;5</option><option>6&ndash;25</option><option>26&ndash;100</option><option>100&ndash;500</option><option>500+</option></select></div>
+        </div>
+        <div class="form-row"><label>Similar apps for inspiration?</label><input class="form-input" type="text" id="reqInspiration" placeholder="e.g. Like Clockify but simpler"/></div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" onclick="prevStep(2)">&larr; Back</button><button type="button" class="btn btn-primary" onclick="nextStep(2)">Features &rarr;</button></div>
+      </div>
+
+      <div class="form-step" id="step-3">
+        <div class="step-heading">Problem &amp; features</div>
+        <div class="step-sub">The more specific, the faster we can build it.</div>
+        <div class="form-row"><label>What problem does this solve? <span>*</span></label><textarea class="form-input" id="reqProblem" style="min-height:82px" placeholder="e.g. I track staff attendance on paper and it is always wrong."></textarea></div>
+        <div class="form-row"><label>Must-have features <span>*</span></label><textarea class="form-input" id="reqFeatures" style="min-height:96px" placeholder="One per line:&#10;Clock-in / clock-out&#10;Monthly PDF report&#10;Admin dashboard"></textarea></div>
+        <div class="form-row"><label>Integrations needed?</label>
+          <div class="check-chips" id="integrationsWrap">
+            <label class="check-chip"><input type="checkbox" value="whatsapp"/> WhatsApp</label>
+            <label class="check-chip"><input type="checkbox" value="email"/> Email</label>
+            <label class="check-chip"><input type="checkbox" value="flutterwave"/> Flutterwave</label>
+            <label class="check-chip"><input type="checkbox" value="google"/> Google Sheets</label>
+            <label class="check-chip"><input type="checkbox" value="none"/> None</label>
+          </div>
+        </div>
+        <div class="form-row"><label>Anything else we should know?</label><textarea class="form-input" id="reqExtra" style="min-height:64px" placeholder="Design preferences, existing systems, dealbreakers..."></textarea></div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" onclick="prevStep(3)">&larr; Back</button><button type="button" class="btn btn-primary" onclick="nextStep(3)">Budget &rarr;</button></div>
+      </div>
+
+      <div class="form-step" id="step-4">
+        <div class="step-heading">Timeline &amp; budget</div>
+        <div class="step-sub">Helps us prioritise and quote accurately.</div>
+        <div class="form-grid-2">
+          <div class="form-row"><label>How soon do you need it?</label><select class="form-input" id="reqTimeline"><option value="">No rush</option><option>ASAP (within 2 weeks)</option><option>Within 1 month</option><option>Within 3 months</option><option>Planning ahead</option></select></div>
+          <div class="form-row"><label>Budget range</label><select class="form-input" id="reqBudget"><option value="">I am flexible</option><option>Free (add to catalogue)</option><option>&#x20A6;1,000 &ndash; &#x20A6;5,000</option><option>&#x20A6;5,000 &ndash; &#x20A6;20,000</option><option>&#x20A6;20,000 &ndash; &#x20A6;50,000</option><option>&#x20A6;50,000+</option><option>Discuss with me first</option></select></div>
+        </div>
+        <div class="form-row"><label>How should the app be delivered?</label>
+          <div class="check-chips" id="deliveryWrap">
+            <label class="check-chip"><input type="checkbox" value="marketplace" checked/> Add to AppAholic</label>
+            <label class="check-chip"><input type="checkbox" value="private"/> Private use only</label>
+            <label class="check-chip"><input type="checkbox" value="saas"/> SaaS (charge my users)</label>
+          </div>
+        </div>
+        <div class="form-row"><label>How did you hear about us?</label><select class="form-input" id="reqSource"><option value="">Select</option><option>Google Search</option><option>WhatsApp / Referral</option><option>Social Media</option><option>Friend / Colleague</option><option>Other</option></select></div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" onclick="prevStep(4)">&larr; Back</button><button type="button" class="btn btn-ochre" id="submitBtn" onclick="submitRequest()">Submit Request</button></div>
+        <div class="form-note">🔒 Private. A real person reviews every request within 48 hours.</div>
+      </div>
+    </form>
+
+    <div class="form-success" id="formSuccess">
+      <div class="form-success__badge">🎉</div>
+      <h2>Request submitted</h2>
+      <p>Your build ticket is in the queue. Check your email for confirmation — we review every request within 48 hours.</p>
+      <a href="/marketplace" class="btn btn-primary">Browse the catalogue</a>
+    </div>
+  </div>
+
+  <aside class="ticket-wrap">
+    <div class="ticket" aria-live="polite">
+      <div class="ticket__head"><span class="ticket__head-label">Build Ticket</span><span class="ticket__id" id="ticketId">#AAH-000</span></div>
+      <div class="ticket__body">
+        <div class="ticket__title placeholder" id="ticketTitle">Your app title appears here</div>
+        <div class="ticket__progress-track"><div class="ticket__progress-fill" id="ticketProgress"></div></div>
+        <div>
+          <div class="ticket__row"><span class="ticket__row-label">Requester</span><span class="ticket__row-val placeholder" id="ticketName">—</span></div>
+          <div class="ticket__row"><span class="ticket__row-label">Category</span><span class="ticket__row-val placeholder" id="ticketCategory">—</span></div>
+          <div class="ticket__row"><span class="ticket__row-label">Platform</span><span class="ticket__row-val placeholder" id="ticketPlatform">—</span></div>
+          <div class="ticket__row"><span class="ticket__row-label">Budget</span><span class="ticket__row-val placeholder" id="ticketBudget">Flexible</span></div>
+        </div>
+      </div>
+      <div class="ticket__foot"><span class="ticket__foot-dot"></span><span class="ticket__foot-text">Fills in live as you complete the form. Nothing is sent until you submit.</span></div>
+    </div>
+    <div class="promise-list">
+      <div class="promise-item">⚡<div class="promise-item__text"><strong>Fast review</strong><span>Reviewed within 48 hours</span></div></div>
+      <div class="promise-item">🗳️<div class="promise-item__text"><strong>Community voting</strong><span>Most-requested built first</span></div></div>
+      <div class="promise-item">🎁<div class="promise-item__text"><strong>Early access, free</strong><span>Requesters get it on launch</span></div></div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+<script>
+var ticketId = 'AAH-' + (Math.floor(Math.random()*900)+100);
+document.getElementById('ticketId').textContent = '#' + ticketId;
+
+function setField(id, value, fallback){
+  var el = document.getElementById(id); if(!el) return;
+  if(value && value.trim()){ el.textContent = value; el.classList.remove('placeholder'); }
+  else { el.textContent = fallback; el.classList.add('placeholder'); }
+}
+var curStep = 1;
+function refreshTicket(){
+  var name = document.getElementById('reqName').value.trim();
+  var title = document.getElementById('reqTitle').value.trim();
+  var category = document.getElementById('reqCategory').value;
+  var platform = document.getElementById('reqPlatform').value;
+  var budget = document.getElementById('reqBudget').value;
+  setField('ticketTitle', title, 'Your app title appears here');
+  setField('ticketName', name, '—');
+  setField('ticketCategory', category, '—');
+  setField('ticketPlatform', platform, '—');
+  setField('ticketBudget', budget, 'Flexible');
+  var done = 0;
+  if(name && document.getElementById('reqEmail').value.trim() && document.getElementById('reqRole').value) done = 1;
+  if(done>=1 && title && category && platform && document.getElementById('reqAudience').value) done = 2;
+  if(done>=2 && document.getElementById('reqProblem').value.trim() && document.getElementById('reqFeatures').value.trim()) done = 3;
+  document.getElementById('ticketProgress').style.width = Math.round((Math.max(done, curStep-1)/4)*100) + '%';
+}
+document.getElementById('requestForm').addEventListener('input', refreshTicket);
+
+function setProgress(s){ for(var i=1;i<=4;i++){ var el=document.getElementById('prog-'+i); el.classList.remove('active','done'); if(i<s) el.classList.add('done'); else if(i===s) el.classList.add('active'); } }
+function showStep(s){ document.querySelectorAll('.form-step').forEach(function(el){el.classList.remove('active')}); document.getElementById('step-'+s).classList.add('active'); setProgress(s); curStep = s; refreshTicket(); document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'}); }
+function nextStep(from){
+  if(from===1){ var n=document.getElementById('reqName').value.trim(), em=document.getElementById('reqEmail').value.trim(), r=document.getElementById('reqRole').value;
+    if(!n||!em||!r){ showToast('Please fill all required fields.','⚠️'); return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ showToast('Please enter a valid email address.','⚠️'); return; } }
+  if(from===2){ var t=document.getElementById('reqTitle').value.trim(), c=document.getElementById('reqCategory').value, p=document.getElementById('reqPlatform').value, a=document.getElementById('reqAudience').value;
+    if(!t||!c||!p||!a){ showToast('Please fill all required fields.','⚠️'); return; } }
+  if(from===3){ var pr=document.getElementById('reqProblem').value.trim(), f=document.getElementById('reqFeatures').value.trim();
+    if(!pr||!f){ showToast('Describe the problem and list the features.','⚠️'); return; } }
+  showStep(from+1);
+}
+function prevStep(from){ showStep(from-1); }
+
+function submitRequest(){
+  var btn = document.getElementById('submitBtn');
+  var integrations = Array.from(document.querySelectorAll('#integrationsWrap input:checked')).map(function(c){return c.value}).join(', ');
+  var delivery = Array.from(document.querySelectorAll('#deliveryWrap input:checked')).map(function(c){return c.value}).join(', ');
+  var get = function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+  var payload = { name:get('reqName'), email:get('reqEmail'), phone:get('reqPhone'), role:get('reqRole'), title:get('reqTitle'),
+    category:get('reqCategory'), platform:get('reqPlatform'), audience:get('reqAudience'), users:get('reqUsers'),
+    problem:get('reqProblem'), features:get('reqFeatures'), inspiration:get('reqInspiration'), integrations:integrations,
+    extra:get('reqExtra'), timeline:get('reqTimeline'), budget:get('reqBudget'), source:get('reqSource'), delivery:delivery };
+
+  if(!payload.name || !payload.email || !payload.title || !payload.problem){ showToast('Please complete all required fields.','⚠️'); return; }
+
+  btn.disabled = true; btn.textContent = 'Sending…';
+  authFetch('/api/request-app', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok){
+        document.getElementById('requestForm').style.display = 'none';
+        document.getElementById('formProgress').style.display = 'none';
+        document.getElementById('formSuccess').classList.add('active');
+      } else { showToast(data.error || 'Something went wrong. Please try again.','⚠️'); }
+    })
+    .catch(function(){ showToast('Could not reach the server. Please email info@justservices.pro directly.','⚠️'); })
+    .finally(function(){ btn.disabled = false; btn.textContent = 'Submit Request'; });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<title>Sign In — AppAholic</title>
+<meta name="description" content="Sign in to AppAholic with Google to access your dashboard, purchases and downloads."/>
+<meta name="robots" content="noindex, follow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/auth"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.auth-wrap{min-height:calc(100vh - 66px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.auth-card{width:100%;max-width:400px;background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:40px 34px;text-align:center}
+.auth-card__mark{width:48px;height:48px;border-radius:10px;background:var(--ink);color:var(--ochre);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:22px;margin:0 auto 20px}
+.auth-card h1{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:-.4px;margin-bottom:8px}
+.auth-card p{font-size:13.5px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;border-radius:10px;border:1.5px solid var(--line);background:var(--white);font-size:14.5px;font-weight:600;color:var(--ink);transition:all .18s}
+.google-btn:hover{border-color:var(--ink);box-shadow:0 2px 8px rgba(20,33,61,.08)}
+.google-btn:disabled{opacity:.6;cursor:default}
+.auth-error{margin-top:16px;padding:11px 14px;background:#FBEAE9;border:1.5px solid var(--stamp-red);border-radius:8px;font-size:12.5px;color:var(--stamp-red);text-align:left;display:none}
+.auth-error.show{display:block}
+.auth-note{margin-top:22px;font-size:12px;color:var(--muted)}
+.auth-signedin{display:none}
+.auth-signedin.show{display:block}
+.auth-signedin .avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 14px;object-fit:cover;border:2px solid var(--line)}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home">
+      <span class="nav__logo-mark" aria-hidden="true">A</span>
+      <span>AppAholic</span>
+    </a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/request" class="nav__link">Request App</a></li>
+        <li><a href="/contact" class="nav__link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header">
+    <span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span>
+    <button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <ul class="mobile-drawer__links" role="list">
+    <li><a href="/" class="mobile-drawer__link" onclick="closeDrawer()">Home</a></li>
+    <li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li>
+    <li><a href="/request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li>
+  </ul>
+</nav>
+
+<main id="main-content" class="auth-wrap">
+  <div class="auth-card">
+    <div id="signedOutView">
+      <div class="auth-card__mark">A</div>
+      <h1>Welcome to AppAholic</h1>
+      <p>Sign in with Google to access your dashboard, track requests and re-download anything you've bought.</p>
+      <button class="google-btn" id="googleBtn" onclick="startGoogleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.9-2.26c-.81.54-1.85.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.9v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.69A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.16.28-1.69V4.98H.9A9 9 0 0 0 0 9c0 1.45.35 2.83.9 4.02l3.05-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .9 4.98l3.05 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+        <span id="googleBtnText">Continue with Google</span>
+      </button>
+      <div class="auth-error" id="authError"></div>
+      <p class="auth-note">🔒 We only use your name, email and photo — nothing is posted on your behalf.</p>
+    </div>
+
+    <div id="signedInView" class="auth-signedin">
+      <img class="avatar" id="signedInAvatar" src="" alt=""/>
+      <h1 id="signedInName">You're signed in</h1>
+      <p id="signedInEmail" style="font-family:var(--font-mono);font-size:12.5px;"></p>
+      <a href="/dashboard" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px">Go to Dashboard</a>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:10px" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+<script>
+var ERROR_MESSAGES = {
+  oauth_denied: 'Sign-in was cancelled. Please try again.',
+  oauth_failed: 'Something went wrong signing you in. Please try again.',
+  oauth_not_configured: 'Google sign-in is not available right now. Please email info@justservices.pro.',
+};
+
+function startGoogleSignIn(){
+  var btn = document.getElementById('googleBtn');
+  btn.disabled = true;
+  document.getElementById('googleBtnText').textContent = 'Redirecting…';
+  var redirect = encodeURIComponent(window.location.origin + '/dashboard');
+  window.location.href = window.API_BASE + '/auth/google?redirect=' + redirect;
+}
+
+function signOut(){
+  Session.clear();
+  document.getElementById('signedInView').classList.remove('show');
+  document.getElementById('signedOutView').style.display = 'block';
+  showToast('Signed out.', '👋');
+}
+
+function renderSignedIn(){
+  authFetch('/auth/me').then(function(r){ return r.json(); }).then(function(data){
+    if(!data.ok){ Session.clear(); return; }
+    var u = data.user;
+    document.getElementById('signedOutView').style.display = 'none';
+    document.getElementById('signedInView').classList.add('show');
+    document.getElementById('signedInName').textContent = 'Welcome back, ' + (u.name ? u.name.split(' ')[0] : 'there');
+    document.getElementById('signedInEmail').textContent = u.email || '';
+    var avatar = document.getElementById('signedInAvatar');
+    if(u.avatar){ avatar.src = u.avatar; } else { avatar.style.display = 'none'; }
+  }).catch(function(){ /* token invalid/expired — leave signed-out view showing */ Session.clear(); });
+}
+
+(function init(){
+  var params = new URLSearchParams(window.location.search);
+  var err = params.get('error');
+  if(err){
+    var el = document.getElementById('authError');
+    el.textContent = ERROR_MESSAGES[err] || 'Something went wrong. Please try again.';
+    el.classList.add('show');
+  }
+  if(Session.isSignedIn()) renderSignedIn();
+})();
+</script>
+</body>
+</html>

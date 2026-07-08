@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<title>Browse Apps — AppAholic Marketplace</title>
+<meta name="description" content="Browse the full AppAholic catalogue — Web, Desktop and Mobile apps for Nigerian businesses and professionals."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/marketplace"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.market-toolbar{position:sticky;top:66px;z-index:50;background:var(--paper);border-bottom:1.5px solid var(--line);padding:16px 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{padding:9px 18px;border-radius:999px;border:1.5px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-3);background:var(--white);transition:all .18s}
+.tab:hover{border-color:var(--ink)}
+.tab.active{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.market-grid{padding:36px 0 80px}
+.apps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.apps-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.apps-grid{grid-template-columns:1fr}}
+.app-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);overflow:hidden;transition:all .2s;display:flex;flex-direction:column}
+.app-card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.app-card__banner{height:80px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative}
+.app-card__tag{position:absolute;top:10px;right:10px}
+.app-card__body{padding:18px 20px;flex:1;display:flex;flex-direction:column}
+.app-card__body h3{font-family:var(--font-display);font-size:16.5px;font-weight:700;margin-bottom:4px}
+.app-card__cat{font-size:11.5px;color:var(--muted);font-family:var(--font-mono);margin-bottom:10px}
+.app-card__desc{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-bottom:14px;flex:1}
+.app-card__foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--line)}
+.app-card__price{font-family:var(--font-mono);font-weight:700;font-size:14px}
+.app-card__rating{font-size:11.5px;color:var(--muted)}
+.market-skeleton{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.market-skeleton{grid-template-columns:1fr 1fr}}
+.skel-card{height:220px;border-radius:var(--r-xl);background:linear-gradient(90deg,var(--paper-2) 25%,var(--white) 37%,var(--paper-2) 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home"><span class="nav__logo-mark" aria-hidden="true">A</span><span>AppAholic</span></a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link nav__link--active">All Apps</a></li>
+        <li><a href="/request" class="nav__link">Request App</a></li>
+        <li><a href="/contact" class="nav__link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
+      <a href="/request" class="btn btn-ochre btn-sm">Request App</a>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
+  <ul class="mobile-drawer__links" role="list">
+    <li><a href="/request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li>
+  </ul>
+  <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>The full catalogue</div>
+    <h1>Everything on <em>the shelf.</em></h1>
+    <p>15 apps, catalogued by platform. Buy instantly, or request something that isn't here yet.</p>
+  </div>
+</section>
+
+<div class="market-toolbar">
+  <div class="container">
+    <div class="tabs" id="platformTabs">
+      <button class="tab active" data-platform="">All</button>
+      <button class="tab" data-platform="web">🌐 Web</button>
+      <button class="tab" data-platform="desktop">🖥️ Desktop</button>
+      <button class="tab" data-platform="mobile">📱 Mobile</button>
+    </div>
+  </div>
+</div>
+
+<main id="main-content" class="market-grid">
+  <div class="container">
+    <div id="appsSkeleton" class="market-skeleton">
+      <div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>
+      <div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>
+    </div>
+    <div id="appsGrid" class="apps-grid" style="display:none"></div>
+    <div id="appsEmpty" class="empty-state" style="display:none">
+      <div class="empty-state__icon">📦</div>
+      <h3>No apps found</h3>
+      <p>Nothing matches this filter yet. Try a different platform, or request something custom.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo"><span class="footer__logo-mark">A</span>AppAholic</div>
+        <p class="footer__tagline">Web, Desktop and Mobile apps for Nigerian businesses and professionals. A <strong>JustServicesPro</strong> product.</p>
+        <a href="mailto:info@justservices.pro" class="footer__email">info@justservices.pro</a>
+      </div>
+      <div><h3 class="footer__col-title">Marketplace</h3><ul class="footer__links" role="list"><li><a href="/marketplace">Browse All Apps</a></li><li><a href="/marketplace?platform=web">Web Apps</a></li><li><a href="/marketplace?platform=desktop">Desktop Apps</a></li><li><a href="/marketplace?platform=mobile">Mobile Apps</a></li></ul></div>
+      <div><h3 class="footer__col-title">Support</h3><ul class="footer__links" role="list"><li><a href="/#how">How it Works</a></li><li><a href="/request">Request an App</a></li><li><a href="/contact">Help &amp; Contact</a></li><li><a href="/terms">Refund Policy</a></li></ul></div>
+      <div><h3 class="footer__col-title">Company</h3><ul class="footer__links" role="list"><li><a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro</a></li><li><a href="/about">About AppAholic</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms of Service</a></li></ul></div>
+    </div>
+    <div class="footer__bottom">
+      <p>&copy; <span id="footerYear"></span> AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd.</p>
+      <div class="footer__bottom-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+<script>
+var currentPlatform = new URLSearchParams(window.location.search).get('platform') || '';
+var allApps = [];
+
+function tagStamp(tag){
+  var map = { top: ['stamp--ochre','Top Pick'], new: ['stamp--green','New'], free: ['stamp--ink','Free'], paid: ['stamp--ink','Paid'] };
+  var m = map[tag];
+  if(!m) return '';
+  return '<span class="stamp app-card__tag ' + m[0] + '">' + m[1] + '</span>';
+}
+
+function renderApps(apps){
+  var grid = document.getElementById('appsGrid');
+  var empty = document.getElementById('appsEmpty');
+  document.getElementById('appsSkeleton').style.display = 'none';
+
+  if(!apps.length){
+    grid.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.style.display = 'grid';
+
+  grid.innerHTML = apps.map(function(app){
+    var price = Number(app.price) > 0 ? '₦' + Number(app.price).toLocaleString() : 'Free';
+    return '<a href="/marketplace?app=' + app.id + '" class="app-card">' +
+      '<div class="app-card__banner" style="background:' + (app.banner_color || '#F0EBDF') + '">' + (app.icon || '📦') + tagStamp(app.tag) + '</div>' +
+      '<div class="app-card__body">' +
+        '<h3>' + app.name + '</h3>' +
+        '<div class="app-card__cat">' + app.category + ' · ' + app.platform + '</div>' +
+        '<p class="app-card__desc">' + (app.description || '') + '</p>' +
+        '<div class="app-card__foot"><span class="app-card__price">' + price + '</span><span class="app-card__rating">★ ' + (app.rating || '—') + '</span></div>' +
+      '</div>' +
+    '</a>';
+  }).join('');
+}
+
+function applyFilter(platform){
+  currentPlatform = platform;
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('active', t.dataset.platform === platform); });
+  var params = new URLSearchParams(window.location.search);
+  if(platform) params.set('platform', platform); else params.delete('platform');
+  history.replaceState({}, '', '/marketplace' + (params.toString() ? '?' + params.toString() : ''));
+  var filtered = platform ? allApps.filter(function(a){ return a.platform === platform; }) : allApps;
+  renderApps(filtered);
+}
+
+document.getElementById('platformTabs').addEventListener('click', function(e){
+  var btn = e.target.closest('.tab');
+  if(!btn) return;
+  applyFilter(btn.dataset.platform);
+});
+
+fetch(window.API_BASE + '/api/apps')
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(!data.ok){ throw new Error(data.error || 'Could not load apps'); }
+    allApps = data.apps || [];
+    applyFilter(currentPlatform);
+  })
+  .catch(function(){
+    document.getElementById('appsSkeleton').style.display = 'none';
+    document.getElementById('appsEmpty').style.display = 'block';
+    document.querySelector('#appsEmpty h3').textContent = 'Could not load the catalogue';
+    document.querySelector('#appsEmpty p').textContent = 'Please refresh, or check back shortly.';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#14213D"/>
+<title>You're Offline — AppAholic</title>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.offline-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+.offline-card{max-width:380px}
+.offline-icon{width:64px;height:64px;border-radius:16px;background:var(--ink);color:var(--ochre);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px}
+.offline-card h1{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:10px}
+.offline-card p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+</style>
+</head>
+<body>
+<div class="offline-wrap">
+  <div class="offline-card">
+    <div class="offline-icon">📡</div>
+    <h1>You're offline</h1>
+    <p>Looks like there's no connection right now. Some pages you've already visited may still work — try reconnecting and reload.</p>
+    <button class="btn btn-primary" onclick="window.location.reload()">Try Again</button>
+  </div>
+</div>
+</body>
+</html>

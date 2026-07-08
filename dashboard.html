@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<title>My Dashboard — AppAholic</title>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/dashboard"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.dash-wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
+.dash-head{margin-bottom:32px}
+.dash-head .section-eyebrow{margin-bottom:6px}
+.dash-head h1{font-family:var(--font-display);font-size:clamp(24px,3.2vw,32px);font-weight:700;letter-spacing:-.5px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px}
+@media(max-width:800px){.stat-grid{grid-template-columns:1fr 1fr}}
+.stat-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.stat-card strong{display:block;font-family:var(--font-display);font-size:26px;font-weight:700}
+.stat-card span{font-size:11.5px;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:800px){.dash-grid{grid-template-columns:1fr}}
+.dash-panel{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);overflow:hidden}
+.dash-panel__head{padding:18px 22px;border-bottom:1.5px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.dash-panel__head h2{font-family:var(--font-display);font-size:16px;font-weight:700}
+.dash-list{max-height:420px;overflow-y:auto}
+.dash-item{display:flex;align-items:center;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line)}
+.dash-item:last-child{border-bottom:none}
+.dash-item__icon{width:36px;height:36px;border-radius:8px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.dash-item__text{flex:1;min-width:0}
+.dash-item__text strong{display:block;font-size:13.5px;font-weight:700}
+.dash-item__text span{font-size:11.5px;color:var(--muted)}
+.dash-item__meta{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-3);text-align:right;white-space:nowrap}
+.loading-wrap{display:flex;align-items:center;justify-content:center;padding:60px 20px;gap:10px;color:var(--muted);font-size:13.5px}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home"><span class="nav__logo-mark" aria-hidden="true">A</span><span>AppAholic</span></a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/dashboard" class="nav__link nav__link--active">Dashboard</a></li>
+        <li><a href="/request" class="nav__link">Request App</a></li>
+        <li><a href="/contact" class="nav__link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <button class="btn btn-ghost btn-sm" onclick="doSignOut()">Sign Out</button>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
+  <ul class="mobile-drawer__links" role="list">
+    <li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li>
+    <li><a href="/request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li>
+  </ul>
+  <div class="mobile-drawer__actions"><button class="btn btn-ghost" onclick="doSignOut()">Sign Out</button></div>
+</nav>
+
+<main id="main-content" class="dash-wrap">
+  <div id="loadingState" class="loading-wrap"><span class="spinner spinner--ink"></span> Loading your dashboard…</div>
+
+  <div id="dashContent" style="display:none">
+    <div class="dash-head">
+      <div class="section-eyebrow" id="greeting">Overview</div>
+      <h1 id="welcomeName">Welcome back</h1>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><strong id="statPurchases">0</strong><span>Apps Purchased</span></div>
+      <div class="stat-card"><strong id="statDownloads">0</strong><span>Total Downloads</span></div>
+      <div class="stat-card"><strong id="statRequests">0</strong><span>App Requests</span></div>
+      <div class="stat-card"><strong id="statSpent">₦0</strong><span>Total Spent</span></div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="dash-panel">
+        <div class="dash-panel__head"><h2>My Purchases</h2><a href="/marketplace" class="btn btn-ghost btn-sm">Browse Apps</a></div>
+        <div class="dash-list" id="purchasesList"></div>
+      </div>
+      <div class="dash-panel">
+        <div class="dash-panel__head"><h2>My Requests</h2><a href="/request" class="btn btn-ghost btn-sm">New Request</a></div>
+        <div class="dash-list" id="requestsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="signedOutState" style="display:none" class="empty-state">
+    <div class="empty-state__icon">🔒</div>
+    <h3>Sign in to see your dashboard</h3>
+    <p>Your purchases, downloads and requests all live here once you sign in.</p>
+    <a href="/auth" class="btn btn-primary" style="margin-top:18px">Sign In</a>
+  </div>
+</main>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+<script>
+function doSignOut(){ Session.clear(); window.location.href = '/auth'; }
+
+function statusStamp(status){
+  var map = { submitted: ['stamp--ink','Submitted'], in_progress: ['stamp--ochre','In Progress'], under_review: ['stamp--ochre','Under Review'], built: ['stamp--green','Built'], declined: ['stamp--red','Declined'] };
+  var m = map[status] || map.submitted;
+  return '<span class="stamp ' + m[0] + '" style="font-size:9px;padding:2px 8px">' + m[1] + '</span>';
+}
+
+function renderEmpty(container, icon, title, text){
+  container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">'+icon+'</div><h3>'+title+'</h3><p>'+text+'</p></div>';
+}
+
+function loadDashboard(){
+  if(!Session.isSignedIn()){
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('signedOutState').style.display = 'block';
+    return;
+  }
+
+  authFetch('/api/dashboard').then(function(r){
+    if(r.status === 401){ Session.clear(); throw new Error('unauthorized'); }
+    return r.json();
+  }).then(function(data){
+    if(!data.ok) throw new Error(data.error || 'failed');
+
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('dashContent').style.display = 'block';
+
+    var firstName = (data.profile.name || data.profile.email || '').split(' ')[0] || 'there';
+    var hour = new Date().getHours();
+    var greet = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('greeting').textContent = greet;
+    document.getElementById('welcomeName').textContent = 'Welcome back, ' + firstName + '.';
+
+    document.getElementById('statPurchases').textContent = data.stats.appsPurchased;
+    document.getElementById('statDownloads').textContent = data.stats.totalDownloads;
+    document.getElementById('statRequests').textContent = data.stats.appRequests;
+    document.getElementById('statSpent').textContent = '₦' + Number(data.stats.totalSpent || 0).toLocaleString();
+
+    var pList = document.getElementById('purchasesList');
+    if(!data.purchases.length){
+      renderEmpty(pList, '🛒', 'No purchases yet', 'Everything you buy will show up here, ready to re-download anytime.');
+    } else {
+      pList.innerHTML = data.purchases.map(function(p){
+        var appName = (p.apps && p.apps.name) || p.app_id || 'App';
+        var icon = (p.apps && p.apps.icon) || '📦';
+        var price = Number(p.amount) > 0 ? '₦' + Number(p.amount).toLocaleString() : 'Free';
+        var date = new Date(p.created_at).toLocaleDateString('en-NG', { month:'short', day:'numeric', year:'numeric' });
+        return '<div class="dash-item"><div class="dash-item__icon">'+icon+'</div><div class="dash-item__text"><strong>'+appName+'</strong><span>Purchased '+date+'</span></div><div class="dash-item__meta">'+price+'</div></div>';
+      }).join('');
+    }
+
+    var rList = document.getElementById('requestsList');
+    if(!data.requests.length){
+      renderEmpty(rList, '📋', 'No requests yet', 'Submit a custom app request and track its status here.');
+    } else {
+      rList.innerHTML = data.requests.map(function(r){
+        var date = new Date(r.created_at).toLocaleDateString('en-NG', { month:'short', day:'numeric' });
+        return '<div class="dash-item"><div class="dash-item__icon">📄</div><div class="dash-item__text"><strong>'+r.title+'</strong><span>'+(r.category||'—')+' · '+date+'</span></div><div class="dash-item__meta">'+statusStamp(r.status)+'</div></div>';
+      }).join('');
+    }
+  }).catch(function(err){
+    document.getElementById('loadingState').style.display = 'none';
+    if(err.message === 'unauthorized'){
+      document.getElementById('signedOutState').style.display = 'block';
+    } else {
+      showToast('Could not load your dashboard right now.', '⚠️');
+      document.getElementById('signedOutState').style.display = 'block';
+    }
+  });
+}
+
+loadDashboard();
+</script>
+</body>
+</html>

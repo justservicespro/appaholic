@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="AppAholic"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<title>AppAholic — Web, Desktop & Mobile Apps, Catalogued</title>
+<meta name="description" content="A stocked catalogue of practical Web, Desktop and Mobile apps for Nigerian businesses and professionals. Browse, buy, or request something built for you."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="AppAholic — Web, Desktop & Mobile Apps, Catalogued"/>
+<meta property="og:description" content="A stocked catalogue of practical apps for Nigerian businesses. Browse, buy, or request something built for you."/>
+<meta property="og:url" content="https://appaholic.justservices.pro/"/>
+<meta property="og:site_name" content="AppAholic"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.hero{padding:64px 0 56px;position:relative;overflow:hidden}
+.hero__grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+@media(max-width:900px){.hero__grid{grid-template-columns:1fr}}
+.hero h1{font-family:var(--font-display);font-size:clamp(34px,5vw,54px);font-weight:700;letter-spacing:-1.2px;line-height:1.08}
+.hero h1 em{font-style:italic;color:var(--ochre-dim)}
+.hero p{margin-top:18px;font-size:16px;color:var(--muted);max-width:480px;line-height:1.75}
+.hero__ctas{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}
+.hero__stats{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap}
+.hero__stat strong{display:block;font-family:var(--font-display);font-size:24px;color:var(--ink)}
+.hero__stat span{font-size:11.5px;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+.ledger-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:0;overflow:hidden}
+.ledger-card__head{background:var(--ink);color:var(--white);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.ledger-card__head span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.ledger-row{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--line)}
+.ledger-row:last-child{border-bottom:none}
+.ledger-row__icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ledger-row__text{flex:1;min-width:0}
+.ledger-row__text strong{display:block;font-size:13.5px;font-weight:700}
+.ledger-row__text span{font-size:11.5px;color:var(--muted)}
+.ledger-row__price{font-family:var(--font-mono);font-size:12.5px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+
+.section{padding:64px 0}
+.section-head{max-width:600px;margin-bottom:40px}
+.section-head h2{font-family:var(--font-display);font-size:clamp(26px,3.2vw,36px);font-weight:700;letter-spacing:-.6px;margin-top:8px}
+
+.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:800px){.platform-grid{grid-template-columns:1fr}}
+.platform-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);padding:28px;transition:all .2s;position:relative;overflow:hidden}
+.platform-card:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.platform-card__icon{font-size:28px;margin-bottom:14px}
+.platform-card h3{font-family:var(--font-display);font-size:19px;font-weight:700;margin-bottom:6px}
+.platform-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.platform-card__count{font-family:var(--font-mono);font-size:11px;color:var(--ochre-dim);font-weight:700}
+
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:12px}
+@media(max-width:800px){.how-steps{grid-template-columns:1fr}}
+.how-step{position:relative;padding-left:52px}
+.how-step__num{position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--ochre);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:15px}
+.how-step h3{font-family:var(--font-display);font-size:16.5px;font-weight:700;margin-bottom:6px}
+.how-step p{font-size:13px;color:var(--muted);line-height:1.65}
+
+.request-cta{background:var(--ink);color:var(--white);border-radius:var(--r-xl);padding:48px 40px;display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:center;position:relative;overflow:hidden}
+.request-cta::before{content:'';position:absolute;top:-100px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,163,61,.18),transparent 70%)}
+@media(max-width:760px){.request-cta{grid-template-columns:1fr;padding:32px 24px}}
+.request-cta h2{font-family:var(--font-display);font-size:clamp(24px,3vw,32px);font-weight:700;letter-spacing:-.5px;position:relative;z-index:1}
+.request-cta p{margin-top:10px;color:rgba(255,255,255,.6);font-size:14px;max-width:400px;position:relative;z-index:1}
+.request-cta__promises{display:flex;flex-direction:column;gap:14px;position:relative;z-index:1}
+.request-cta__promise{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,.75)}
+.request-cta__promise strong{color:var(--white);display:block;font-size:13.5px}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home">
+      <span class="nav__logo-mark" aria-hidden="true">A</span>
+      <span>AppAholic</span>
+    </a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link nav__link--active">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/marketplace?platform=web" class="nav__link">Web</a></li>
+        <li><a href="/marketplace?platform=desktop" class="nav__link">Desktop</a></li>
+        <li><a href="/marketplace?platform=mobile" class="nav__link">Mobile</a></li>
+        <li><a href="/request" class="nav__link">Request App</a></li>
+        <li><a href="/contact" class="nav__link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
+      <a href="/request" class="btn btn-ochre btn-sm">Request App</a>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header">
+    <span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span>
+    <button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <ul class="mobile-drawer__links" role="list">
+    <li><a href="/" class="mobile-drawer__link" onclick="closeDrawer()">Home</a></li>
+    <li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li>
+    <li><a href="/marketplace?platform=web" class="mobile-drawer__link" onclick="closeDrawer()">Web Apps</a></li>
+    <li><a href="/marketplace?platform=desktop" class="mobile-drawer__link" onclick="closeDrawer()">Desktop Apps</a></li>
+    <li><a href="/marketplace?platform=mobile" class="mobile-drawer__link" onclick="closeDrawer()">Mobile Apps</a></li>
+    <li><a href="/request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li>
+    <li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li>
+    <li><a href="/about" class="mobile-drawer__link" onclick="closeDrawer()">About</a></li>
+  </ul>
+  <div class="mobile-drawer__actions">
+    <a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a>
+  </div>
+</nav>
+
+<main id="main-content">
+<section class="hero">
+  <div class="container">
+    <div class="hero__grid">
+      <div>
+        <div class="page-eyebrow" style="color:var(--ochre-dim)"><span class="page-eyebrow-dot" style="background:var(--ochre-dim)"></span>15 apps in stock</div>
+        <h1>The <em>toolshed</em><br/>for Nigerian<br/>businesses.</h1>
+        <p>A catalogued stock of practical Web, Desktop and Mobile apps — built for the way small businesses and freelancers actually work here. Buy what's on the shelf, or order something custom.</p>
+        <div class="hero__ctas">
+          <a href="/marketplace" class="btn btn-primary btn-lg">Browse the Catalogue</a>
+          <a href="/request" class="btn btn-ghost btn-lg">Request an App</a>
+        </div>
+        <div class="hero__stats">
+          <div class="hero__stat"><strong>15</strong><span>Apps Stocked</span></div>
+          <div class="hero__stat"><strong>3</strong><span>Platforms</span></div>
+          <div class="hero__stat"><strong>48hr</strong><span>Request Review</span></div>
+        </div>
+      </div>
+      <div class="ledger-card">
+        <div class="ledger-card__head"><span>Today's Stock Ledger</span><span>#A-047</span></div>
+        <div class="ledger-row"><div class="ledger-row__icon" style="background:#F3E5F5">🧾</div><div class="ledger-row__text"><strong>InvoiceKit</strong><span>Finance · Web</span></div><div class="ledger-row__price">₦2,500</div></div>
+        <div class="ledger-row"><div class="ledger-row__icon" style="background:#FFFDE7">📝</div><div class="ledger-row__text"><strong>QuickNote</strong><span>Productivity · Web</span></div><div class="ledger-row__price">Free</div></div>
+        <div class="ledger-row"><div class="ledger-row__icon" style="background:#E3F2FD">🗂️</div><div class="ledger-row__text"><strong>VaultSync</strong><span>Storage · Desktop</span></div><div class="ledger-row__price">Free</div></div>
+        <div class="ledger-row"><div class="ledger-row__icon" style="background:#E8F5E9">💸</div><div class="ledger-row__text"><strong>PayTrack</strong><span>Finance · Mobile</span></div><div class="ledger-row__price">₦800</div></div>
+        <div class="ledger-row"><div class="ledger-row__icon" style="background:#E8EAF6">🤖</div><div class="ledger-row__text"><strong>TaskMind AI</strong><span>AI Tools · Web</span></div><div class="ledger-row__price">₦5,000</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">Browse by shelf</div>
+      <h2>Three aisles, one catalogue.</h2>
+    </div>
+    <div class="platform-grid">
+      <a href="/marketplace?platform=web" class="platform-card">
+        <div class="platform-card__icon">🌐</div>
+        <h3>Web Apps</h3>
+        <p>Runs in any browser. No install — sign in and go, from any device.</p>
+        <div class="platform-card__count">6 apps stocked →</div>
+      </a>
+      <a href="/marketplace?platform=desktop" class="platform-card">
+        <div class="platform-card__icon">🖥️</div>
+        <h3>Desktop Apps</h3>
+        <p>Native Windows & Mac software. Offline-capable, installed once.</p>
+        <div class="platform-card__count">5 apps stocked →</div>
+      </a>
+      <a href="/marketplace?platform=mobile" class="platform-card">
+        <div class="platform-card__icon">📱</div>
+        <h3>Mobile Apps</h3>
+        <p>Android & iOS tools that live in your pocket, sync with the web.</p>
+        <div class="platform-card__count">4 apps stocked →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how" style="background:var(--paper-2)">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">How it works</div>
+      <h2>From the shelf to your screen.</h2>
+    </div>
+    <div class="how-steps">
+      <div class="how-step"><div class="how-step__num">1</div><h3>Browse or request</h3><p>Pick something from the catalogue, or tell us what you need built.</p></div>
+      <div class="how-step"><div class="how-step__num">2</div><h3>Buy or wait for review</h3><p>Purchase instantly, or get a reply on your custom request within 48 hours.</p></div>
+      <div class="how-step"><div class="how-step__num">3</div><h3>Download & keep</h3><p>Everything you own lives in your dashboard — download again anytime.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="request-cta">
+      <div>
+        <h2>Can't find what<br/>you need on the shelf?</h2>
+        <p>Tell us what you're trying to solve. Every request gets a real reply within 48 hours — and if we build it, you get it free.</p>
+        <a href="/request" class="btn btn-ochre btn-lg" style="margin-top:22px;position:relative;z-index:1">Start Your Request →</a>
+      </div>
+      <div class="request-cta__promises">
+        <div class="request-cta__promise">⚡ <div><strong>Fast review</strong>Reviewed within 48 hours, always by a person</div></div>
+        <div class="request-cta__promise">🗳️ <div><strong>Community voting</strong>Most-requested ideas get built first</div></div>
+        <div class="request-cta__promise">🎁 <div><strong>Early access, free</strong>Requesters get the finished app at no cost</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo"><span class="footer__logo-mark">A</span>AppAholic</div>
+        <p class="footer__tagline">Web, Desktop and Mobile apps for Nigerian businesses and professionals. A <strong>JustServicesPro</strong> product.</p>
+        <a href="mailto:info@justservices.pro" class="footer__email">info@justservices.pro</a>
+      </div>
+      <div>
+        <h3 class="footer__col-title">Marketplace</h3>
+        <ul class="footer__links" role="list">
+          <li><a href="/marketplace">Browse All Apps</a></li>
+          <li><a href="/marketplace?platform=web">Web Apps</a></li>
+          <li><a href="/marketplace?platform=desktop">Desktop Apps</a></li>
+          <li><a href="/marketplace?platform=mobile">Mobile Apps</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__col-title">Support</h3>
+        <ul class="footer__links" role="list">
+          <li><a href="/#how">How it Works</a></li>
+          <li><a href="/request">Request an App</a></li>
+          <li><a href="/contact">Help &amp; Contact</a></li>
+          <li><a href="/terms">Refund Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__col-title">Company</h3>
+        <ul class="footer__links" role="list">
+          <li><a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro</a></li>
+          <li><a href="/about">About AppAholic</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>&copy; <span id="footerYear"></span> AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd.</p>
+      <div class="footer__bottom-links">
+        <a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+</body>
+</html>
