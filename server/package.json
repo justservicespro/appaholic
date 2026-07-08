@@ -1,7 +1,7 @@
 {
   "name": "appaholic-server",
-  "version": "2.0.0",
-  "description": "AppAholic API server — Google OAuth, Supabase, Gmail SMTP",
+  "version": "1.0.0",
+  "description": "AppAholic email + Google OAuth server",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
@@ -15,9 +15,7 @@
     "dotenv":             "^16.4.7",
     "googleapis":         "^144.0.0",
     "helmet":             "^7.2.0",
-    "express-rate-limit": "^7.4.1",
-    "jsonwebtoken":       "^9.0.2",
-    "@supabase/supabase-js": "^2.45.4"
+    "express-rate-limit": "^7.4.1"
   },
   "engines": { "node": ">=18" }
 }

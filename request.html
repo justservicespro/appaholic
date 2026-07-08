@@ -4,104 +4,270 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="manifest" href="/manifest.json"/>
-<meta name="theme-color" content="#14213D"/>
+<meta name="theme-color" content="#0A0A0F"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="AppAholic"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png"/>
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png"/>
+<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png"/>
+<link rel="apple-touch-startup-image" href="/icons/icon-512.png"/>
+<meta name="msapplication-TileImage" content="/icons/icon-144.png"/>
+<meta name="msapplication-TileColor" content="#0A0A0F"/>
 <title>Request a Custom App — AppAholic</title>
-<meta name="description" content="Tell us what you need built. Every request is reviewed within 48 hours — popular ideas get built and added to the marketplace, free for requesters."/>
+<meta name="description" content="Tell us what you need built. Every request is reviewed within 48 hours — popular ideas get built and added to the marketplace, and requesters get early access free."/>
 <meta name="robots" content="index, follow"/>
+<meta name="author" content="JustServicesPro Management and Consulting Ltd"/>
 <link rel="canonical" href="https://appaholic.justservices.pro/request"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Request a Custom App — AppAholic"/>
-<meta property="og:description" content="Tell us what you need. Reviewed within 48 hours — popular ideas get built, free for requesters."/>
+<meta property="og:description" content="Tell us what you need. Our team reviews every request — popular ideas get built and added to the marketplace, free for requesters."/>
 <meta property="og:url" content="https://appaholic.justservices.pro/request"/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<meta property="og:site_name" content="AppAholic"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230A0A0F'/><circle cx='16' cy='16' r='7' fill='%23C8FF00'/></svg>"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/assets/theme.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
+:root {
+  --ink: #0A0A0F; --ink-2: #1C1C26; --ink-3: #2E2E3E; --muted: #6B6B85;
+  --border: #E4E4F0; --surface: #F7F7FB; --white: #FFFFFF;
+  --volt: #C8FF00; --volt-dim: #9FCC00; --indigo: #4B3EFF; --rose: #FF3E6C; --amber: #FFB800;
+  --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+  --shadow-md: 0 4px 16px rgba(10,10,15,.08), 0 2px 6px rgba(10,10,15,.05);
+  --shadow-lg: 0 12px 40px rgba(10,10,15,.12), 0 4px 12px rgba(10,10,15,.07);
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--surface); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.skip-link{position:absolute;top:-48px;left:8px;z-index:9999;background:var(--volt);color:var(--ink);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:top .2s}
+.skip-link:focus{top:8px}
+
+.nav{position:sticky;top:0;z-index:100;height:64px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px);height:100%;display:flex;align-items:center;gap:12px}
+.nav__logo{display:flex;align-items:center;gap:8px;flex-shrink:0;font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.5px;color:var(--ink);text-decoration:none}
+.nav__logo-dot{width:9px;height:9px;border-radius:50%;background:var(--volt);border:2px solid var(--ink);display:inline-block;flex-shrink:0}
+.nav__center{flex:1;display:flex;justify-content:center}
+.nav__links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav__link{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);transition:color .18s,background .18s;white-space:nowrap}
+.nav__link:hover{color:var(--ink);background:var(--surface)}
+.nav__link--active{color:var(--ink)!important;font-weight:700}
+.nav__actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto}
+.nav__hamburger{display:none;width:40px;height:40px;border-radius:var(--r-md);align-items:center;justify-content:center;border:1.5px solid var(--border);cursor:pointer;background:none;padding:0;flex-direction:column;gap:5px}
+.nav__hamburger-icon{display:flex;flex-direction:column;gap:5px;width:18px}
+.nav__hamburger-icon span{display:block;height:2px;border-radius:2px;background:var(--ink);transition:all .22s}
+.drawer-backdrop{position:fixed;inset:0;z-index:190;background:rgba(10,10,15,.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-backdrop.show{opacity:1;pointer-events:all}
+.mobile-drawer{position:fixed;top:0;right:-320px;z-index:200;width:300px;max-width:88vw;height:100vh;background:var(--white);box-shadow:-8px 0 40px rgba(10,10,15,.14);transition:right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;padding:20px}
+.mobile-drawer.open{right:0}
+.mobile-drawer__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.mobile-drawer__close{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--muted)}
+.mobile-drawer__links{list-style:none;display:flex;flex-direction:column;gap:2px;flex:1}
+.mobile-drawer__link{display:block;padding:11px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;color:var(--ink-3)}
+.mobile-drawer__link:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__subgroup{padding:6px 0}
+.mobile-drawer__sublabel{display:block;padding:0 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:var(--font-mono);margin-bottom:4px;margin-top:8px}
+.mobile-drawer__subgroup ul{list-style:none;display:flex;flex-direction:column;gap:1px}
+.mobile-drawer__subgroup ul a{display:block;padding:9px 12px 9px 22px;border-radius:var(--r-md);font-size:13px;font-weight:500;color:var(--muted)}
+.mobile-drawer__subgroup ul a:hover{background:var(--surface);color:var(--ink)}
+.mobile-drawer__actions{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.mobile-drawer__actions .btn{text-align:center;justify-content:center;border-radius:var(--r-lg)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:999px;font-size:14px;font-weight:600;transition:all .2s}
+.btn-ghost{border:1.5px solid var(--border);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:var(--ink-3);transform:translateY(-1px)}
+.btn-sm{padding:7px 14px;font-size:13px}
+@media(max-width:960px){.nav__center{display:none}.nav__hamburger{display:flex}.nav__actions .btn-ghost{display:none}}
+
+.page-hero{background:var(--ink);color:var(--white);padding:52px 0 40px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-140px;right:-100px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(200,255,0,.16),transparent 70%);pointer-events:none}
+.page-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--volt);margin-bottom:14px}
+.page-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--volt);box-shadow:0 0 8px var(--volt)}
+.page-hero h1{font-family:var(--font-display);font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-1.2px;max-width:640px;position:relative;z-index:1}
+.page-hero h1 em{font-style:normal;color:var(--volt)}
+.page-hero p{margin-top:14px;font-size:15px;color:rgba(255,255,255,.62);max-width:520px;line-height:1.75;position:relative;z-index:1}
+
 .request-layout{max-width:1200px;margin:0 auto;padding:40px 24px 90px;display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
 @media(max-width:960px){.request-layout{grid-template-columns:1fr;padding:28px 20px 70px}}
+
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-xl);padding:36px;box-shadow:var(--shadow-md)}
+@media(max-width:600px){.form-card{padding:24px 18px}}
 .form-progress{margin-bottom:28px}
 .form-progress__steps{display:flex;align-items:flex-start}
 .form-progress__step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
-.form-progress__step:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;right:-50%;height:2px;background:var(--line);z-index:0}
-.form-progress__step.done::after,.form-progress__step.active::after{background:var(--ochre)}
-.form-progress__dot{width:27px;height:27px;border-radius:50%;border:2px solid var(--line);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--font-mono);color:var(--muted);position:relative;z-index:1;transition:all .25s}
+.form-progress__step:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;right:-50%;height:2px;background:var(--border);z-index:0}
+.form-progress__step.done::after,.form-progress__step.active::after{background:var(--volt)}
+.form-progress__dot{width:27px;height:27px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--font-mono);color:var(--muted);position:relative;z-index:1;transition:all .25s}
 .form-progress__step.active .form-progress__dot{border-color:var(--ink);background:var(--ink);color:var(--white)}
-.form-progress__step.done .form-progress__dot{border-color:var(--stamp-green);background:var(--ochre);color:var(--ink)}
+.form-progress__step.done .form-progress__dot{border-color:#4A7C00;background:var(--volt);color:var(--ink)}
 .form-progress__label{font-size:10px;font-weight:600;color:var(--muted);text-align:center;font-family:var(--font-mono);letter-spacing:.04em;text-transform:uppercase;margin-top:7px}
 .form-progress__step.active .form-progress__label{color:var(--ink)}
-.step-heading{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px}
+.form-progress__step.done .form-progress__label{color:#4A7C00}
+.step-heading{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
 .step-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
 .form-step{display:none}
 .form-step.active{display:block;animation:stepIn .25s ease}
 @keyframes stepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.form-nav{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.form-row{margin-bottom:20px}
+.form-row label{display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:var(--ink-3)}
+.form-row label span{color:var(--rose);margin-left:2px}
+.form-input{width:100%;padding:12px 14px;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--surface);font-size:14px;color:var(--ink);transition:all .18s}
+.form-input:focus{outline:none;border-color:var(--ink);background:var(--white);box-shadow:0 0 0 3px rgba(10,10,15,.07)}
+.form-input::placeholder{color:var(--muted)}
+textarea.form-input{resize:vertical}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:520px){.form-grid-2{grid-template-columns:1fr}}
+.check-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.check-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--border);font-size:12.5px;font-weight:600;color:var(--ink-3);cursor:pointer;transition:all .18s}
+.check-chip input{display:none}
+.check-chip:hover{border-color:var(--ink)}
+.check-chip:has(input:checked){background:var(--ink);border-color:var(--ink);color:var(--white)}
+.form-nav{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.btn-form-back{padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--border);color:var(--muted);transition:all .18s}
+.btn-form-back:hover{border-color:var(--ink);color:var(--ink)}
+.btn-form-next,.btn-form-submit{padding:10px 22px;border-radius:999px;font-size:13px;font-weight:700;background:var(--ink);color:var(--white);transition:all .2s}
+.btn-form-next:hover,.btn-form-submit:hover{background:var(--indigo)}
+.btn-form-submit{border-radius:var(--r-lg);padding:12px 26px;font-size:14px;font-family:var(--font-display)}
+.btn-form-submit:disabled{opacity:.6;cursor:default}
 .form-note{margin-top:16px;font-size:12px;color:var(--muted);text-align:center}
+
 .form-success{display:none;text-align:center;padding:40px 12px}
 .form-success.active{display:block;animation:stepIn .3s ease}
-.form-success__badge{width:64px;height:64px;border-radius:50%;background:var(--ochre);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 18px}
-.form-success h2{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:8px}
+.form-success__badge{width:64px;height:64px;border-radius:50%;background:var(--volt);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 18px}
+.form-success h2{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:8px}
 .form-success p{font-size:14px;color:var(--muted);max-width:340px;margin:0 auto 22px;line-height:1.7}
+
 .ticket-wrap{position:sticky;top:88px}
-.ticket{background:var(--ink);color:var(--white);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-lg)}
-.ticket__head{padding:20px 24px 16px;border-bottom:1px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:space-between}
+.ticket{background:var(--ink);color:var(--white);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-lg);position:relative}
+.ticket__head{padding:22px 24px 18px;border-bottom:1px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:space-between}
 .ticket__head-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)}
-.ticket__id{font-family:var(--font-mono);font-size:13px;color:var(--ochre);font-weight:700}
-.ticket__body{padding:20px 24px;display:flex;flex-direction:column;gap:14px}
-.ticket__title{font-family:var(--font-display);font-size:18px;font-weight:700;min-height:24px}
-.ticket__title.placeholder{color:rgba(255,255,255,.28);font-weight:500}
-.ticket__row{display:flex;justify-content:space-between;font-size:12.5px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.ticket__id{font-family:var(--font-mono);font-size:13px;color:var(--volt);font-weight:600}
+.ticket__body{padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.ticket__title{font-family:var(--font-display);font-size:19px;font-weight:800;letter-spacing:-.3px;min-height:26px;transition:color .2s}
+.ticket__title.placeholder{color:rgba(255,255,255,.28);font-weight:600}
+.ticket__row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
 .ticket__row:last-child{border-bottom:none}
-.ticket__row-label{color:rgba(255,255,255,.4);font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase}
+.ticket__row-label{color:rgba(255,255,255,.4);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
 .ticket__row-val{font-weight:600;text-align:right;max-width:60%}
 .ticket__row-val.placeholder{color:rgba(255,255,255,.28);font-weight:500}
-.ticket__progress-track{height:6px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
-.ticket__progress-fill{height:100%;background:var(--ochre);border-radius:3px;width:0%;transition:width .35s ease}
-.ticket__foot{padding:14px 24px 20px;display:flex;gap:10px;align-items:center}
-.ticket__foot-dot{width:8px;height:8px;border-radius:50%;background:var(--ochre);flex-shrink:0}
+.ticket__progress-track{height:6px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:2px}
+.ticket__progress-fill{height:100%;background:var(--volt);border-radius:3px;width:0%;transition:width .35s ease}
+.ticket__foot{padding:16px 24px 22px;display:flex;align-items:center;gap:10px}
+.ticket__foot-dot{width:8px;height:8px;border-radius:50%;background:var(--volt);box-shadow:0 0 8px var(--volt);flex-shrink:0}
 .ticket__foot-text{font-size:11.5px;color:rgba(255,255,255,.5);line-height:1.5}
+
 .promise-list{margin-top:20px;display:flex;flex-direction:column;gap:12px}
-.promise-item{display:flex;gap:12px;background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-md);padding:14px 16px}
-.promise-item__text strong{display:block;font-size:13px;font-weight:700}
+.promise-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 16px}
+.promise-item__icon{font-size:18px;flex-shrink:0}
+.promise-item__text strong{display:block;font-size:13px;font-weight:700;margin-bottom:2px}
 .promise-item__text span{font-size:12px;color:var(--muted)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--ink);color:var(--white);padding:14px 22px;border-radius:999px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:500;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.footer{background:var(--ink-2);color:rgba(255,255,255,.5);padding:56px 0 32px;margin-top:20px}
+.footer__inner{max-width:1400px;margin:0 auto;padding:0 clamp(16px,3vw,32px)}
+.footer__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.footer__logo{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--white);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.footer__logo-dot{width:8px;height:8px;border-radius:50%;background:var(--volt);flex-shrink:0}
+.footer__tagline{font-size:13px;line-height:1.7;margin-bottom:10px}
+.footer__tagline strong{color:rgba(255,255,255,.7)}
+.footer__email{font-size:12px;color:rgba(255,255,255,.4);display:inline-block;margin-bottom:16px;transition:color .2s}
+.footer__email:hover{color:rgba(200,255,0,.8)}
+.footer__social{display:flex;gap:10px}
+.footer__social a{width:36px;height:36px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s}
+.footer__social a:hover{background:rgba(255,255,255,.12);color:var(--white)}
+.footer__col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-family:var(--font-mono);color:rgba(255,255,255,.3);margin-bottom:14px;display:block}
+.footer__links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer__links a{font-size:13px;color:rgba(255,255,255,.5);transition:color .18s}
+.footer__links a:hover{color:rgba(255,255,255,.9)}
+.footer__bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);font-size:12px;flex-wrap:wrap;gap:12px}
+.footer__bottom p{margin:0;color:rgba(255,255,255,.3)}
+.footer__bottom-links{display:flex;gap:16px}
+.footer__bottom-links a{color:rgba(255,255,255,.3);transition:color .18s}
+.footer__bottom-links a:hover{color:rgba(255,255,255,.7)}
+@media(max-width:600px){.footer__grid{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:420px){.footer__grid{grid-template-columns:1fr;gap:20px}.footer__bottom{flex-direction:column;align-items:flex-start}}
+
+@media (prefers-reduced-motion: reduce) {
+  html{scroll-behavior:auto}
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
 </style>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="nav" role="banner">
   <div class="nav__inner">
-    <a href="/" class="nav__logo" aria-label="AppAholic home"><span class="nav__logo-mark" aria-hidden="true">A</span><span>AppAholic</span></a>
+    <a href="/" class="nav__logo" aria-label="AppAholic home">
+      <span class="nav__logo-dot" aria-hidden="true"></span>
+      <span>AppAholic</span>
+    </a>
     <nav class="nav__center" aria-label="Main navigation">
       <ul class="nav__links" role="list">
         <li><a href="/" class="nav__link">Home</a></li>
         <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/marketplace?platform=web" class="nav__link">&#x1F310; Web</a></li>
+        <li><a href="/marketplace?platform=desktop" class="nav__link">&#x1F5A5; Desktop</a></li>
+        <li><a href="/marketplace?platform=mobile" class="nav__link">&#x1F4F1; Mobile</a></li>
         <li><a href="/request" class="nav__link nav__link--active">Request App</a></li>
         <li><a href="/contact" class="nav__link">Contact</a></li>
       </ul>
     </nav>
     <div class="nav__actions">
       <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
-      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer"><span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span></button>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
     </div>
   </div>
 </header>
 <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
-  <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
-  <ul class="mobile-drawer__links" role="list"><li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li><li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li></ul>
-  <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
+  <div class="mobile-drawer__header">
+    <span class="nav__logo" style="color:var(--ink)"><span class="nav__logo-dot"></span>AppAholic</span>
+    <button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <ul class="mobile-drawer__links" role="list">
+    <li><a href="/" class="mobile-drawer__link" onclick="closeDrawer()">Home</a></li>
+    <li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li>
+    <li class="mobile-drawer__subgroup">
+      <span class="mobile-drawer__sublabel">By Platform</span>
+      <ul role="list">
+        <li><a href="/marketplace?platform=web" onclick="closeDrawer()">&#x1F310; Web Apps</a></li>
+        <li><a href="/marketplace?platform=desktop" onclick="closeDrawer()">&#x1F5A5; Desktop Apps</a></li>
+        <li><a href="/marketplace?platform=mobile" onclick="closeDrawer()">&#x1F4F1; Mobile Apps</a></li>
+      </ul>
+    </li>
+    <li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li>
+    <li><a href="/about" class="mobile-drawer__link" onclick="closeDrawer()">About</a></li>
+  </ul>
+  <div class="mobile-drawer__actions">
+    <a href="/auth" class="btn btn-ghost" onclick="closeDrawer()">Sign In</a>
+  </div>
 </nav>
 
 <section class="page-hero" id="main-content">
   <div class="container">
-    <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>Not on the shelf yet?</div>
-    <h1>Order something <em>custom-built.</em></h1>
-    <p>Tell us what you need. We review every request within 48 hours — the most-requested ideas get built and added to the shelf, free for requesters.</p>
+    <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>Can't find what you need?</div>
+    <h1>Request a <em>custom app</em>,<br/>built for your workflow.</h1>
+    <p>Tell us what you need. Our team reviews every request within 48 hours — the most-requested ideas get built and added to the marketplace, and you get early access free.</p>
   </div>
 </section>
 
 <div class="request-layout">
-  <div class="card" style="padding:36px">
+  <div class="form-card">
     <div class="form-progress" id="formProgress">
       <div class="form-progress__steps">
         <div class="form-progress__step active" id="prog-1"><div class="form-progress__dot">1</div><div class="form-progress__label">You</div></div>
@@ -112,113 +278,281 @@
     </div>
 
     <form id="requestForm" novalidate>
-      <div class="form-step active" id="step-1">
-        <div class="step-heading">Tell us about yourself</div>
-        <div class="step-sub">We'll use this to send your proposal and follow up.</div>
-        <div class="form-grid-2">
-          <div class="form-row"><label>Full Name <span>*</span></label><input class="form-input" type="text" id="reqName" placeholder="e.g. Tunde Bakare" autocomplete="name"/></div>
-          <div class="form-row"><label>Email Address <span>*</span></label><input class="form-input" type="email" id="reqEmail" placeholder="you@example.com" autocomplete="email"/></div>
-        </div>
-        <div class="form-row"><label>Phone / WhatsApp <span style="color:var(--muted);font-weight:400">(optional)</span></label><input class="form-input" type="tel" id="reqPhone" placeholder="+234 800 000 0000"/></div>
-        <div class="form-row"><label>Your role <span>*</span></label>
-          <select class="form-input" id="reqRole"><option value="">Select your role</option><option>Freelancer / Sole trader</option><option>Business owner / Founder</option><option>Manager / Team lead</option><option>Developer / Designer</option><option>Student</option><option>Other</option></select>
-        </div>
-        <div class="form-nav"><div></div><button type="button" class="btn btn-primary" onclick="nextStep(1)">The App &rarr;</button></div>
+    <div class="form-step active" id="step-1">
+      <div class="step-heading">Tell us about yourself</div>
+      <div class="step-sub">We'll use this to send your proposal and follow up.</div>
+      <div class="form-grid-2">
+        <div class="form-row"><label>Full Name <span>*</span></label><input class="form-input" type="text" id="reqName" placeholder="e.g. Tunde Bakare" autocomplete="name"/></div>
+        <div class="form-row"><label>Email Address <span>*</span></label><input class="form-input" type="email" id="reqEmail" placeholder="you@example.com" autocomplete="email"/></div>
       </div>
-
-      <div class="form-step" id="step-2">
-        <div class="step-heading">About the app</div>
-        <div class="step-sub">Give us the headline — what is this thing?</div>
-        <div class="form-row"><label>App Name / Title <span>*</span></label><input class="form-input" type="text" id="reqTitle" placeholder="e.g. Staff Attendance Manager"/></div>
-        <div class="form-grid-2">
-          <div class="form-row"><label>Category <span>*</span></label><select class="form-input" id="reqCategory"><option value="">Select category</option><option>Productivity</option><option>Finance &amp; Accounting</option><option>Analytics &amp; Reports</option><option>HR &amp; Team Management</option><option>Inventory &amp; Logistics</option><option>Customer Management (CRM)</option><option>Security &amp; Privacy</option><option>Communication</option><option>AI / Automation Tools</option><option>Other</option></select></div>
-          <div class="form-row"><label>Platform <span>*</span></label><select class="form-input" id="reqPlatform"><option value="">Select platform</option><option>Web (Browser)</option><option>Windows Desktop</option><option>Mac Desktop</option><option>Android Mobile</option><option>iOS Mobile</option><option>Cross-platform</option></select></div>
-        </div>
-        <div class="form-grid-2">
-          <div class="form-row"><label>Who will use it? <span>*</span></label><select class="form-input" id="reqAudience"><option value="">Select audience</option><option>Just me</option><option>My small team (2&ndash;10)</option><option>My company / org</option><option>My customers / clients</option><option>General public</option></select></div>
-          <div class="form-row"><label>Est. number of users</label><select class="form-input" id="reqUsers"><option value="">Not sure yet</option><option>1&ndash;5</option><option>6&ndash;25</option><option>26&ndash;100</option><option>100&ndash;500</option><option>500+</option></select></div>
-        </div>
-        <div class="form-row"><label>Similar apps for inspiration?</label><input class="form-input" type="text" id="reqInspiration" placeholder="e.g. Like Clockify but simpler"/></div>
-        <div class="form-nav"><button type="button" class="btn btn-ghost" onclick="prevStep(2)">&larr; Back</button><button type="button" class="btn btn-primary" onclick="nextStep(2)">Features &rarr;</button></div>
+      <div class="form-row"><label>Phone / WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400">(optional)</span></label><input class="form-input" type="tel" id="reqPhone" placeholder="+234 800 000 0000" autocomplete="tel"/></div>
+      <div class="form-row">
+        <label>Your role <span>*</span></label>
+        <select class="form-input" id="reqRole">
+          <option value="">Select your role</option>
+          <option>Freelancer / Sole trader</option><option>Business owner / Founder</option>
+          <option>Manager / Team lead</option><option>Developer / Designer</option>
+          <option>Student</option><option>Other</option>
+        </select>
       </div>
-
-      <div class="form-step" id="step-3">
-        <div class="step-heading">Problem &amp; features</div>
-        <div class="step-sub">The more specific, the faster we can build it.</div>
-        <div class="form-row"><label>What problem does this solve? <span>*</span></label><textarea class="form-input" id="reqProblem" style="min-height:82px" placeholder="e.g. I track staff attendance on paper and it is always wrong."></textarea></div>
-        <div class="form-row"><label>Must-have features <span>*</span></label><textarea class="form-input" id="reqFeatures" style="min-height:96px" placeholder="One per line:&#10;Clock-in / clock-out&#10;Monthly PDF report&#10;Admin dashboard"></textarea></div>
-        <div class="form-row"><label>Integrations needed?</label>
-          <div class="check-chips" id="integrationsWrap">
-            <label class="check-chip"><input type="checkbox" value="whatsapp"/> WhatsApp</label>
-            <label class="check-chip"><input type="checkbox" value="email"/> Email</label>
-            <label class="check-chip"><input type="checkbox" value="flutterwave"/> Flutterwave</label>
-            <label class="check-chip"><input type="checkbox" value="google"/> Google Sheets</label>
-            <label class="check-chip"><input type="checkbox" value="none"/> None</label>
-          </div>
+      <div class="form-nav"><div></div><button type="button" class="btn-form-next" onclick="nextStep(1)">The App &rarr;</button></div>
+    </div>
+    <div class="form-step" id="step-2">
+      <div class="step-heading">About the app</div>
+      <div class="step-sub">Give us the headline — what is this thing?</div>
+      <div class="form-row"><label>App Name / Title <span>*</span></label><input class="form-input" type="text" id="reqTitle" placeholder="e.g. Staff Attendance Manager"/></div>
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label>Category <span>*</span></label>
+          <select class="form-input" id="reqCategory">
+            <option value="">Select category</option>
+            <option>Productivity</option><option>Finance &amp; Accounting</option><option>Analytics &amp; Reports</option>
+            <option>HR &amp; Team Management</option><option>Inventory &amp; Logistics</option>
+            <option>Customer Management (CRM)</option><option>Security &amp; Privacy</option>
+            <option>Communication &amp; Collaboration</option><option>AI / Automation Tools</option>
+            <option>Education &amp; Training</option><option>Other</option>
+          </select>
         </div>
-        <div class="form-row"><label>Anything else we should know?</label><textarea class="form-input" id="reqExtra" style="min-height:64px" placeholder="Design preferences, existing systems, dealbreakers..."></textarea></div>
-        <div class="form-nav"><button type="button" class="btn btn-ghost" onclick="prevStep(3)">&larr; Back</button><button type="button" class="btn btn-primary" onclick="nextStep(3)">Budget &rarr;</button></div>
+        <div class="form-row">
+          <label>Platform <span>*</span></label>
+          <select class="form-input" id="reqPlatform">
+            <option value="">Select platform</option>
+            <option>Web (Browser)</option><option>Windows Desktop</option><option>Mac Desktop</option>
+            <option>Android Mobile</option><option>iOS Mobile</option><option>Cross-platform</option>
+          </select>
+        </div>
       </div>
-
-      <div class="form-step" id="step-4">
-        <div class="step-heading">Timeline &amp; budget</div>
-        <div class="step-sub">Helps us prioritise and quote accurately.</div>
-        <div class="form-grid-2">
-          <div class="form-row"><label>How soon do you need it?</label><select class="form-input" id="reqTimeline"><option value="">No rush</option><option>ASAP (within 2 weeks)</option><option>Within 1 month</option><option>Within 3 months</option><option>Planning ahead</option></select></div>
-          <div class="form-row"><label>Budget range</label><select class="form-input" id="reqBudget"><option value="">I am flexible</option><option>Free (add to catalogue)</option><option>&#x20A6;1,000 &ndash; &#x20A6;5,000</option><option>&#x20A6;5,000 &ndash; &#x20A6;20,000</option><option>&#x20A6;20,000 &ndash; &#x20A6;50,000</option><option>&#x20A6;50,000+</option><option>Discuss with me first</option></select></div>
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label>Who will use it? <span>*</span></label>
+          <select class="form-input" id="reqAudience">
+            <option value="">Select audience</option>
+            <option>Just me</option><option>My small team (2&ndash;10)</option>
+            <option>My company / org</option><option>My customers / clients</option><option>General public</option>
+          </select>
         </div>
-        <div class="form-row"><label>How should the app be delivered?</label>
-          <div class="check-chips" id="deliveryWrap">
-            <label class="check-chip"><input type="checkbox" value="marketplace" checked/> Add to AppAholic</label>
-            <label class="check-chip"><input type="checkbox" value="private"/> Private use only</label>
-            <label class="check-chip"><input type="checkbox" value="saas"/> SaaS (charge my users)</label>
-          </div>
+        <div class="form-row">
+          <label>Est. number of users</label>
+          <select class="form-input" id="reqUsers">
+            <option value="">Not sure yet</option>
+            <option>1&ndash;5</option><option>6&ndash;25</option><option>26&ndash;100</option><option>100&ndash;500</option><option>500+</option>
+          </select>
         </div>
-        <div class="form-row"><label>How did you hear about us?</label><select class="form-input" id="reqSource"><option value="">Select</option><option>Google Search</option><option>WhatsApp / Referral</option><option>Social Media</option><option>Friend / Colleague</option><option>Other</option></select></div>
-        <div class="form-nav"><button type="button" class="btn btn-ghost" onclick="prevStep(4)">&larr; Back</button><button type="button" class="btn btn-ochre" id="submitBtn" onclick="submitRequest()">Submit Request</button></div>
-        <div class="form-note">🔒 Private. A real person reviews every request within 48 hours.</div>
       </div>
+      <div class="form-row"><label>Similar apps for inspiration?</label><input class="form-input" type="text" id="reqInspiration" placeholder="e.g. Like Clockify but simpler"/></div>
+      <div class="form-nav">
+        <button type="button" class="btn-form-back" onclick="prevStep(2)">&larr; Back</button>
+        <button type="button" class="btn-form-next" onclick="nextStep(2)">Features &rarr;</button>
+      </div>
+    </div>
+    <div class="form-step" id="step-3">
+      <div class="step-heading">Problem &amp; features</div>
+      <div class="step-sub">The more specific, the faster we can build it.</div>
+      <div class="form-row"><label>What problem does this solve? <span>*</span></label><textarea class="form-input" id="reqProblem" placeholder="e.g. I track staff attendance on paper and it is always wrong. Need digital clock-in/out with monthly reports." style="min-height:82px"></textarea></div>
+      <div class="form-row"><label>Must-have features <span>*</span></label><textarea class="form-input" id="reqFeatures" placeholder="One per line:&#10;Clock-in / clock-out per employee&#10;Monthly PDF report&#10;Admin dashboard&#10;SMS on late arrival" style="min-height:96px"></textarea></div>
+      <div class="form-row">
+        <label>Integrations needed?</label>
+        <div class="check-chips" id="integrationsWrap">
+          <label class="check-chip"><input type="checkbox" value="whatsapp"/> WhatsApp</label>
+          <label class="check-chip"><input type="checkbox" value="email"/> Email / SMTP</label>
+          <label class="check-chip"><input type="checkbox" value="sms"/> SMS</label>
+          <label class="check-chip"><input type="checkbox" value="flutterwave"/> Flutterwave</label>
+          <label class="check-chip"><input type="checkbox" value="paystack"/> Paystack</label>
+          <label class="check-chip"><input type="checkbox" value="google"/> Google Sheets</label>
+          <label class="check-chip"><input type="checkbox" value="excel"/> Excel / CSV</label>
+          <label class="check-chip"><input type="checkbox" value="none"/> None</label>
+        </div>
+      </div>
+      <div class="form-row"><label>Anything else we should know?</label><textarea class="form-input" id="reqExtra" placeholder="Design preferences, existing systems, dealbreakers..." style="min-height:64px"></textarea></div>
+      <div class="form-nav">
+        <button type="button" class="btn-form-back" onclick="prevStep(3)">&larr; Back</button>
+        <button type="button" class="btn-form-next" onclick="nextStep(3)">Budget &rarr;</button>
+      </div>
+    </div>
+    <div class="form-step" id="step-4">
+      <div class="step-heading">Timeline &amp; budget</div>
+      <div class="step-sub">Helps us prioritise and quote accurately.</div>
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label>How soon do you need it?</label>
+          <select class="form-input" id="reqTimeline">
+            <option value="">No rush</option>
+            <option>ASAP (within 2 weeks)</option><option>Within 1 month</option>
+            <option>Within 3 months</option><option>Planning ahead (3&ndash;6 months)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Budget range</label>
+          <select class="form-input" id="reqBudget">
+            <option value="">I am flexible / open</option>
+            <option>Free (add to catalogue)</option><option>&#x20A6;1,000 &ndash; &#x20A6;5,000</option>
+            <option>&#x20A6;5,000 &ndash; &#x20A6;20,000</option><option>&#x20A6;20,000 &ndash; &#x20A6;50,000</option>
+            <option>&#x20A6;50,000 &ndash; &#x20A6;150,000</option><option>&#x20A6;150,000+</option>
+            <option>Discuss with me first</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>How should the app be delivered?</label>
+        <div class="check-chips" id="deliveryWrap">
+          <label class="check-chip"><input type="checkbox" value="marketplace" checked/> Add to AppAholic</label>
+          <label class="check-chip"><input type="checkbox" value="private"/> Private use only</label>
+          <label class="check-chip"><input type="checkbox" value="saas"/> SaaS (charge my users)</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>How did you hear about us?</label>
+        <select class="form-input" id="reqSource">
+          <option value="">Select</option>
+          <option>Google Search</option><option>WhatsApp / Referral</option>
+          <option>Social Media</option><option>Friend / Colleague</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-nav">
+        <button type="button" class="btn-form-back" onclick="prevStep(4)">&larr; Back</button>
+        <button type="button" class="btn-form-submit" id="submitBtn" onclick="submitRequest()">&#128640; Submit Request</button>
+      </div>
+      <div class="form-note">&#128274; Private. A real person reviews every request within 48 hours.</div>
+    </div>
     </form>
 
     <div class="form-success" id="formSuccess">
       <div class="form-success__badge">🎉</div>
       <h2>Request submitted</h2>
       <p>Your build ticket is in the queue. Check your email for confirmation — we review every request within 48 hours.</p>
-      <a href="/marketplace" class="btn btn-primary">Browse the catalogue</a>
+      <a href="/marketplace" class="btn btn-primary">Browse the marketplace</a>
     </div>
   </div>
 
   <aside class="ticket-wrap">
     <div class="ticket" aria-live="polite">
-      <div class="ticket__head"><span class="ticket__head-label">Build Ticket</span><span class="ticket__id" id="ticketId">#AAH-000</span></div>
+      <div class="ticket__head">
+        <span class="ticket__head-label">Build Ticket</span>
+        <span class="ticket__id" id="ticketId">#AAH-000</span>
+      </div>
       <div class="ticket__body">
         <div class="ticket__title placeholder" id="ticketTitle">Your app title appears here</div>
-        <div class="ticket__progress-track"><div class="ticket__progress-fill" id="ticketProgress"></div></div>
+        <div>
+          <div class="ticket__progress-track"><div class="ticket__progress-fill" id="ticketProgress"></div></div>
+        </div>
         <div>
           <div class="ticket__row"><span class="ticket__row-label">Requester</span><span class="ticket__row-val placeholder" id="ticketName">—</span></div>
           <div class="ticket__row"><span class="ticket__row-label">Category</span><span class="ticket__row-val placeholder" id="ticketCategory">—</span></div>
           <div class="ticket__row"><span class="ticket__row-label">Platform</span><span class="ticket__row-val placeholder" id="ticketPlatform">—</span></div>
           <div class="ticket__row"><span class="ticket__row-label">Budget</span><span class="ticket__row-val placeholder" id="ticketBudget">Flexible</span></div>
+          <div class="ticket__row"><span class="ticket__row-label">Timeline</span><span class="ticket__row-val placeholder" id="ticketTimeline">No rush</span></div>
         </div>
       </div>
-      <div class="ticket__foot"><span class="ticket__foot-dot"></span><span class="ticket__foot-text">Fills in live as you complete the form. Nothing is sent until you submit.</span></div>
+      <div class="ticket__foot">
+        <span class="ticket__foot-dot"></span>
+        <span class="ticket__foot-text">Fills in live as you complete the form. Nothing is sent until you submit.</span>
+      </div>
     </div>
+
     <div class="promise-list">
-      <div class="promise-item">⚡<div class="promise-item__text"><strong>Fast review</strong><span>Reviewed within 48 hours</span></div></div>
-      <div class="promise-item">🗳️<div class="promise-item__text"><strong>Community voting</strong><span>Most-requested built first</span></div></div>
-      <div class="promise-item">🎁<div class="promise-item__text"><strong>Early access, free</strong><span>Requesters get it on launch</span></div></div>
+      <div class="promise-item"><div class="promise-item__icon">⚡</div><div class="promise-item__text"><strong>Fast review</strong><span>Every request reviewed within 48 hours</span></div></div>
+      <div class="promise-item"><div class="promise-item__icon">🗳️</div><div class="promise-item__text"><strong>Community voting</strong><span>Most-requested apps get built first</span></div></div>
+      <div class="promise-item"><div class="promise-item__icon">🎁</div><div class="promise-item__text"><strong>Early access</strong><span>Requesters get the app free on launch</span></div></div>
     </div>
   </aside>
 </div>
 
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <div class="footer__logo"><span class="footer__logo-dot"></span>AppAholic</div>
+        <p class="footer__tagline">Web, Desktop and Mobile apps for Nigerian businesses and professionals. A <strong>JustServicesPro</strong> product.</p>
+        <a href="mailto:info@justservices.pro" class="footer__email">info@justservices.pro</a>
+        <div class="footer__social">
+          <a href="https://wa.me/2348000000000" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.117 1.528 5.845L0 24l6.335-1.507C8.05 23.453 9.977 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.577-.504-5.065-1.382l-.361-.215-3.762.895.952-3.664-.236-.375A9.923 9.923 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></a>
+          <a href="mailto:info@justservices.pro" aria-label="Email us"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+          <a href="https://justservices.pro" target="_blank" rel="noopener" aria-label="JustServicesPro website"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h3 class="footer__col-title">Marketplace</h3>
+        <ul class="footer__links" role="list">
+          <li><a href="/marketplace">Browse All Apps</a></li>
+          <li><a href="/marketplace?platform=web">Web Apps</a></li>
+          <li><a href="/marketplace?platform=desktop">Desktop Apps</a></li>
+          <li><a href="/marketplace?platform=mobile">Mobile Apps</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3 class="footer__col-title">Support</h3>
+        <ul class="footer__links" role="list">
+          <li><a href="/#how">How it Works</a></li>
+          <li><a href="/request">Request an App</a></li>
+          <li><a href="/contact">Help &amp; Contact</a></li>
+          <li><a href="/terms#refund">Refund Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3 class="footer__col-title">Company</h3>
+        <ul class="footer__links" role="list">
+          <li><a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro</a></li>
+          <li><a href="/about">About AppAholic</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>&copy; <span id="footerYear"></span> AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd.</p>
+      <div class="footer__bottom-links">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
 <div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
-<script src="/assets/app.js"></script>
+
 <script>
+(function(){
+  var hamburger = document.getElementById('navHamburger');
+  var drawer    = document.getElementById('mobileDrawer');
+  var backdrop  = document.getElementById('drawerBackdrop');
+  var closeBtn  = document.getElementById('drawerClose');
+  function openDrawer(){ drawer.classList.add('open'); backdrop.classList.add('show'); drawer.setAttribute('aria-hidden','false'); hamburger.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; closeBtn.focus(); }
+  function closeDrawer(){ drawer.classList.remove('open'); backdrop.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); hamburger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; hamburger.focus(); }
+  window.closeDrawer = closeDrawer;
+  hamburger.addEventListener('click', openDrawer);
+  closeBtn.addEventListener('click', closeDrawer);
+  backdrop.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
+  var yr = document.getElementById('footerYear'); if(yr) yr.textContent = new Date().getFullYear();
+
+  var params = new URLSearchParams(window.location.search);
+  var token  = params.get('oauth_session');
+  function updateNavUser(user){
+    var el = document.getElementById('navSignIn'); if(!el || !user) return;
+    el.textContent = user.firstName || (user.name||'').split(' ')[0] || 'Account';
+    el.setAttribute('href', '/dashboard');
+  }
+  if(token){
+    try{
+      var pad = token.replace(/-/g,'+').replace(/_/g,'/'); while(pad.length%4) pad+='=';
+      var user = JSON.parse(atob(pad));
+      sessionStorage.setItem('appaholic_user', JSON.stringify(user));
+      params.delete('oauth_session');
+      history.replaceState({}, '', window.location.pathname + (params.toString()?'?'+params.toString():''));
+      updateNavUser(user);
+    } catch(e){}
+  } else {
+    try{ var stored = sessionStorage.getItem('appaholic_user'); if(stored) updateNavUser(JSON.parse(stored)); }catch(e){}
+  }
+})();
+
 var ticketId = 'AAH-' + (Math.floor(Math.random()*900)+100);
 document.getElementById('ticketId').textContent = '#' + ticketId;
 
-function setField(id, value, fallback){
-  var el = document.getElementById(id); if(!el) return;
+function setTicketField(elId, value, fallback){
+  var el = document.getElementById(elId);
+  if(!el) return;
   if(value && value.trim()){ el.textContent = value; el.classList.remove('placeholder'); }
   else { el.textContent = fallback; el.classList.add('placeholder'); }
 }
@@ -229,57 +563,124 @@ function refreshTicket(){
   var category = document.getElementById('reqCategory').value;
   var platform = document.getElementById('reqPlatform').value;
   var budget = document.getElementById('reqBudget').value;
-  setField('ticketTitle', title, 'Your app title appears here');
-  setField('ticketName', name, '—');
-  setField('ticketCategory', category, '—');
-  setField('ticketPlatform', platform, '—');
-  setField('ticketBudget', budget, 'Flexible');
-  var done = 0;
-  if(name && document.getElementById('reqEmail').value.trim() && document.getElementById('reqRole').value) done = 1;
-  if(done>=1 && title && category && platform && document.getElementById('reqAudience').value) done = 2;
-  if(done>=2 && document.getElementById('reqProblem').value.trim() && document.getElementById('reqFeatures').value.trim()) done = 3;
-  document.getElementById('ticketProgress').style.width = Math.round((Math.max(done, curStep-1)/4)*100) + '%';
+  var timeline = document.getElementById('reqTimeline').value;
+
+  setTicketField('ticketTitle', title, 'Your app title appears here');
+  setTicketField('ticketName', name, '—');
+  setTicketField('ticketCategory', category, '—');
+  setTicketField('ticketPlatform', platform, '—');
+  setTicketField('ticketBudget', budget, 'Flexible');
+  setTicketField('ticketTimeline', timeline, 'No rush');
+
+  var stepsDone = 0;
+  if(name && document.getElementById('reqEmail').value.trim() && document.getElementById('reqRole').value) stepsDone = 1;
+  if(stepsDone>=1 && title && category && platform && document.getElementById('reqAudience').value) stepsDone = 2;
+  if(stepsDone>=2 && document.getElementById('reqProblem').value.trim() && document.getElementById('reqFeatures').value.trim()) stepsDone = 3;
+  if(curStep === 4 && stepsDone>=3) stepsDone = 4;
+  var pct = Math.round((Math.max(stepsDone, curStep-1)/4)*100);
+  document.getElementById('ticketProgress').style.width = pct + '%';
 }
 document.getElementById('requestForm').addEventListener('input', refreshTicket);
 
-function setProgress(s){ for(var i=1;i<=4;i++){ var el=document.getElementById('prog-'+i); el.classList.remove('active','done'); if(i<s) el.classList.add('done'); else if(i===s) el.classList.add('active'); } }
-function showStep(s){ document.querySelectorAll('.form-step').forEach(function(el){el.classList.remove('active')}); document.getElementById('step-'+s).classList.add('active'); setProgress(s); curStep = s; refreshTicket(); document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'}); }
+function setProgress(s){
+  for(var i=1;i<=4;i++){
+    var el = document.getElementById('prog-'+i); if(!el) continue;
+    el.classList.remove('active','done');
+    if(i<s) el.classList.add('done'); else if(i===s) el.classList.add('active');
+  }
+}
+function showStep(s){
+  document.querySelectorAll('.form-step').forEach(function(el){ el.classList.remove('active'); });
+  var st = document.getElementById('step-'+s);
+  if(st){ st.classList.add('active'); }
+  setProgress(s); curStep = s; refreshTicket();
+  document.querySelector('.form-card').scrollIntoView({behavior:'smooth', block:'start'});
+}
 function nextStep(from){
-  if(from===1){ var n=document.getElementById('reqName').value.trim(), em=document.getElementById('reqEmail').value.trim(), r=document.getElementById('reqRole').value;
+  if(from===1){
+    var n = document.getElementById('reqName').value.trim();
+    var em = document.getElementById('reqEmail').value.trim();
+    var r = document.getElementById('reqRole').value;
     if(!n||!em||!r){ showToast('Please fill all required fields.','⚠️'); return; }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ showToast('Please enter a valid email address.','⚠️'); return; } }
-  if(from===2){ var t=document.getElementById('reqTitle').value.trim(), c=document.getElementById('reqCategory').value, p=document.getElementById('reqPlatform').value, a=document.getElementById('reqAudience').value;
-    if(!t||!c||!p||!a){ showToast('Please fill all required fields.','⚠️'); return; } }
-  if(from===3){ var pr=document.getElementById('reqProblem').value.trim(), f=document.getElementById('reqFeatures').value.trim();
-    if(!pr||!f){ showToast('Describe the problem and list the features.','⚠️'); return; } }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ showToast('Please enter a valid email address.','⚠️'); return; }
+  }
+  if(from===2){
+    var t = document.getElementById('reqTitle').value.trim();
+    var c = document.getElementById('reqCategory').value;
+    var p = document.getElementById('reqPlatform').value;
+    var a = document.getElementById('reqAudience').value;
+    if(!t||!c||!p||!a){ showToast('Please fill all required fields.','⚠️'); return; }
+  }
+  if(from===3){
+    var pr = document.getElementById('reqProblem').value.trim();
+    var f = document.getElementById('reqFeatures').value.trim();
+    if(!pr||!f){ showToast('Describe the problem and list the features.','⚠️'); return; }
+  }
   showStep(from+1);
 }
 function prevStep(from){ showStep(from-1); }
 
 function submitRequest(){
   var btn = document.getElementById('submitBtn');
-  var integrations = Array.from(document.querySelectorAll('#integrationsWrap input:checked')).map(function(c){return c.value}).join(', ');
-  var delivery = Array.from(document.querySelectorAll('#deliveryWrap input:checked')).map(function(c){return c.value}).join(', ');
+  var integrations = Array.from(document.querySelectorAll('#integrationsWrap input[type=checkbox]:checked')).map(function(c){return c.value}).join(', ');
+  var delivery = Array.from(document.querySelectorAll('#deliveryWrap input[type=checkbox]:checked')).map(function(c){return c.value}).join(', ');
   var get = function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
-  var payload = { name:get('reqName'), email:get('reqEmail'), phone:get('reqPhone'), role:get('reqRole'), title:get('reqTitle'),
-    category:get('reqCategory'), platform:get('reqPlatform'), audience:get('reqAudience'), users:get('reqUsers'),
-    problem:get('reqProblem'), features:get('reqFeatures'), inspiration:get('reqInspiration'), integrations:integrations,
-    extra:get('reqExtra'), timeline:get('reqTimeline'), budget:get('reqBudget'), source:get('reqSource'), delivery:delivery };
 
-  if(!payload.name || !payload.email || !payload.title || !payload.problem){ showToast('Please complete all required fields.','⚠️'); return; }
+  var payload = {
+    name: get('reqName'), email: get('reqEmail'), phone: get('reqPhone'),
+    role: get('reqRole'), title: get('reqTitle'), category: get('reqCategory'),
+    platform: get('reqPlatform'), audience: get('reqAudience'), users: get('reqUsers'),
+    problem: get('reqProblem'), features: get('reqFeatures'), inspiration: get('reqInspiration'),
+    integrations: integrations, extra: get('reqExtra'), timeline: get('reqTimeline'),
+    budget: get('reqBudget'), source: get('reqSource'), delivery: delivery,
+  };
+
+  if(!payload.name || !payload.email || !payload.title || !payload.problem){
+    showToast('Please complete all required fields.','⚠️');
+    return;
+  }
 
   btn.disabled = true; btn.textContent = 'Sending…';
-  authFetch('/api/request-app', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if(data.ok){
-        document.getElementById('requestForm').style.display = 'none';
-        document.getElementById('formProgress').style.display = 'none';
-        document.getElementById('formSuccess').classList.add('active');
-      } else { showToast(data.error || 'Something went wrong. Please try again.','⚠️'); }
-    })
-    .catch(function(){ showToast('Could not reach the server. Please email info@justservices.pro directly.','⚠️'); })
-    .finally(function(){ btn.disabled = false; btn.textContent = 'Submit Request'; });
+
+  fetch((window.API_BASE||'') + '/api/request-app', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(data.ok){
+      document.querySelector('#requestForm').style.display = 'none';
+      document.getElementById('formProgress').style.display = 'none';
+      document.getElementById('formSuccess').classList.add('active');
+    } else {
+      showToast(data.error || 'Something went wrong. Please try again.','⚠️');
+    }
+  })
+  .catch(function(){
+    showToast('Could not reach the server. Please email info@justservices.pro directly.','⚠️');
+  })
+  .finally(function(){
+    btn.disabled = false; btn.innerHTML = '&#128640; Submit Request';
+  });
+}
+
+window.API_BASE = 'https://api.appaholic.justservices.pro';
+
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = icon || '✅';
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3500);
+}
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(function(reg){ setInterval(function(){ reg.update(); }, 60000); })
+      .catch(function(){});
+  });
 }
 </script>
 </body>
