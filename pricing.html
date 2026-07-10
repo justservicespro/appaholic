@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<title>Pricing — AppAholic</title>
+<meta name="description" content="Buy apps one at a time, or subscribe for unlimited downloads. Plans for freelancers, small teams and growing businesses."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://appaholic.justservices.pro/pricing"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<style>
+.pricing-wrap{max-width:1100px;margin:0 auto;padding:48px 24px 90px}
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:44px}
+.billing-toggle__track{width:52px;height:28px;border-radius:999px;background:var(--ink);position:relative;cursor:pointer;border:none;flex-shrink:0}
+.billing-toggle__thumb{width:22px;height:22px;border-radius:50%;background:var(--white);position:absolute;top:3px;left:3px;transition:left .2s}
+.billing-toggle__track.on .billing-toggle__thumb{left:27px}
+.billing-toggle__label{font-size:13.5px;font-weight:600;color:var(--muted)}
+.billing-toggle__label.active{color:var(--ink)}
+.save-badge{background:var(--ochre);color:var(--ink);font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:999px;font-family:var(--font-mono)}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+@media(max-width:860px){.plans-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
+.plan-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);padding:32px 28px;display:flex;flex-direction:column;position:relative;transition:all .2s}
+.plan-card--featured{border-color:var(--ink);box-shadow:var(--shadow-lg);transform:scale(1.03)}
+@media(max-width:860px){.plan-card--featured{transform:none}}
+.plan-card__badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--ochre);font-family:var(--font-mono);font-size:10.5px;font-weight:700;padding:5px 14px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.plan-card h3{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:4px}
+.plan-card__tagline{font-size:13px;color:var(--muted);margin-bottom:22px}
+.plan-card__price{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
+.plan-card__price strong{font-family:var(--font-display);font-size:34px;font-weight:700}
+.plan-card__price span{font-size:13px;color:var(--muted)}
+.plan-card__yearly-note{font-size:11.5px;color:var(--ochre-dim);font-weight:600;margin-bottom:22px;min-height:16px}
+.plan-card__features{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:28px;flex:1}
+.plan-card__features li{display:flex;gap:9px;font-size:13.5px;color:var(--ink-3);line-height:1.5}
+.plan-card__features li::before{content:'✓';color:var(--stamp-green);font-weight:700;flex-shrink:0}
+.faq-section{margin-top:72px;max-width:720px;margin-left:auto;margin-right:auto}
+.faq-item{border-bottom:1px solid var(--line);padding:20px 0}
+.faq-item h4{font-family:var(--font-display);font-size:15.5px;font-weight:700;margin-bottom:8px}
+.faq-item p{font-size:13.5px;color:var(--muted);line-height:1.7}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home"><span class="nav__logo-mark" aria-hidden="true">A</span><span>AppAholic</span></a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/" class="nav__link">Home</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+        <li><a href="/pricing" class="nav__link nav__link--active">Pricing</a></li>
+        <li><a href="/request" class="nav__link">Request App</a></li>
+        <li><a href="/contact" class="nav__link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <a href="/auth" class="btn btn-ghost btn-sm" id="navSignIn">Sign In</a>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer"><span class="nav__hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span></button>
+    </div>
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
+  <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
+  <ul class="mobile-drawer__links" role="list"><li><a href="/marketplace" class="mobile-drawer__link" onclick="closeDrawer()">Browse All Apps</a></li><li><a href="/request" class="mobile-drawer__link" onclick="closeDrawer()">Request an App</a></li><li><a href="/contact" class="mobile-drawer__link" onclick="closeDrawer()">Contact</a></li></ul>
+  <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
+</nav>
+
+<section class="page-hero" id="main-content">
+  <div class="container">
+    <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>Buy once, or stock up</div>
+    <h1>Pay per app, <em>or never again.</em></h1>
+    <p>Buy what you need from the shelf, or subscribe for unlimited access across the catalogue. Cancel anytime.</p>
+  </div>
+</section>
+
+<main class="pricing-wrap">
+  <div class="billing-toggle">
+    <span class="billing-toggle__label active" id="labelMonthly">Monthly</span>
+    <button class="billing-toggle__track" id="billingToggle" aria-label="Toggle yearly billing"><span class="billing-toggle__thumb"></span></button>
+    <span class="billing-toggle__label" id="labelYearly">Yearly</span>
+    <span class="save-badge">Save ~2 months</span>
+  </div>
+
+  <div class="plans-grid" id="plansGrid">
+    <div class="empty-state"><div class="spinner spinner--ink"></div></div>
+  </div>
+
+  <div class="faq-section">
+    <div class="faq-item"><h4>What happens to apps I already bought?</h4><p>They're yours forever, subscription or not — subscribing just changes how future downloads work.</p></div>
+    <div class="faq-item"><h4>Can I cancel anytime?</h4><p>Yes. Your plan stays active until the end of the current billing period, then simply doesn't renew.</p></div>
+    <div class="faq-item"><h4>What payment methods are supported?</h4><p>Card, bank transfer and USSD via Flutterwave — whatever you'd normally use to pay online in Nigeria.</p></div>
+    <div class="faq-item"><h4>Do custom app requests count toward my plan?</h4><p>Pro and Business plans include discounts and faster review on custom requests, but requests are always submitted the same way regardless of plan.</p></div>
+  </div>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo"><span class="footer__logo-mark">A</span>AppAholic</div>
+        <p class="footer__tagline">Web, Desktop and Mobile apps for Nigerian businesses and professionals. A <strong>JustServicesPro</strong> product.</p>
+        <a href="mailto:info@justservices.pro" class="footer__email">info@justservices.pro</a>
+      </div>
+      <div><h3 class="footer__col-title">Marketplace</h3><ul class="footer__links" role="list"><li><a href="/marketplace">Browse All Apps</a></li><li><a href="/pricing">Pricing</a></li></ul></div>
+      <div><h3 class="footer__col-title">Support</h3><ul class="footer__links" role="list"><li><a href="/request">Request an App</a></li><li><a href="/contact">Help &amp; Contact</a></li><li><a href="/terms">Refund Policy</a></li></ul></div>
+      <div><h3 class="footer__col-title">Company</h3><ul class="footer__links" role="list"><li><a href="https://justservices.pro" target="_blank" rel="noopener">JustServicesPro</a></li><li><a href="/about">About AppAholic</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms of Service</a></li></ul></div>
+    </div>
+    <div class="footer__bottom">
+      <p>&copy; <span id="footerYear"></span> AppAholic &mdash; a product of JustServicesPro Management and Consulting Ltd.</p>
+      <div class="footer__bottom-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+<script>
+var allPlans = [];
+var cycle = 'monthly';
+
+function fmtNaira(n){ return n === 0 ? 'Free' : '₦' + Number(n).toLocaleString(); }
+
+function renderPlans(){
+  var grid = document.getElementById('plansGrid');
+  grid.innerHTML = allPlans.map(function(plan){
+    var price = plan[cycle];
+    var isFeatured = plan.id === 'pro';
+    var yearlyNote = cycle === 'yearly' && plan.monthly > 0 ? '≈ ₦' + Math.round(plan.yearly/12).toLocaleString() + '/mo billed yearly' : '&nbsp;';
+    var ctaHtml = plan.id === 'free'
+      ? '<a href="/marketplace" class="btn btn-ghost" style="width:100%;justify-content:center">Browse Free Apps</a>'
+      : '<button class="btn ' + (isFeatured ? 'btn-ochre' : 'btn-primary') + '" style="width:100%;justify-content:center" onclick="subscribe(\'' + plan.id + '\')">Choose ' + plan.name + '</button>';
+    return '<div class="plan-card ' + (isFeatured ? 'plan-card--featured' : '') + '">' +
+      (isFeatured ? '<div class="plan-card__badge">Most Popular</div>' : '') +
+      '<h3>' + plan.name + '</h3>' +
+      '<div class="plan-card__tagline">' + plan.tagline + '</div>' +
+      '<div class="plan-card__price"><strong>' + fmtNaira(price) + '</strong>' + (price > 0 ? '<span>/' + (cycle === 'monthly' ? 'month' : 'year') + '</span>' : '') + '</div>' +
+      '<div class="plan-card__yearly-note">' + yearlyNote + '</div>' +
+      '<ul class="plan-card__features">' + plan.features.map(function(f){ return '<li>' + f + '</li>'; }).join('') + '</ul>' +
+      ctaHtml +
+    '</div>';
+  }).join('');
+}
+
+document.getElementById('billingToggle').addEventListener('click', function(){
+  cycle = cycle === 'monthly' ? 'yearly' : 'monthly';
+  this.classList.toggle('on', cycle === 'yearly');
+  document.getElementById('labelMonthly').classList.toggle('active', cycle === 'monthly');
+  document.getElementById('labelYearly').classList.toggle('active', cycle === 'yearly');
+  renderPlans();
+});
+
+function subscribe(planId){
+  if(!Session.isSignedIn()){
+    showToast('Sign in first to subscribe.', '🔒');
+    setTimeout(function(){ window.location.href = '/auth?redirect=/pricing'; }, 1200);
+    return;
+  }
+  authFetch('/api/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ plan: planId, billingCycle: cycle }) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok && data.link){ window.location.href = data.link; }
+      else { showToast(data.error || 'Could not start checkout.', '⚠️'); }
+    })
+    .catch(function(){ showToast('Could not reach the server. Please try again.', '⚠️'); });
+}
+
+fetch(window.API_BASE + '/api/plans')
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(!data.ok) throw new Error();
+    allPlans = data.plans;
+    renderPlans();
+  })
+  .catch(function(){
+    document.getElementById('plansGrid').innerHTML = '<div class="empty-state"><div class="empty-state__icon">⚠️</div><h3>Could not load plans</h3><p>Please refresh, or check back shortly.</p></div>';
+  });
+</script>
+</body>
+</html>

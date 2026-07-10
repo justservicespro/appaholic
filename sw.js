@@ -1,11 +1,12 @@
-// AppAholic Service Worker — v3 (rebuild)
-const CACHE_NAME    = 'appaholic-v3';
-const STATIC_CACHE  = 'appaholic-static-v3';
-const DYNAMIC_CACHE = 'appaholic-dynamic-v3';
+// AppAholic Service Worker — v4 (subscriptions + pricing)
+const CACHE_NAME    = 'appaholic-v4';
+const STATIC_CACHE  = 'appaholic-static-v4';
+const DYNAMIC_CACHE = 'appaholic-dynamic-v4';
 
 const PRE_CACHE = [
   '/',
   '/marketplace',
+  '/pricing',
   '/auth',
   '/request',
   '/contact',
@@ -15,7 +16,7 @@ const PRE_CACHE = [
   '/assets/app.js',
 ];
 
-const PAGE_ROUTES = ['/', '/marketplace', '/auth', '/dashboard', '/about', '/privacy', '/terms', '/request', '/contact'];
+const PAGE_ROUTES = ['/', '/marketplace', '/pricing', '/auth', '/dashboard', '/about', '/privacy', '/terms', '/request', '/contact'];
 
 self.addEventListener('install', function (e) {
   self.skipWaiting();

@@ -36,6 +36,10 @@
 .dash-item__text span{font-size:11.5px;color:var(--muted)}
 .dash-item__meta{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-3);text-align:right;white-space:nowrap}
 .loading-wrap{display:flex;align-items:center;justify-content:center;padding:60px 20px;gap:10px;color:var(--muted);font-size:13.5px}
+.plan-badge{display:flex;align-items:center;gap:12px;background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:12px 18px}
+.plan-badge__name{font-family:var(--font-display);font-size:15px;font-weight:700}
+.plan-badge__name.free{color:var(--muted)}
+.plan-badge__cta{font-size:12.5px}
 </style>
 </head>
 <body>
@@ -75,9 +79,9 @@
   <div id="loadingState" class="loading-wrap"><span class="spinner spinner--ink"></span> Loading your dashboard…</div>
 
   <div id="dashContent" style="display:none">
-    <div class="dash-head">
-      <div class="section-eyebrow" id="greeting">Overview</div>
-      <h1 id="welcomeName">Welcome back</h1>
+    <div class="dash-head" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px">
+      <div><div class="section-eyebrow" id="greeting">Overview</div><h1 id="welcomeName">Welcome back</h1></div>
+      <div id="planBadgeWrap"></div>
     </div>
 
     <div class="stat-grid">
@@ -120,6 +124,24 @@ function statusStamp(status){
 
 function renderEmpty(container, icon, title, text){
   container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">'+icon+'</div><h3>'+title+'</h3><p>'+text+'</p></div>';
+}
+
+function renderPlanBadge(sub){
+  var wrap = document.getElementById('planBadgeWrap');
+  var plan = sub && sub.plan ? sub.plan : 'free';
+  var label = plan.charAt(0).toUpperCase() + plan.slice(1);
+  if(plan === 'free'){
+    wrap.innerHTML = '<div class="plan-badge"><span class="plan-badge__name free">Free plan</span><a href="/pricing" class="btn btn-ochre btn-sm plan-badge__cta">Upgrade</a></div>';
+  } else {
+    var renews = sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString('en-NG', { month:'short', day:'numeric', year:'numeric' }) : '';
+    wrap.innerHTML = '<div class="plan-badge"><span class="stamp stamp--ochre" style="font-size:9px;padding:2px 8px">' + label + '</span><span style="font-size:12px;color:var(--muted)">' + (renews ? 'Renews ' + renews : '') + '</span></div>';
+  }
+}
+
+function loadSubscription(){
+  authFetch('/api/subscription').then(function(r){ return r.json(); }).then(function(data){
+    renderPlanBadge(data.ok ? data.subscription : null);
+  }).catch(function(){ renderPlanBadge(null); });
 }
 
 function loadDashboard(){
@@ -183,6 +205,13 @@ function loadDashboard(){
 }
 
 loadDashboard();
+if(Session.isSignedIn()) loadSubscription();
+
+(function checkReturnParams(){
+  var params = new URLSearchParams(window.location.search);
+  if(params.get('subscribed')){ showToast('Subscription activated! 🎉', '✅'); }
+  if(params.get('purchased')){ showToast('Purchase complete — check My Purchases below.', '✅'); }
+})();
 </script>
 </body>
 </html>

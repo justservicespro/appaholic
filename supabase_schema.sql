@@ -173,6 +173,31 @@ create table if not exists public.contact_messages (
 alter table public.contact_messages enable row level security;
 -- No public select policy — contact messages are only readable via the service role (admin/server).
 
+-- ── SUBSCRIPTIONS ─────────────────────────────────────────────────────
+create table if not exists public.subscriptions (
+  id                  uuid primary key default gen_random_uuid(),
+  user_id             uuid references public.profiles(id) on delete cascade,
+  plan                text not null check (plan in ('free','pro','business')),
+  status              text not null default 'active' check (status in ('active','past_due','cancelled','expired')),
+  billing_cycle       text not null default 'monthly' check (billing_cycle in ('monthly','yearly')),
+  amount              numeric not null default 0,
+  currency            text default 'NGN',
+  provider_ref        text,                 -- Flutterwave tx_ref of the most recent successful charge
+  current_period_end  timestamptz,
+  cancelled_at        timestamptz,
+  created_at          timestamptz not null default now()
+);
+
+alter table public.subscriptions enable row level security;
+
+drop policy if exists "subscriptions_select_own" on public.subscriptions;
+create policy "subscriptions_select_own" on public.subscriptions
+  for select using (auth.uid() = user_id);
+
+-- Only one active subscription per user — enforced at the app level on write,
+-- indexed here for fast lookup.
+create index if not exists idx_subscriptions_user on public.subscriptions(user_id);
+
 -- ── INDEXES ───────────────────────────────────────────────────────────
 create index if not exists idx_purchases_user   on public.purchases(user_id);
 create index if not exists idx_downloads_user   on public.downloads(user_id);
