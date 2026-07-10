@@ -116,11 +116,48 @@ if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
 }
 const FROM        = `"AppAholic" <${process.env.GMAIL_USER || 'no-reply@justservices.pro'}>`;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.GMAIL_USER;
+// Admin notifications are CC'd here too — defaults to the sending Gmail account,
+// override with ADMIN_EMAIL_CC if you want a different second recipient.
+const ADMIN_EMAIL_CC = process.env.ADMIN_EMAIL_CC || process.env.GMAIL_USER;
 const SITE_URL    = process.env.SITE_URL || 'https://appaholic.justservices.pro';
 
-async function sendMail({ to, subject, html, replyTo }) {
-  return transporter.sendMail({ from: FROM, to: cleanHeader(to), subject: cleanHeader(subject), html, ...(replyTo ? { replyTo: cleanHeader(replyTo) } : {}) });
+/* ── SUBSCRIPTION PLANS (source of truth — frontend fetches this, never hardcodes prices) ── */
+const PLANS = {
+  free: {
+    id: 'free', name: 'Free', tagline: 'Browse and buy one at a time',
+    monthly: 0, yearly: 0,
+    features: ['Browse the full catalogue', '1 free-tier app download per month', 'Standard 48-hour request review'],
+  },
+  pro: {
+    id: 'pro', name: 'Pro', tagline: 'For freelancers and small teams',
+    monthly: 4500, yearly: 45000,
+    features: ['Unlimited downloads of any app priced ₦3,000 or under', 'Priority 24-hour request review', '10% off custom app builds', 'Email support'],
+  },
+  business: {
+    id: 'business', name: 'Business', tagline: 'For growing companies',
+    monthly: 12000, yearly: 120000,
+    features: ['Unlimited downloads — every app, any price', '2 fast-tracked custom requests per month', '15% off additional custom builds', 'Priority WhatsApp support'],
+  },
+};
+
+/* ── FLUTTERWAVE ─────────────────────────────────────────────────────── */
+const FLW_SECRET_KEY = process.env.FLW_SECRET_KEY;
+const FLW_PUBLIC_KEY = process.env.FLW_PUBLIC_KEY;
+const FLW_WEBHOOK_SECRET_HASH = process.env.FLW_WEBHOOK_SECRET_HASH; // set the SAME value in Flutterwave Dashboard → Settings → Webhooks → Secret Hash
+if (!FLW_SECRET_KEY) console.warn('⚠️  FLW_SECRET_KEY not set — subscription checkout will fail.');
+if (!FLW_WEBHOOK_SECRET_HASH) console.warn('⚠️  FLW_WEBHOOK_SECRET_HASH not set — webhook events will be rejected for safety.');
+
+
+async function sendMail({ to, subject, html, replyTo, cc }) {
+  return transporter.sendMail({
+    from: FROM, to: cleanHeader(to), subject: cleanHeader(subject), html,
+    ...(replyTo ? { replyTo: cleanHeader(replyTo) } : {}),
+    ...(cc && cc !== to ? { cc: cleanHeader(cc) } : {}),
+  });
 }
+
+// Shorthand for the admin notification emails — always CC's the second admin address.
+function sendAdminMail(opts) { return sendMail({ ...opts, to: ADMIN_EMAIL, cc: ADMIN_EMAIL_CC }); }
 
 function wrapEmail({ preheader = '', title, bodyHtml, ctaText, ctaUrl }) {
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head>
@@ -216,8 +253,8 @@ app.get('/auth/google/callback', asyncRoute(async (req, res) => {
       }),
     }).catch(e => console.warn('Welcome email failed (non-fatal):', e.message));
 
-    sendMail({
-      to: ADMIN_EMAIL,
+    sendAdminMail({
+      
       subject: `New Google sign-in: ${cleanHeader(user.email)}`,
       html: wrapEmail({ title: 'New Google Sign-In', bodyHtml: `<p><strong>${esc(user.name)}</strong> (${esc(user.email)}) just signed in.</p>` }),
     }).catch(e => console.warn('Admin alert failed (non-fatal):', e.message));
@@ -243,6 +280,181 @@ app.post('/auth/logout', (req, res) => res.json({ ok: true }));
 /* ════════════════════════════════════════════════════════════════════
    APPS (marketplace catalogue — read from Supabase)
    ════════════════════════════════════════════════════════════════════ */
+// POST /api/checkout — initiates a one-off Flutterwave payment for a single app purchase.
+// Uses the same AAH- tx_ref prefix as /api/subscribe so the shared cross-product webhook
+// relay (see WEBHOOK_RELAY.md) can identify AppAholic events without knowing our internals.
+app.post('/api/checkout', strictLimiter, asyncRoute(async (req, res) => {
+  if (!FLW_SECRET_KEY) return res.status(503).json({ ok: false, error: 'Payments are not configured yet.' });
+  const { appId, appName, amount, email, name } = req.body || {};
+  if (!appId || !appName || !amount || !email) return res.status(400).json({ ok: false, error: 'Missing fields.' });
+  if (!isValidEmail(email)) return res.status(400).json({ ok: false, error: 'Invalid email address.' });
+
+  let userId = null;
+  const authHeader = req.headers.authorization || '';
+  if (authHeader.startsWith('Bearer ')) {
+    const payload = verifySession(authHeader.slice(7));
+    if (payload) userId = payload.sub;
+  }
+
+  const txRef = `AAH-PUR-${appId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+  try {
+    const flwRes = await fetch('https://api.flutterwave.com/v3/payments', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${FLW_SECRET_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tx_ref: txRef,
+        amount: Number(amount),
+        currency: 'NGN',
+        redirect_url: `${SITE_URL}/dashboard?purchased=${encodeURIComponent(appId)}`,
+        customer: { email, name: name || email },
+        customizations: { title: 'AppAholic', description: appName, logo: `${SITE_URL}/icons/icon-192.png` },
+        meta: { user_id: userId, app_id: appId },
+      }),
+    });
+    const flwData = await flwRes.json();
+    if (flwData.status !== 'success' || !flwData.data || !flwData.data.link) {
+      console.error('Flutterwave checkout init failed:', JSON.stringify(flwData));
+      return res.status(502).json({ ok: false, error: 'Could not start checkout right now.' });
+    }
+    res.json({ ok: true, link: flwData.data.link, txRef });
+  } catch (err) {
+    console.error('checkout:', err.message);
+    res.status(502).json({ ok: false, error: 'Could not start checkout right now.' });
+  }
+}));
+
+/* ════════════════════════════════════════════════════════════════════
+   SUBSCRIPTIONS
+   ════════════════════════════════════════════════════════════════════ */
+
+// GET /api/plans — public, the frontend pricing page fetches this instead of hardcoding prices.
+app.get('/api/plans', (req, res) => res.json({ ok: true, plans: Object.values(PLANS) }));
+
+// GET /api/subscription — authenticated, current user's subscription status for the dashboard.
+app.get('/api/subscription', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data } = await supabase.from('subscriptions').select('*').eq('user_id', req.user.sub).eq('status', 'active').order('created_at', { ascending: false }).limit(1).maybeSingle();
+  res.json({ ok: true, subscription: data || { plan: 'free', status: 'active' } });
+}));
+
+// POST /api/subscribe — authenticated, body: { plan: 'pro'|'business', billingCycle: 'monthly'|'yearly' }
+// Initiates a Flutterwave Standard checkout and returns the payment link for the frontend to redirect to.
+app.post('/api/subscribe', requireAuth, strictLimiter, asyncRoute(async (req, res) => {
+  if (!FLW_SECRET_KEY) return res.status(503).json({ ok: false, error: 'Payments are not configured yet.' });
+  const { plan, billingCycle } = req.body || {};
+  if (!PLANS[plan] || plan === 'free') return res.status(400).json({ ok: false, error: 'Invalid plan.' });
+  const cycle = billingCycle === 'yearly' ? 'yearly' : 'monthly';
+  const amount = PLANS[plan][cycle];
+  const txRef = `AAH-SUB-${plan}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+  try {
+    const flwRes = await fetch('https://api.flutterwave.com/v3/payments', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${FLW_SECRET_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tx_ref: txRef,
+        amount,
+        currency: 'NGN',
+        redirect_url: `${SITE_URL}/dashboard?subscribed=1`,
+        customer: { email: req.user.email, name: req.user.name || req.user.email },
+        customizations: { title: 'AppAholic', description: `${PLANS[plan].name} plan — ${cycle}`, logo: `${SITE_URL}/icons/icon-192.png` },
+        meta: { user_id: req.user.sub, plan, billing_cycle: cycle },
+      }),
+    });
+    const flwData = await flwRes.json();
+    if (flwData.status !== 'success' || !flwData.data || !flwData.data.link) {
+      console.error('Flutterwave init failed:', JSON.stringify(flwData));
+      return res.status(502).json({ ok: false, error: 'Could not start checkout right now.' });
+    }
+    res.json({ ok: true, link: flwData.data.link, txRef });
+  } catch (err) {
+    console.error('subscribe:', err.message);
+    res.status(502).json({ ok: false, error: 'Could not start checkout right now.' });
+  }
+}));
+
+// POST /api/webhook — receives Flutterwave payment events.
+//
+// IMPORTANT: this Flutterwave account is shared across multiple JustServicesPro
+// products, and Flutterwave only supports one webhook URL per account. The single
+// real webhook is registered at https://justservices.pro/api/webhook (a separate,
+// central project) which relays only AppAholic-relevant events (tx_ref starting
+// with "AAH-") to this endpoint, forwarding the original request headers —
+// including 'verif-hash' — unchanged. See WEBHOOK_RELAY.md for the relay code.
+//
+// Verified via the 'verif-hash' header matching FLW_WEBHOOK_SECRET_HASH (set
+// identically here and in the Flutterwave dashboard) — a shared-secret string
+// compare, per Flutterwave's documented webhook verification method.
+app.post('/api/webhook', asyncRoute(async (req, res) => {
+  const incomingHash = req.headers['verif-hash'];
+  if (!FLW_WEBHOOK_SECRET_HASH || !incomingHash || incomingHash !== FLW_WEBHOOK_SECRET_HASH) {
+    console.warn('Webhook rejected: hash mismatch or not configured.');
+    return res.status(401).json({ ok: false });
+  }
+
+  const event = req.body || {};
+  res.status(200).json({ ok: true }); // ack immediately — Flutterwave retries if this is slow/fails
+
+  if (event.event !== 'charge.completed' || !event.data || event.data.status !== 'successful') return;
+
+  try {
+    // Re-verify the transaction server-side with Flutterwave directly — never trust the webhook
+    // payload alone, since anyone who guesses/leaks the hash could otherwise fake a payload.
+    const verifyRes = await fetch(`https://api.flutterwave.com/v3/transactions/${event.data.id}/verify`, {
+      headers: { Authorization: `Bearer ${FLW_SECRET_KEY}` },
+    });
+    const verified = await verifyRes.json();
+    if (verified.status !== 'success' || verified.data.status !== 'successful') {
+      console.warn('Webhook: transaction did not verify, ignoring.', event.data.id);
+      return;
+    }
+
+    const meta = verified.data.meta || {};
+    const amount = verified.data.amount;
+    const email = verified.data.customer && verified.data.customer.email;
+
+    if (meta.plan && PLANS[meta.plan] && meta.user_id && supabase) {
+      const periodEnd = new Date();
+      if (meta.billing_cycle === 'yearly') periodEnd.setFullYear(periodEnd.getFullYear() + 1);
+      else periodEnd.setMonth(periodEnd.getMonth() + 1);
+
+      await supabase.from('subscriptions').insert({
+        user_id: meta.user_id, plan: meta.plan, status: 'active',
+        billing_cycle: meta.billing_cycle || 'monthly', amount, currency: 'NGN',
+        provider_ref: String(event.data.id), current_period_end: periodEnd.toISOString(),
+      });
+
+      if (email) {
+        sendMail({
+          to: email, subject: `You're on the ${PLANS[meta.plan].name} plan — AppAholic`,
+          html: wrapEmail({
+            preheader: 'Subscription confirmed.',
+            title: `Welcome to ${esc(PLANS[meta.plan].name)}! 🎉`,
+            bodyHtml: `<p>Your subscription is active. You now have <strong>${esc(PLANS[meta.plan].tagline)}</strong>.</p>`,
+            ctaText: 'Go to Dashboard', ctaUrl: `${SITE_URL}/dashboard`,
+          }),
+        }).catch(e => console.warn('Subscription email failed:', e.message));
+      }
+      sendAdminMail({
+        subject: `New ${meta.plan} subscription — ₦${amount}`,
+        html: wrapEmail({ title: 'New Subscription', bodyHtml: `<p>${esc(email || 'A user')} subscribed to <strong>${esc(PLANS[meta.plan].name)}</strong> (${esc(meta.billing_cycle)}) — ₦${amount}.</p>` }),
+      }).catch(e => console.warn('Admin subscription alert failed:', e.message));
+    } else {
+      // Not a subscription charge — a one-off app purchase went through Flutterwave directly.
+      // Record it the same way /api/order-confirmation does, keyed by whatever the frontend put in meta.
+      if (meta.app_id && supabase) {
+        await supabase.from('purchases').insert({
+          user_id: meta.user_id || null, app_id: meta.app_id, email: email || 'unknown',
+          amount, currency: 'NGN', status: 'completed', provider_ref: String(event.data.id),
+        });
+      }
+    }
+  } catch (err) {
+    console.error('webhook processing error:', err.message);
+  }
+}));
+
 app.get('/api/apps', asyncRoute(async (req, res) => {
   if (!requireSupabase(res)) return;
   const { platform, category } = req.query;
@@ -335,8 +547,8 @@ app.post('/api/request-app', strictLimiter, asyncRoute(async (req, res) => {
         ctaText: 'Browse Apps', ctaUrl: SITE_URL,
       }),
     });
-    await sendMail({
-      to: ADMIN_EMAIL, replyTo: email,
+    await sendAdminMail({
+      replyTo: email,
       subject: `New app request: "${cleanHeader(title)}" from ${cleanHeader(name)}`,
       html: wrapEmail({
         title: 'New App Request',
@@ -383,8 +595,8 @@ app.post('/api/contact', strictLimiter, asyncRoute(async (req, res) => {
           <p style="color:#6B6458;font-size:13px;border-top:1px solid #D9D2C3;padding-top:12px;">Your message:<br/>${esc(message)}</p>`,
       }),
     });
-    await sendMail({
-      to: ADMIN_EMAIL, replyTo: email,
+    await sendAdminMail({
+      replyTo: email,
       subject: `New contact message [${cleanHeader(topicLabel)}] from ${cleanHeader(name)}`,
       html: wrapEmail({ title: 'New Contact Message', bodyHtml: `<p><strong>${esc(name)}</strong> (${esc(email)}) — ${esc(topicLabel)}</p><p style="margin-top:10px;white-space:pre-wrap;">${esc(message)}</p>` }),
     });
@@ -427,8 +639,8 @@ app.post('/api/order-confirmation', strictLimiter, asyncRoute(async (req, res) =
         ctaText: 'Go to Dashboard', ctaUrl: safeUrl(downloadUrl, `${SITE_URL}/dashboard`),
       }),
     });
-    await sendMail({
-      to: ADMIN_EMAIL,
+    await sendAdminMail({
+      
       subject: `${isFree?'Free download':'Sale'}: ${cleanHeader(appName)} — ${cleanHeader(name||email)}`,
       html: wrapEmail({ title: isFree?'Free Download':'New Sale', bodyHtml: `<p><strong>${esc(appName)}</strong> ${isFree?'downloaded':'purchased for '+(esc(currency)||'₦')+amountStr} by ${esc(name)||''} (${esc(email)}).</p>` }),
     });
@@ -467,7 +679,7 @@ app.post('/api/send-invoice', strictLimiter, asyncRoute(async (req, res) => {
 app.post('/api/admin-alert', strictLimiter, asyncRoute(async (req, res) => {
   const { subject, message } = req.body || {};
   try {
-    await sendMail({ to: ADMIN_EMAIL, subject: `Alert: ${cleanHeader(subject||'AppAholic Alert')}`, html: wrapEmail({ title: esc(subject)||'Alert', bodyHtml: `<p>${esc(message)||''}</p>` }) });
+    await sendAdminMail({ subject: `Alert: ${cleanHeader(subject||'AppAholic Alert')}`, html: wrapEmail({ title: esc(subject)||'Alert', bodyHtml: `<p>${esc(message)||''}</p>` }) });
     res.json({ ok: true });
   } catch (err) {
     console.error('admin-alert:', err.message);
