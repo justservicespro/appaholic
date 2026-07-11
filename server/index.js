@@ -744,6 +744,52 @@ app.post('/api/admin-alert', strictLimiter, asyncRoute(async (req, res) => {
 }));
 
 /* ── HEALTH ── */
+/* ════════════════════════════════════════════════════════════════════
+   QUICKNOTE — per-app API. Pattern for future web apps: namespaced routes,
+   same requireAuth + Supabase service-role pattern as everything else.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/quicknote/notes', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('quicknote_notes').select('*').eq('user_id', req.user.sub).order('updated_at', { ascending: false });
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load notes.' });
+  res.json({ ok: true, notes: data });
+}));
+
+app.post('/api/quicknote/notes', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { title, content, tags } = req.body || {};
+  const { data, error } = await supabase.from('quicknote_notes')
+    .insert({ user_id: req.user.sub, title: (title || 'Untitled').slice(0, 200), content: content || '', tags: Array.isArray(tags) ? tags.slice(0, 20) : [] })
+    .select('*').single();
+  if (error) return res.status(500).json({ ok: false, error: 'Could not create note.' });
+  res.json({ ok: true, note: data });
+}));
+
+app.put('/api/quicknote/notes/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { title, content, tags } = req.body || {};
+  const updates = { updated_at: new Date().toISOString() };
+  if (title !== undefined) updates.title = String(title).slice(0, 200) || 'Untitled';
+  if (content !== undefined) updates.content = String(content);
+  if (tags !== undefined) updates.tags = Array.isArray(tags) ? tags.slice(0, 20) : [];
+
+  const { data, error } = await supabase.from('quicknote_notes')
+    .update(updates).eq('id', req.params.id).eq('user_id', req.user.sub) // scoped to owner — can't touch someone else's note
+    .select('*').maybeSingle();
+  if (error) return res.status(500).json({ ok: false, error: 'Could not save note.' });
+  if (!data) return res.status(404).json({ ok: false, error: 'Note not found.' });
+  res.json({ ok: true, note: data });
+}));
+
+app.delete('/api/quicknote/notes/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { error, count } = await supabase.from('quicknote_notes').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not delete note.' });
+  if (!count) return res.status(404).json({ ok: false, error: 'Note not found.' });
+  res.json({ ok: true });
+}));
+
 app.get('/api/health', (req, res) => res.json({
   ok: true,
   smtp: !missing.includes('GMAIL_USER') && !missing.includes('GMAIL_APP_PASSWORD'),
