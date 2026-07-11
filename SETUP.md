@@ -68,9 +68,30 @@ Then test the real flow: sign in with Google on `/auth` → should land on
 `/dashboard` showing an empty state (no fake data) → submit a request on
 `/request` → check it appears in Supabase under `app_requests`.
 
+## 8. Set up file storage for app downloads (when you're ready to upload the first real app)
+
+Desktop/Mobile apps need actual installer files hosted somewhere. This uses
+Supabase Storage — same account, same dashboard, no new service.
+
+1. Supabase dashboard → **Storage** (left sidebar) → **New bucket**
+2. Name it exactly: `app-files`
+3. **Leave it Private** (do NOT make it public) — downloads are only ever
+   handed out through `/api/download/:appId`, which checks the person
+   actually owns the app first, then generates a link that expires in 5
+   minutes. A public bucket would skip that check entirely.
+4. Upload each app's installer under a path matching its app ID, e.g.
+   `focusdesk/FocusDesk-Setup-v1.2.exe`
+5. In the `apps` table (Table Editor), set that app's `storage_path` column
+   to the exact path you uploaded to, e.g. `focusdesk/FocusDesk-Setup-v1.2.exe`
+
+For **Web apps** (no file — just a running page), set `launch_url` instead:
+either an internal path like `/invoicekit` if it's built into this project,
+or a full external URL if it lives elsewhere.
+
 ---
 
 ## What changed architecturally
+
 
 - **Sessions**: the old base64 "session" (unsigned, anyone could forge it)
   is replaced with a real signed JWT using `SESSION_SECRET` — the variable

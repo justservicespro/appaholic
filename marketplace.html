@@ -38,6 +38,25 @@
 @media(max-width:900px){.market-skeleton{grid-template-columns:1fr 1fr}}
 .skel-card{height:220px;border-radius:var(--r-xl);background:linear-gradient(90deg,var(--paper-2) 25%,var(--white) 37%,var(--paper-2) 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite}
 @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+.app-card{cursor:pointer}
+
+.modal-backdrop{position:fixed;inset:0;z-index:300;background:rgba(20,33,61,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .22s;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{opacity:1;pointer-events:all}
+.app-modal{background:var(--white);border-radius:var(--r-xl);max-width:520px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);transform:translateY(12px);transition:transform .22s}
+.modal-backdrop.show .app-modal{transform:translateY(0)}
+.app-modal__banner{height:120px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;border-radius:var(--r-xl) var(--r-xl) 0 0}
+.app-modal__close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;border:none}
+.app-modal__body{padding:26px 28px 28px}
+.app-modal__body h2{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:4px}
+.app-modal__meta{font-size:12.5px;color:var(--muted);font-family:var(--font-mono);margin-bottom:16px}
+.app-modal__desc{font-size:13.5px;color:var(--ink-3);line-height:1.7;margin-bottom:18px}
+.app-modal__features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+.app-modal__features li{display:flex;gap:8px;font-size:13px;color:var(--ink-3)}
+.app-modal__features li::before{content:'✓';color:var(--stamp-green);font-weight:700;flex-shrink:0}
+.app-modal__foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-top:18px;border-top:1px solid var(--line)}
+.app-modal__price{font-family:var(--font-display);font-size:22px;font-weight:700}
+.app-modal__action{flex-shrink:0}
+.app-modal__note{font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center}
 </style>
 </head>
 <body>
@@ -107,6 +126,23 @@
   </div>
 </main>
 
+<div class="modal-backdrop" id="appModalBackdrop">
+  <div class="app-modal" id="appModal" role="dialog" aria-modal="true">
+    <div class="app-modal__banner" id="modalBanner"></div>
+    <div class="app-modal__body">
+      <h2 id="modalName"></h2>
+      <div class="app-modal__meta" id="modalMeta"></div>
+      <p class="app-modal__desc" id="modalDesc"></p>
+      <ul class="app-modal__features" id="modalFeatures"></ul>
+      <div class="app-modal__foot">
+        <span class="app-modal__price" id="modalPrice"></span>
+        <button class="btn btn-primary app-modal__action" id="modalActionBtn"></button>
+      </div>
+      <div class="app-modal__note" id="modalNote"></div>
+    </div>
+  </div>
+</div>
+
 <footer class="footer" role="contentinfo">
   <div class="footer__inner">
     <div class="footer__grid">
@@ -154,7 +190,7 @@ function renderApps(apps){
 
   grid.innerHTML = apps.map(function(app){
     var price = Number(app.price) > 0 ? '₦' + Number(app.price).toLocaleString() : 'Free';
-    return '<a href="/marketplace?app=' + app.id + '" class="app-card">' +
+    return '<div class="app-card" onclick="openAppModal(\'' + app.id + '\')">' +
       '<div class="app-card__banner" style="background:' + (app.banner_color || '#F0EBDF') + '">' + (app.icon || '📦') + tagStamp(app.tag) + '</div>' +
       '<div class="app-card__body">' +
         '<h3>' + app.name + '</h3>' +
@@ -162,7 +198,7 @@ function renderApps(apps){
         '<p class="app-card__desc">' + (app.description || '') + '</p>' +
         '<div class="app-card__foot"><span class="app-card__price">' + price + '</span><span class="app-card__rating">★ ' + (app.rating || '—') + '</span></div>' +
       '</div>' +
-    '</a>';
+    '</div>';
   }).join('');
 }
 
@@ -188,6 +224,8 @@ fetch(window.API_BASE + '/api/apps')
     if(!data.ok){ throw new Error(data.error || 'Could not load apps'); }
     allApps = data.apps || [];
     applyFilter(currentPlatform);
+    var deepLink = new URLSearchParams(window.location.search).get('app');
+    if(deepLink) openAppModal(deepLink);
   })
   .catch(function(){
     document.getElementById('appsSkeleton').style.display = 'none';
@@ -195,6 +233,106 @@ fetch(window.API_BASE + '/api/apps')
     document.querySelector('#appsEmpty h3').textContent = 'Could not load the catalogue';
     document.querySelector('#appsEmpty p').textContent = 'Please refresh, or check back shortly.';
   });
+
+/* ── APP DETAIL MODAL ── */
+var currentModalApp = null;
+
+function openAppModal(appId){
+  var app = allApps.find(function(a){ return a.id === appId; });
+  if(!app) return;
+  currentModalApp = app;
+
+  document.getElementById('modalBanner').style.background = app.banner_color || '#F0EBDF';
+  document.getElementById('modalBanner').innerHTML = (app.icon || '📦') + '<button class="app-modal__close" aria-label="Close">&#x2715;</button>';
+  document.getElementById('modalName').textContent = app.name;
+  document.getElementById('modalMeta').textContent = app.category + ' · ' + app.platform + (app.rating ? ' · ★ ' + app.rating : '');
+  document.getElementById('modalDesc').textContent = app.long_description || app.description || '';
+  document.getElementById('modalFeatures').innerHTML = (app.features || []).map(function(f){ return '<li>' + f + '</li>'; }).join('');
+  document.getElementById('modalPrice').textContent = Number(app.price) > 0 ? '₦' + Number(app.price).toLocaleString() : 'Free';
+  document.getElementById('modalNote').textContent = '';
+
+  setModalAction('idle');
+
+  document.getElementById('appModalBackdrop').classList.add('show');
+  var params = new URLSearchParams(window.location.search);
+  params.set('app', appId);
+  history.replaceState({}, '', '/marketplace' + '?' + params.toString());
+}
+
+function closeAppModal(){
+  document.getElementById('appModalBackdrop').classList.remove('show');
+  var params = new URLSearchParams(window.location.search);
+  params.delete('app');
+  history.replaceState({}, '', '/marketplace' + (params.toString() ? '?' + params.toString() : ''));
+}
+
+document.getElementById('appModalBackdrop').addEventListener('click', function(e){
+  if(e.target === this || e.target.closest('.app-modal__close')) closeAppModal();
+});
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAppModal(); });
+
+function setModalAction(state){
+  var btn = document.getElementById('modalActionBtn');
+  var note = document.getElementById('modalNote');
+  if(state === 'loading'){ btn.disabled = true; btn.textContent = 'Please wait…'; return; }
+  btn.disabled = false;
+
+  if(!Session.isSignedIn()){
+    btn.textContent = 'Sign In to Continue';
+    btn.onclick = function(){ window.location.href = '/auth?redirect=/marketplace?app=' + currentModalApp.id; };
+    note.textContent = '';
+    return;
+  }
+
+  if(currentModalApp.platform === 'web'){
+    btn.textContent = 'Launch App';
+  } else {
+    btn.textContent = Number(currentModalApp.price) > 0 ? 'Get This App' : 'Download';
+  }
+  btn.onclick = handleModalAction;
+}
+
+function handleModalAction(){
+  setModalAction('loading');
+  authFetch('/api/download/' + currentModalApp.id)
+    .then(function(r){ return r.json().then(function(data){ return { status: r.status, data: data }; }); })
+    .then(function(res){
+      if(res.data.ok && res.data.type === 'launch'){
+        window.open(res.data.url, '_blank');
+        setModalAction('idle');
+      } else if(res.data.ok && res.data.type === 'download'){
+        var a = document.createElement('a');
+        a.href = res.data.url; a.download = '';
+        document.body.appendChild(a); a.click(); a.remove();
+        showToast('Download started!', '✅');
+        setModalAction('idle');
+      } else if(res.status === 402){
+        startPurchase();
+      } else {
+        showToast(res.data.error || 'Something went wrong.', '⚠️');
+        setModalAction('idle');
+      }
+    })
+    .catch(function(){
+      showToast('Could not reach the server. Please try again.', '⚠️');
+      setModalAction('idle');
+    });
+}
+
+function startPurchase(){
+  var btn = document.getElementById('modalActionBtn');
+  btn.disabled = true; btn.textContent = 'Redirecting to payment…';
+  authFetch('/api/checkout', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ appId: currentModalApp.id, appName: currentModalApp.name, amount: currentModalApp.price })
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok && data.link){ window.location.href = data.link; }
+      else { showToast(data.error || 'Could not start checkout.', '⚠️'); setModalAction('idle'); }
+    })
+    .catch(function(){ showToast('Could not reach the server. Please try again.', '⚠️'); setModalAction('idle'); });
+}
 </script>
 </body>
 </html>

@@ -285,16 +285,22 @@ app.post('/auth/logout', (req, res) => res.json({ ok: true }));
 // relay (see WEBHOOK_RELAY.md) can identify AppAholic events without knowing our internals.
 app.post('/api/checkout', strictLimiter, asyncRoute(async (req, res) => {
   if (!FLW_SECRET_KEY) return res.status(503).json({ ok: false, error: 'Payments are not configured yet.' });
-  const { appId, appName, amount, email, name } = req.body || {};
-  if (!appId || !appName || !amount || !email) return res.status(400).json({ ok: false, error: 'Missing fields.' });
-  if (!isValidEmail(email)) return res.status(400).json({ ok: false, error: 'Invalid email address.' });
+  const { appId, appName, amount } = req.body || {};
+  let { email, name } = req.body || {};
 
   let userId = null;
   const authHeader = req.headers.authorization || '';
   if (authHeader.startsWith('Bearer ')) {
     const payload = verifySession(authHeader.slice(7));
-    if (payload) userId = payload.sub;
+    if (payload) {
+      userId = payload.sub;
+      email = email || payload.email;
+      name = name || payload.name;
+    }
   }
+
+  if (!appId || !appName || !amount || !email) return res.status(400).json({ ok: false, error: 'Missing fields.' });
+  if (!isValidEmail(email)) return res.status(400).json({ ok: false, error: 'Invalid email address.' });
 
   const txRef = `AAH-PUR-${appId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -453,6 +459,56 @@ app.post('/api/webhook', asyncRoute(async (req, res) => {
   } catch (err) {
     console.error('webhook processing error:', err.message);
   }
+}));
+
+// GET /api/download/:appId — authenticated. Checks the user is actually entitled to this
+// app (free, purchased, or covered by their subscription tier) before handing out anything.
+// Desktop/Mobile apps get a short-lived signed Supabase Storage URL; Web apps get their launch_url.
+app.get('/api/download/:appId', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { appId } = req.params;
+
+  const { data: app, error: appErr } = await supabase.from('apps').select('*').eq('id', appId).eq('active', true).maybeSingle();
+  if (appErr || !app) return res.status(404).json({ ok: false, error: 'App not found.' });
+
+  // ── Entitlement check ──
+  let entitled = Number(app.price) === 0;
+
+  if (!entitled) {
+    const { data: purchase } = await supabase.from('purchases').select('id').eq('user_id', req.user.sub).eq('app_id', appId).eq('status', 'completed').maybeSingle();
+    if (purchase) entitled = true;
+  }
+
+  if (!entitled) {
+    const { data: sub } = await supabase.from('subscriptions').select('plan').eq('user_id', req.user.sub).eq('status', 'active').order('created_at', { ascending: false }).limit(1).maybeSingle();
+    if (sub) {
+      if (sub.plan === 'business') entitled = true;
+      else if (sub.plan === 'pro' && Number(app.price) <= 3000) entitled = true;
+    }
+  }
+
+  if (!entitled) return res.status(402).json({ ok: false, error: 'Purchase or a subscription that covers this app is required.', requiresPurchase: true });
+
+  // ── Web apps: no file, just the URL where the app actually runs ──
+  if (app.platform === 'web') {
+    if (!app.launch_url) return res.status(503).json({ ok: false, error: 'This app is not live yet — check back soon.' });
+    return res.json({ ok: true, type: 'launch', url: app.launch_url });
+  }
+
+  // ── Desktop/Mobile: generate a short-lived signed download link ──
+  if (!app.storage_path) return res.status(503).json({ ok: false, error: 'This app is not available for download yet — check back soon.' });
+
+  const { data: signed, error: signErr } = await supabase.storage.from('app-files').createSignedUrl(app.storage_path, 300); // 5 minutes
+  if (signErr || !signed) {
+    console.error('createSignedUrl failed:', signErr && signErr.message);
+    return res.status(500).json({ ok: false, error: 'Could not prepare your download. Please try again.' });
+  }
+
+  // Record the download (best-effort — don't fail the response if this write has an issue).
+  supabase.from('downloads').insert({ user_id: req.user.sub, app_id: appId, device: req.headers['user-agent'] || null })
+    .then(({ error }) => { if (error) console.error('download log insert failed:', error.message); });
+
+  res.json({ ok: true, type: 'download', url: signed.signedUrl, expiresIn: 300 });
 }));
 
 app.get('/api/apps', asyncRoute(async (req, res) => {

@@ -205,6 +205,15 @@ create index if not exists idx_requests_user    on public.app_requests(user_id);
 create index if not exists idx_apps_platform    on public.apps(platform);
 create index if not exists idx_apps_category    on public.apps(category);
 
+-- ── APPS: file hosting columns ──────────────────────────────────────
+-- storage_path: path inside the Supabase Storage 'app-files' bucket, for
+--   Desktop/Mobile installers (e.g. 'focusdesk/FocusDesk-Setup-v1.2.exe').
+--   Null until the actual app is built and uploaded.
+-- launch_url: for Web apps — either an internal path (e.g. '/invoicekit')
+--   or an external URL where the running app lives. Null for Desktop/Mobile.
+alter table public.apps add column if not exists storage_path text;
+alter table public.apps add column if not exists launch_url text;
+
 -- ── SEED DATA: the 15-app catalogue ──────────────────────────────────
 insert into public.apps (id, name, category, platform, os, price, rating, downloads_count, tag, icon, banner_color, description, long_description, features, tags) values
 ('focusclock','FocusClock','Productivity','web','{web}',1200,4.9,3200,'top','⏱️','#FFF3E0','Pomodoro focus timer with smart break scheduling and distraction blocking.','FocusClock is a precision focus tool built on the Pomodoro technique extended with AI-driven break scheduling. It learns your energy patterns and suggests optimal work blocks.',ARRAY['Smart Pomodoro sessions','Website & app blocker','Productivity analytics dashboard','Google Calendar sync','Daily & weekly PDF reports'],ARRAY['Focus','Timer','Pomodoro','Productivity']),
