@@ -214,6 +214,28 @@ create index if not exists idx_apps_category    on public.apps(category);
 alter table public.apps add column if not exists storage_path text;
 alter table public.apps add column if not exists launch_url text;
 
+-- ── QUICKNOTE — per-app data table ──────────────────────────────────
+-- Pattern to follow for future web apps: one table per app, namespaced
+-- routes under /api/{app-slug}/..., all authenticated via the same
+-- requireAuth middleware and signed session already built.
+create table if not exists public.quicknote_notes (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid not null references public.profiles(id) on delete cascade,
+  title       text not null default 'Untitled',
+  content     text not null default '',
+  tags        text[] not null default '{}',
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
+alter table public.quicknote_notes enable row level security;
+
+drop policy if exists "quicknote_notes_all_own" on public.quicknote_notes;
+create policy "quicknote_notes_all_own" on public.quicknote_notes
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create index if not exists idx_quicknote_notes_user on public.quicknote_notes(user_id);
+
 -- ── SEED DATA: the 15-app catalogue ──────────────────────────────────
 insert into public.apps (id, name, category, platform, os, price, rating, downloads_count, tag, icon, banner_color, description, long_description, features, tags) values
 ('focusclock','FocusClock','Productivity','web','{web}',1200,4.9,3200,'top','⏱️','#FFF3E0','Pomodoro focus timer with smart break scheduling and distraction blocking.','FocusClock is a precision focus tool built on the Pomodoro technique extended with AI-driven break scheduling. It learns your energy patterns and suggests optimal work blocks.',ARRAY['Smart Pomodoro sessions','Website & app blocker','Productivity analytics dashboard','Google Calendar sync','Daily & weekly PDF reports'],ARRAY['Focus','Timer','Pomodoro','Productivity']),
@@ -232,3 +254,9 @@ insert into public.apps (id, name, category, platform, os, price, rating, downlo
 ('staffcheck','StaffCheck','Productivity','mobile','{android}',1200,4.5,1900,'new','✅','#E0F7FA','Android attendance app for SMEs. GPS clock-in/out, late alerts, admin reports.','StaffCheck lets employees clock in and out via Android phone with GPS tagging. Admin gets a real-time attendance dashboard.',ARRAY['GPS-tagged clock in & clock out','Real-time attendance dashboard','Late arrival SMS alerts','Monthly PDF attendance reports','Multi-location support'],ARRAY['HR','Attendance','Android','Team']),
 ('invkit-m','InvoiceKit Mobile','Finance','mobile','{android,ios}',1500,4.7,2800,'paid','🧾','#F3E5F5','Create and send professional invoices from your phone. Syncs with InvoiceKit web.','Send invoices on the go. Full InvoiceKit features in your pocket, synced in real time with your web account.',ARRAY['Full invoice creation on mobile','PDF generation & WhatsApp sharing','Real-time payment notifications','Client database sync with web','Flutterwave payment link generation'],ARRAY['Invoice','Mobile','Finance','WhatsApp'])
 on conflict (id) do nothing;
+
+-- ── APP LAUNCH URLS — run/re-run this section any time an app goes live ──
+-- ON CONFLICT DO NOTHING above means re-running the seed never updates an
+-- existing row, so launch_url/storage_path are set here instead, separately,
+-- as each app actually gets built. Safe to re-run — it's just an UPDATE.
+update public.apps set launch_url = '/quicknote' where id = 'quicknote';

@@ -5,6 +5,7 @@
   "rewrites": [
     { "source": "/marketplace", "destination": "/marketplace.html" },
     { "source": "/pricing", "destination": "/pricing.html" },
+    { "source": "/quicknote", "destination": "/quicknote.html" },
     { "source": "/request", "destination": "/request.html" },
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/auth", "destination": "/auth.html" },

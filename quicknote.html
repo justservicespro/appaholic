@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#14213D"/>
+<title>QuickNote — AppAholic</title>
+<meta name="description" content="Lightweight markdown note-taking. Fast, keyboard-first, instant search."/>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314213D'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23E8A33D' text-anchor='middle'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/theme.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<style>
+body{overflow:hidden}
+.qn-shell{display:grid;grid-template-columns:280px 1fr;height:calc(100vh - 66px)}
+@media(max-width:800px){.qn-shell{grid-template-columns:1fr}.qn-sidebar{display:none}.qn-sidebar.mobile-open{display:flex;position:fixed;top:66px;left:0;bottom:0;width:82vw;z-index:80;box-shadow:var(--shadow-lg)}}
+
+.qn-sidebar{background:var(--white);border-right:1.5px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+.qn-sidebar__head{padding:16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.qn-search{position:relative}
+.qn-search input{width:100%;padding:9px 12px 9px 32px;border-radius:8px;border:1.5px solid var(--line);font-size:13px;background:var(--paper)}
+.qn-search input:focus{outline:none;border-color:var(--ink)}
+.qn-search::before{content:'🔍';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;opacity:.5}
+.qn-new-btn{width:100%;padding:9px;border-radius:8px;background:var(--ink);color:var(--white);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px}
+.qn-new-btn:hover{background:var(--ink-2)}
+.qn-list{flex:1;overflow-y:auto;padding:8px}
+.qn-item{padding:11px 12px;border-radius:8px;cursor:pointer;margin-bottom:3px;transition:background .15s}
+.qn-item:hover{background:var(--paper-2)}
+.qn-item.active{background:var(--paper-2);border-left:3px solid var(--ochre-dim);padding-left:9px}
+.qn-item__title{font-size:13.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qn-item__preview{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.qn-item__meta{display:flex;justify-content:space-between;align-items:center;margin-top:5px}
+.qn-item__date{font-size:10px;color:var(--muted);font-family:var(--font-mono)}
+.qn-item__tags{display:flex;gap:4px}
+.qn-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--ochre)}
+
+.qn-main{display:flex;flex-direction:column;overflow:hidden}
+.qn-toolbar{padding:12px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;background:var(--white)}
+.qn-title-input{flex:1;border:none;background:none;font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--ink)}
+.qn-title-input:focus{outline:none}
+.qn-toolbar-btn{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;border:1.5px solid var(--line);color:var(--ink-3);flex-shrink:0}
+.qn-toolbar-btn:hover{border-color:var(--ink);color:var(--ink)}
+.qn-toolbar-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.qn-save-indicator{font-size:11px;color:var(--muted);font-family:var(--font-mono);white-space:nowrap;flex-shrink:0}
+.qn-tags-row{padding:10px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--paper)}
+.qn-tags-row input{border:none;background:none;font-size:12px;color:var(--muted);flex:1;min-width:100px}
+.qn-tags-row input:focus{outline:none}
+.qn-tag-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:var(--white);border:1px solid var(--line);font-size:11px;font-weight:600;color:var(--ink-3)}
+.qn-tag-chip button{font-size:10px;color:var(--muted);line-height:1}
+
+.qn-editor-wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.qn-editor-wrap.preview-only{grid-template-columns:1fr}
+.qn-editor-wrap.preview-only .qn-editor-pane{display:none}
+.qn-editor-wrap.edit-only{grid-template-columns:1fr}
+.qn-editor-wrap.edit-only .qn-preview-pane{display:none}
+@media(max-width:800px){.qn-editor-wrap{grid-template-columns:1fr}.qn-preview-pane{display:none}.qn-editor-wrap.preview-only .qn-editor-pane{display:none}.qn-editor-wrap.preview-only .qn-preview-pane{display:block}}
+.qn-editor-pane{border-right:1px solid var(--line);overflow:hidden}
+.qn-editor-pane textarea{width:100%;height:100%;border:none;resize:none;padding:24px;font-family:var(--font-mono);font-size:13.5px;line-height:1.8;color:var(--ink-3);background:var(--white)}
+.qn-editor-pane textarea:focus{outline:none}
+.qn-preview-pane{overflow-y:auto;padding:24px 32px;background:var(--paper)}
+.qn-preview-pane h1,.qn-preview-pane h2,.qn-preview-pane h3{font-family:var(--font-display);margin:18px 0 8px}
+.qn-preview-pane h1:first-child,.qn-preview-pane h2:first-child,.qn-preview-pane h3:first-child{margin-top:0}
+.qn-preview-pane p{font-size:14px;line-height:1.75;color:var(--ink-3);margin-bottom:12px}
+.qn-preview-pane ul,.qn-preview-pane ol{padding-left:22px;margin-bottom:12px;font-size:14px;color:var(--ink-3)}
+.qn-preview-pane code{background:var(--paper-2);padding:2px 6px;border-radius:4px;font-family:var(--font-mono);font-size:12.5px}
+.qn-preview-pane pre{background:var(--ink);color:var(--white);padding:14px;border-radius:8px;overflow-x:auto;margin-bottom:12px}
+.qn-preview-pane pre code{background:none;color:inherit;padding:0}
+.qn-preview-pane blockquote{border-left:3px solid var(--ochre);padding-left:14px;color:var(--muted);margin-bottom:12px}
+.qn-preview-pane a{color:var(--ochre-dim);text-decoration:underline}
+
+.qn-mobile-bar{display:none}
+@media(max-width:800px){.qn-mobile-bar{display:flex;padding:10px 16px;border-bottom:1px solid var(--line);gap:8px;background:var(--white)}}
+
+.qn-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);text-align:center;padding:40px}
+</style>
+</head>
+<body>
+<header class="nav" role="banner">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="AppAholic home"><span class="nav__logo-mark" aria-hidden="true">A</span><span>AppAholic</span></a>
+    <nav class="nav__center" aria-label="Main navigation">
+      <ul class="nav__links" role="list">
+        <li><a href="/dashboard" class="nav__link">Dashboard</a></li>
+        <li><a href="/marketplace" class="nav__link">All Apps</a></li>
+      </ul>
+    </nav>
+    <div class="nav__actions">
+      <span class="stamp stamp--ochre" style="font-size:9px">QuickNote</span>
+    </div>
+  </div>
+</header>
+
+<div id="signedOutBlock" style="display:none" class="empty-state">
+  <div class="empty-state__icon">🔒</div>
+  <h3>Sign in to use QuickNote</h3>
+  <p>Your notes are private and sync to your account.</p>
+  <a href="/auth?redirect=/quicknote" class="btn btn-primary" style="margin-top:18px">Sign In</a>
+</div>
+
+<div id="qnApp" class="qn-shell" style="display:none">
+  <aside class="qn-sidebar" id="qnSidebar">
+    <div class="qn-sidebar__head">
+      <div class="qn-search"><input type="text" id="searchInput" placeholder="Search notes…"/></div>
+      <button class="qn-new-btn" id="newNoteBtn">+ New Note <span style="opacity:.5;font-size:11px">(Ctrl+N)</span></button>
+    </div>
+    <div class="qn-list" id="notesList"></div>
+  </aside>
+
+  <main class="qn-main">
+    <div class="qn-mobile-bar">
+      <button class="qn-toolbar-btn" id="mobileMenuBtn">☰</button>
+      <span style="font-size:13px;font-weight:600;flex:1">Notes</span>
+    </div>
+    <div class="qn-toolbar" id="qnToolbar" style="display:none">
+      <input type="text" class="qn-title-input" id="titleInput" placeholder="Untitled"/>
+      <span class="qn-save-indicator" id="saveIndicator"></span>
+      <button class="qn-toolbar-btn" id="editModeBtn" title="Edit">✏️</button>
+      <button class="qn-toolbar-btn active" id="splitModeBtn" title="Split view">⬛</button>
+      <button class="qn-toolbar-btn" id="previewModeBtn" title="Preview">👁️</button>
+      <button class="qn-toolbar-btn" id="exportBtn" title="Export">⬇️</button>
+      <button class="qn-toolbar-btn" id="deleteBtn" title="Delete">🗑️</button>
+    </div>
+    <div class="qn-tags-row" id="qnTagsRow" style="display:none">
+      <span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">TAGS</span>
+      <div id="tagChips" style="display:contents"></div>
+      <input type="text" id="tagInput" placeholder="add tag, press Enter"/>
+    </div>
+    <div class="qn-editor-wrap" id="editorWrap" style="display:none">
+      <div class="qn-editor-pane"><textarea id="contentInput" placeholder="Start writing in markdown…"></textarea></div>
+      <div class="qn-preview-pane" id="previewPane"></div>
+    </div>
+    <div class="qn-empty" id="qnEmptyState">
+      <div style="font-size:36px;margin-bottom:14px">📝</div>
+      <h3 style="font-family:var(--font-display);font-size:17px;margin-bottom:6px">No note selected</h3>
+      <p style="font-size:13px;max-width:260px">Pick a note from the sidebar, or create a new one to get started.</p>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
+<script src="/assets/app.js"></script>
+<script>
+if(!Session.isSignedIn()){
+  document.getElementById('signedOutBlock').style.display = 'block';
+} else {
+  document.getElementById('qnApp').style.display = 'grid';
+  initQuickNote();
+}
+
+function initQuickNote(){
+  var notes = [];
+  var currentNote = null;
+  var currentTags = [];
+  var saveTimer = null;
+  var viewMode = 'split';
+
+  marked.setOptions({ breaks: true });
+
+  function fmtDate(iso){
+    var d = new Date(iso);
+    var now = new Date();
+    if(d.toDateString() === now.toDateString()) return d.toLocaleTimeString('en-NG', {hour:'2-digit', minute:'2-digit'});
+    return d.toLocaleDateString('en-NG', {month:'short', day:'numeric'});
+  }
+
+  function escapeHtml(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  function renderList(filter){
+    var list = document.getElementById('notesList');
+    var filtered = notes;
+    if(filter){
+      var f = filter.toLowerCase();
+      filtered = notes.filter(function(n){ return (n.title||'').toLowerCase().includes(f) || (n.content||'').toLowerCase().includes(f) || (n.tags||[]).some(function(t){return t.toLowerCase().includes(f)}); });
+    }
+    if(!filtered.length){
+      list.innerHTML = '<div class="empty-state" style="padding:30px 16px"><div class="empty-state__icon" style="font-size:22px">' + (filter ? '🔍' : '📝') + '</div><p style="font-size:12.5px">' + (filter ? 'No notes match "' + filter + '"' : 'No notes yet — create your first one') + '</p></div>';
+      return;
+    }
+    list.innerHTML = filtered.map(function(n){
+      var preview = (n.content || '').replace(/[#*`_>-]/g, '').slice(0, 70) || 'No content yet';
+      var active = currentNote && currentNote.id === n.id ? 'active' : '';
+      return '<div class="qn-item ' + active + '" onclick="window.__qnSelectNote(\'' + n.id + '\')">' +
+        '<div class="qn-item__title">' + escapeHtml(n.title || 'Untitled') + '</div>' +
+        '<div class="qn-item__preview">' + escapeHtml(preview) + '</div>' +
+        '<div class="qn-item__meta"><span class="qn-item__date">' + fmtDate(n.updated_at) + '</span>' +
+        '<div class="qn-item__tags">' + (n.tags||[]).slice(0,3).map(function(){return '<span class="qn-tag-dot"></span>'}).join('') + '</div></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function loadNotes(){
+    authFetch('/api/quicknote/notes').then(function(r){ return r.json(); }).then(function(data){
+      if(!data.ok) throw new Error();
+      notes = data.notes;
+      renderList(document.getElementById('searchInput').value);
+    }).catch(function(){ showToast('Could not load notes.', '⚠️'); });
+  }
+
+  function selectNote(id){
+    currentNote = notes.find(function(n){ return n.id === id; });
+    if(!currentNote) return;
+    currentTags = (currentNote.tags || []).slice();
+    document.getElementById('qnEmptyState').style.display = 'none';
+    document.getElementById('qnToolbar').style.display = 'flex';
+    document.getElementById('qnTagsRow').style.display = 'flex';
+    document.getElementById('editorWrap').style.display = 'grid';
+    document.getElementById('titleInput').value = currentNote.title || '';
+    document.getElementById('contentInput').value = currentNote.content || '';
+    renderTags();
+    updatePreview();
+    renderList(document.getElementById('searchInput').value);
+    if(window.innerWidth <= 800) document.getElementById('qnSidebar').classList.remove('mobile-open');
+  }
+  window.__qnSelectNote = selectNote;
+
+  function renderTags(){
+    document.getElementById('tagChips').innerHTML = currentTags.map(function(t, i){
+      return '<span class="qn-tag-chip">' + escapeHtml(t) + ' <button onclick="window.__qnRemoveTag(' + i + ')">✕</button></span>';
+    }).join('');
+  }
+  window.__qnRemoveTag = function(i){ currentTags.splice(i, 1); renderTags(); scheduleSave(); };
+
+  function updatePreview(){
+    var content = document.getElementById('contentInput').value;
+    document.getElementById('previewPane').innerHTML = content.trim() ? marked.parse(content) : '<p style="color:var(--muted);font-style:italic">Nothing to preview yet.</p>';
+  }
+
+  function scheduleSave(){
+    document.getElementById('saveIndicator').textContent = 'Saving…';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveCurrentNote, 600);
+  }
+
+  function saveCurrentNote(){
+    if(!currentNote) return;
+    var title = document.getElementById('titleInput').value.trim() || 'Untitled';
+    var content = document.getElementById('contentInput').value;
+    authFetch('/api/quicknote/notes/' + currentNote.id, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ title: title, content: content, tags: currentTags })
+    }).then(function(r){ return r.json(); }).then(function(data){
+      if(data.ok){
+        currentNote = data.note;
+        var idx = notes.findIndex(function(n){ return n.id === currentNote.id; });
+        if(idx > -1) notes[idx] = currentNote;
+        document.getElementById('saveIndicator').textContent = 'Saved ' + fmtDate(currentNote.updated_at);
+        renderList(document.getElementById('searchInput').value);
+      } else {
+        document.getElementById('saveIndicator').textContent = 'Save failed';
+      }
+    }).catch(function(){ document.getElementById('saveIndicator').textContent = 'Save failed — offline?'; });
+  }
+
+  document.getElementById('titleInput').addEventListener('input', scheduleSave);
+  document.getElementById('contentInput').addEventListener('input', function(){ updatePreview(); scheduleSave(); });
+
+  document.getElementById('tagInput').addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && this.value.trim()){
+      currentTags.push(this.value.trim()); this.value = ''; renderTags(); scheduleSave();
+    }
+  });
+
+  document.getElementById('searchInput').addEventListener('input', function(){ renderList(this.value); });
+
+  function createNote(){
+    authFetch('/api/quicknote/notes', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ title:'Untitled', content:'', tags:[] }) })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if(data.ok){ notes.unshift(data.note); renderList(''); selectNote(data.note.id); document.getElementById('titleInput').focus(); }
+        else { showToast('Could not create note.', '⚠️'); }
+      }).catch(function(){ showToast('Could not reach the server.', '⚠️'); });
+  }
+  document.getElementById('newNoteBtn').addEventListener('click', createNote);
+
+  document.getElementById('deleteBtn').addEventListener('click', function(){
+    if(!currentNote) return;
+    if(!confirm('Delete "' + (currentNote.title || 'Untitled') + '"? This cannot be undone.')) return;
+    authFetch('/api/quicknote/notes/' + currentNote.id, { method:'DELETE' }).then(function(r){ return r.json(); }).then(function(data){
+      if(data.ok){
+        notes = notes.filter(function(n){ return n.id !== currentNote.id; });
+        currentNote = null;
+        document.getElementById('qnToolbar').style.display = 'none';
+        document.getElementById('qnTagsRow').style.display = 'none';
+        document.getElementById('editorWrap').style.display = 'none';
+        document.getElementById('qnEmptyState').style.display = 'flex';
+        renderList(document.getElementById('searchInput').value);
+        showToast('Note deleted.', '✅');
+      }
+    }).catch(function(){ showToast('Could not delete note.', '⚠️'); });
+  });
+
+  function setViewMode(mode){
+    viewMode = mode;
+    var wrap = document.getElementById('editorWrap');
+    wrap.className = 'qn-editor-wrap' + (mode === 'preview' ? ' preview-only' : mode === 'edit' ? ' edit-only' : '');
+    ['editModeBtn','splitModeBtn','previewModeBtn'].forEach(function(id){ document.getElementById(id).classList.remove('active'); });
+    document.getElementById(mode === 'preview' ? 'previewModeBtn' : mode === 'edit' ? 'editModeBtn' : 'splitModeBtn').classList.add('active');
+  }
+  document.getElementById('editModeBtn').addEventListener('click', function(){ setViewMode('edit'); });
+  document.getElementById('splitModeBtn').addEventListener('click', function(){ setViewMode('split'); });
+  document.getElementById('previewModeBtn').addEventListener('click', function(){ setViewMode('preview'); });
+
+  document.getElementById('exportBtn').addEventListener('click', function(){
+    if(!currentNote) return;
+    var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + escapeHtml(currentNote.title) + '</title>' +
+      '<style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;padding:0 20px;line-height:1.7;color:#222}h1,h2,h3{font-family:-apple-system,sans-serif}pre{background:#f4f4f4;padding:12px;border-radius:6px;overflow-x:auto}</style></head><body>' +
+      marked.parse(document.getElementById('contentInput').value) + '</body></html>';
+    var blob = new Blob([html], { type: 'text/html' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (currentNote.title || 'note').replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    showToast('Exported as HTML — open it and use your browser\'s Print → Save as PDF for a PDF version.', '✅');
+  });
+
+  document.getElementById('mobileMenuBtn').addEventListener('click', function(){
+    document.getElementById('qnSidebar').classList.toggle('mobile-open');
+  });
+
+  document.addEventListener('keydown', function(e){
+    if((e.ctrlKey || e.metaKey) && e.key === 'n'){ e.preventDefault(); createNote(); }
+    if((e.ctrlKey || e.metaKey) && e.key === 'k'){ e.preventDefault(); document.getElementById('searchInput').focus(); }
+  });
+
+  loadNotes();
+}
+</script>
+</body>
+</html>
