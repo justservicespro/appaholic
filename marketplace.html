@@ -92,7 +92,7 @@
   <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
 </nav>
 
-<section class="page-hero">
+<section class="page-hero dark-texture">
   <div class="container">
     <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>The full catalogue</div>
     <h1>Everything on <em>the shelf.</em></h1>
@@ -143,7 +143,7 @@
   </div>
 </div>
 
-<footer class="footer" role="contentinfo">
+<footer class="footer dark-texture" role="contentinfo">
   <div class="footer__inner">
     <div class="footer__grid">
       <div>
@@ -188,9 +188,10 @@ function renderApps(apps){
   empty.style.display = 'none';
   grid.style.display = 'grid';
 
-  grid.innerHTML = apps.map(function(app){
+  grid.innerHTML = apps.map(function(app, i){
     var price = Number(app.price) > 0 ? '₦' + Number(app.price).toLocaleString() : 'Free';
-    return '<div class="app-card" onclick="openAppModal(\'' + app.id + '\')">' +
+    var delay = Math.min(i, 8) * 45;
+    return '<div class="app-card card-enter" style="animation-delay:' + delay + 'ms" onclick="openAppModal(\'' + app.id + '\')">' +
       '<div class="app-card__banner" style="background:' + (app.banner_color || '#F0EBDF') + '">' + (app.icon || '📦') + tagStamp(app.tag) + '</div>' +
       '<div class="app-card__body">' +
         '<h3>' + app.name + '</h3>' +
@@ -284,11 +285,7 @@ function setModalAction(state){
     return;
   }
 
-  if(currentModalApp.launch_url){
-    btn.textContent = 'Launch App';
-  } else {
-    btn.textContent = Number(currentModalApp.price) > 0 ? 'Get This App' : 'Download';
-  }
+  btn.textContent = Number(currentModalApp.price) > 0 ? 'Get' : 'Download';
   btn.onclick = handleModalAction;
 }
 

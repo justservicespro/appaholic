@@ -261,9 +261,9 @@ on conflict (id) do nothing;
 -- as each app actually gets built. Safe to re-run — it's just an UPDATE.
 update public.apps set launch_url = '/quicknote' where id = 'quicknote';
 
--- QuickNote Mobile: no native Android/iOS build exists (see project notes on
--- why mobile apps need real native tooling this environment doesn't have).
--- Pragmatic substitution: it points at the same QuickNote web app, which is
--- mobile-responsive and installable to a home screen as a PWA. Notes sync
--- automatically since it's literally the same app and backend, not a copy.
-update public.apps set launch_url = '/quicknote' where id = 'quicknote-m';
+-- QuickNote Mobile: HELD, on purpose. No native Android/iOS build exists, and
+-- an earlier attempt to substitute the web app instead was explicitly declined —
+-- native mobile apps wait for real development elsewhere (Claude Code, etc.),
+-- not a web-app stand-in. This line reverses that substitution if it was ever
+-- applied to your database; it's a no-op (both already null) otherwise.
+update public.apps set launch_url = null where id = 'quicknote-m';

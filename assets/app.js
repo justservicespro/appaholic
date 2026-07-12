@@ -51,6 +51,31 @@ function showToast(msg, icon) {
 }
 window.showToast = showToast;
 
+/* ── SCROLL-REVEAL — fade+rise elements into view as the user scrolls ── */
+document.addEventListener('DOMContentLoaded', function () {
+  var revealEls = document.querySelectorAll('[data-reveal]');
+  if (!revealEls.length) return;
+
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(function (el, i) {
+    el.style.transitionDelay = Math.min(i % 6, 5) * 60 + 'ms';
+    observer.observe(el);
+  });
+});
+
 /* ── NAV / DRAWER / SIGNED-IN STATE (runs on every page) ── */
 document.addEventListener('DOMContentLoaded', function () {
   var hamburger = document.getElementById('navHamburger');

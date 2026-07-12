@@ -70,7 +70,7 @@
   <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
 </nav>
 
-<section class="page-hero" id="main-content">
+<section class="page-hero dark-texture" id="main-content">
   <div class="container">
     <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>Buy once, or stock up</div>
     <h1>Pay per app, <em>or never again.</em></h1>
@@ -98,7 +98,7 @@
   </div>
 </main>
 
-<footer class="footer" role="contentinfo">
+<footer class="footer dark-texture" role="contentinfo">
   <div class="footer__inner">
     <div class="footer__grid">
       <div>
@@ -127,14 +127,15 @@ function fmtNaira(n){ return n === 0 ? 'Free' : '₦' + Number(n).toLocaleString
 
 function renderPlans(){
   var grid = document.getElementById('plansGrid');
-  grid.innerHTML = allPlans.map(function(plan){
+  grid.innerHTML = allPlans.map(function(plan, i){
     var price = plan[cycle];
     var isFeatured = plan.id === 'pro';
+    var delay = i * 90;
     var yearlyNote = cycle === 'yearly' && plan.monthly > 0 ? '≈ ₦' + Math.round(plan.yearly/12).toLocaleString() + '/mo billed yearly' : '&nbsp;';
     var ctaHtml = plan.id === 'free'
       ? '<a href="/marketplace" class="btn btn-ghost" style="width:100%;justify-content:center">Browse Free Apps</a>'
       : '<button class="btn ' + (isFeatured ? 'btn-ochre' : 'btn-primary') + '" style="width:100%;justify-content:center" onclick="subscribe(\'' + plan.id + '\')">Choose ' + plan.name + '</button>';
-    return '<div class="plan-card ' + (isFeatured ? 'plan-card--featured' : '') + '">' +
+    return '<div class="plan-card card-enter ' + (isFeatured ? 'plan-card--featured' : '') + '" style="animation-delay:' + delay + 'ms">' +
       (isFeatured ? '<div class="plan-card__badge">Most Popular</div>' : '') +
       '<h3>' + plan.name + '</h3>' +
       '<div class="plan-card__tagline">' + plan.tagline + '</div>' +
