@@ -184,6 +184,31 @@ textarea.form-input{resize:vertical}
 @keyframes card-enter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .card-enter{animation:card-enter .5s cubic-bezier(.16,1,.3,1) both}
 
+/* ── CONTINUOUS LIVELY MOTION — not just entrance, ongoing ── */
+@keyframes swing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(4deg)}}
+.stamp{animation:swing 2.6s ease-in-out infinite;transform-origin:top center}
+.stamp:nth-child(odd){animation-duration:3.1s}
+
+@keyframes breathe-glow{
+  0%,100%{background-position:20% 0%, 100% 100%}
+  50%{background-position:28% 8%, 92% 92%}
+}
+.dark-texture::before{background-size:200% 200%;animation:breathe-glow 8s ease-in-out infinite}
+
+@keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker{overflow:hidden;background:var(--ink);border-bottom:1.5px solid var(--line);white-space:nowrap;position:relative}
+.ticker__track{display:inline-flex;animation:ticker-scroll 32s linear infinite;padding:9px 0}
+.ticker:hover .ticker__track{animation-play-state:paused}
+.ticker__item{display:inline-flex;align-items:center;gap:8px;padding:0 28px;font-family:var(--font-mono);font-size:11.5px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.02em;white-space:nowrap}
+.ticker__item strong{color:var(--ochre)}
+.ticker__sep{color:rgba(255,255,255,.25)}
+
+@keyframes float-bob{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-14px) rotate(var(--r,0deg))}}
+.float-icon{position:absolute;font-size:28px;opacity:.85;animation:float-bob 4.5s ease-in-out infinite;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
+
+.typewriter-cursor{display:inline-block;width:2px;background:var(--ochre);margin-left:2px;animation:blink-cursor .8s step-end infinite}
+@keyframes blink-cursor{50%{opacity:0}}
+
 @media (prefers-reduced-motion: reduce) {
   html{scroll-behavior:auto}
   *{animation-duration:.001ms!important;transition-duration:.001ms!important}

@@ -72,6 +72,14 @@
 .request-cta p{margin-top:10px;color:rgba(255,255,255,.6);font-size:14px;max-width:400px;position:relative;z-index:1}
 .request-cta__promises{display:flex;flex-direction:column;gap:14px;position:relative;z-index:1}
 .request-cta__promise{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,.75)}
+
+.calc-wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:0;background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-md)}
+@media(max-width:760px){.calc-wrap{grid-template-columns:1fr}}
+.calc-inputs{padding:32px}
+.calc-result{background:var(--ink);color:var(--white);padding:32px;display:flex;flex-direction:column;justify-content:center}
+.calc-result__label{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.5)}
+.calc-result__price{font-family:var(--font-display);font-size:clamp(24px,3vw,32px);font-weight:700;color:var(--ochre);margin:8px 0 12px;transition:opacity .2s}
+.calc-result__note{font-size:12px;color:rgba(255,255,255,.55);line-height:1.6}
 .request-cta__promise strong{color:var(--white);display:block;font-size:13.5px}
 </style>
 </head>
@@ -88,6 +96,7 @@
         <li><a href="/" class="nav__link nav__link--active">Home</a></li>
         <li><a href="/marketplace" class="nav__link">All Apps</a></li>
         <li><a href="/pricing" class="nav__link">Pricing</a></li>
+        <li><a href="/#calculator" class="nav__link">Budget Calc</a></li>
         <li><a href="/marketplace?platform=web" class="nav__link">Web</a></li>
         <li><a href="/marketplace?platform=desktop" class="nav__link">Desktop</a></li>
         <li><a href="/marketplace?platform=mobile" class="nav__link">Mobile</a></li>
@@ -104,6 +113,11 @@
     </div>
   </div>
 </header>
+
+<div class="ticker" role="marquee" aria-label="Live activity ticker">
+  <div class="ticker__track" id="tickerTrack"></div>
+</div>
+
 <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
   <div class="mobile-drawer__header">
@@ -126,12 +140,15 @@
 </nav>
 
 <main id="main-content">
-<section class="hero">
+<section class="hero" style="position:relative;overflow:hidden">
+  <span class="float-icon" style="top:12%;right:8%;--r:-8deg" aria-hidden="true">🧾</span>
+  <span class="float-icon" style="top:55%;right:2%;--r:10deg;animation-delay:1.2s;font-size:22px" aria-hidden="true">📝</span>
+  <span class="float-icon" style="top:78%;right:15%;--r:-5deg;animation-delay:2.4s;font-size:20px" aria-hidden="true">💸</span>
   <div class="container">
     <div class="hero__grid">
       <div>
         <div class="page-eyebrow" style="color:var(--ochre-dim)"><span class="page-eyebrow-dot" style="background:var(--ochre-dim)"></span>15 apps in stock</div>
-        <h1>The <em>toolshed</em><br/>for Nigerian<br/>businesses.</h1>
+        <h1>The <em>toolshed</em><br/>for <span id="typewriterTarget"></span><span class="typewriter-cursor">&nbsp;</span></h1>
         <p>A catalogued stock of practical Web, Desktop and Mobile apps — built for the way small businesses and freelancers actually work here. Buy what's on the shelf, or order something custom.</p>
         <div class="hero__ctas">
           <a href="/marketplace" class="btn btn-primary btn-lg">Browse the Catalogue</a>
@@ -194,6 +211,50 @@
       <div class="how-step" data-reveal><div class="how-step__num">1</div><h3>Browse or request</h3><p>Pick something from the catalogue, or tell us what you need built.</p></div>
       <div class="how-step" data-reveal><div class="how-step__num">2</div><h3>Buy or wait for review</h3><p>Purchase instantly, or get a reply on your custom request within 48 hours.</p></div>
       <div class="how-step" data-reveal><div class="how-step__num">3</div><h3>Download & keep</h3><p>Everything you own lives in your dashboard — download again anytime.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="calculator">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div class="section-eyebrow">Not sure what it'll cost?</div>
+      <h2>Estimate your app.</h2>
+    </div>
+    <div class="calc-wrap" data-reveal="scale">
+      <div class="calc-inputs">
+        <div class="form-row">
+          <label>What kind of app?</label>
+          <select class="form-input" id="calcComplexity">
+            <option value="simple">Simple — one core feature, minimal setup</option>
+            <option value="standard" selected>Standard — a few features, some data/reports</option>
+            <option value="complex">Complex — multiple features, integrations, admin panel</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Which platform?</label>
+          <select class="form-input" id="calcPlatform">
+            <option value="web">Web (browser)</option>
+            <option value="desktop">Desktop (Windows/Mac)</option>
+            <option value="mobile">Mobile (Android/iOS)</option>
+            <option value="cross">Cross-platform (all of the above)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Any external integrations? <span style="color:var(--muted);font-weight:400">(WhatsApp, Flutterwave, Google Sheets, etc.)</span></label>
+          <select class="form-input" id="calcIntegrations">
+            <option value="none">None needed</option>
+            <option value="one">One or two</option>
+            <option value="several">Several</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-result">
+        <div class="calc-result__label">Estimated range</div>
+        <div class="calc-result__price" id="calcPrice">₦40,000 – ₦120,000</div>
+        <div class="calc-result__note">This is a rough estimate to help you plan — your actual quote is confirmed after you submit a request.</div>
+        <a href="/request" class="btn btn-ochre" style="width:100%;justify-content:center;margin-top:16px" id="calcCta">Request This App →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -263,5 +324,82 @@
 
 <div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
 <script src="/assets/app.js"></script>
+<script>
+/* ── TYPEWRITER — cycles through audience phrases, continuous ── */
+(function(){
+  var phrases = ['Nigerian businesses.', 'growing freelancers.', 'small teams.', 'solo hustlers.', 'busy founders.'];
+  var target = document.getElementById('typewriterTarget');
+  if(!target) return;
+  var pi = 0, ci = 0, deleting = false;
+
+  function tick(){
+    var word = phrases[pi];
+    if(!deleting){
+      ci++;
+      target.textContent = word.slice(0, ci);
+      if(ci === word.length){ deleting = true; setTimeout(tick, 1800); return; }
+      setTimeout(tick, 55 + Math.random()*40);
+    } else {
+      ci--;
+      target.textContent = word.slice(0, ci);
+      if(ci === 0){ deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 350); return; }
+      setTimeout(tick, 28);
+    }
+  }
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    target.textContent = phrases[0];
+  } else {
+    tick();
+  }
+})();
+
+/* ── TICKER — scrolling activity strip, duplicated once for a seamless loop ── */
+(function(){
+  var items = [
+    '🧾 InvoiceKit — ₦2,500', '📝 QuickNote — Free', '⚡ 48-hour request review',
+    '🗳️ Community-voted builds', '💳 Secure checkout via Flutterwave', '🎁 Requesters get it free on launch',
+    '🖥️ Desktop & 📱 Mobile & 🌐 Web', '🔥 15 apps in stock', '🤖 TaskMind AI — ₦5,000',
+  ];
+  var track = document.getElementById('tickerTrack');
+  if(!track) return;
+  var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join('');
+  track.innerHTML = html + html; // duplicated for seamless -50% loop
+})();
+
+/* ── BUDGET CALCULATOR ── */
+(function(){
+  var ranges = {
+    simple:   { web: [15000, 40000], desktop: [25000, 55000], mobile: [30000, 65000], cross: [45000, 90000] },
+    standard: { web: [40000, 120000], desktop: [55000, 140000], mobile: [65000, 150000], cross: [90000, 200000] },
+    complex:  { web: [120000, 300000], desktop: [140000, 320000], mobile: [150000, 350000], cross: [200000, 450000] },
+  };
+  var integrationMultiplier = { none: 1, one: 1.15, several: 1.35 };
+
+  function fmt(n){ return '₦' + Math.round(n).toLocaleString(); }
+
+  function updateEstimate(){
+    var complexity = document.getElementById('calcComplexity').value;
+    var platform = document.getElementById('calcPlatform').value;
+    var integrations = document.getElementById('calcIntegrations').value;
+    var base = ranges[complexity][platform];
+    var mult = integrationMultiplier[integrations];
+    var priceEl = document.getElementById('calcPrice');
+    priceEl.style.opacity = '0';
+    setTimeout(function(){
+      priceEl.textContent = fmt(base[0] * mult) + ' – ' + fmt(base[1] * mult);
+      priceEl.style.opacity = '1';
+    }, 150);
+
+    var params = new URLSearchParams();
+    params.set('platform', platform === 'cross' ? 'Cross-platform' : platform.charAt(0).toUpperCase() + platform.slice(1));
+    document.getElementById('calcCta').href = '/request?' + params.toString();
+  }
+  ['calcComplexity','calcPlatform','calcIntegrations'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('change', updateEstimate);
+  });
+  if(document.getElementById('calcPrice')) updateEstimate();
+})();
+</script>
 </body>
 </html>

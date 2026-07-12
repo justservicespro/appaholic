@@ -235,6 +235,18 @@
 <script src="/assets/app.js"></script>
 <script>
 var ticketId = 'AAH-' + (Math.floor(Math.random()*900)+100);
+
+/* Prefill from the homepage budget calculator, if arriving with ?platform=... */
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var platform = params.get('platform');
+  if(platform){
+    var sel = document.getElementById('reqPlatform');
+    for(var i = 0; i < sel.options.length; i++){
+      if(sel.options[i].text.indexOf(platform) !== -1){ sel.selectedIndex = i; break; }
+    }
+  }
+})();
 document.getElementById('ticketId').textContent = '#' + ticketId;
 
 function setField(id, value, fallback){

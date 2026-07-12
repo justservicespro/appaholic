@@ -63,6 +63,10 @@
     </div>
   </div>
 </header>
+
+<div class="ticker" role="marquee" aria-label="Live activity ticker">
+  <div class="ticker__track" id="tickerTrack"></div>
+</div>
 <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
   <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
@@ -70,7 +74,9 @@
   <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
 </nav>
 
-<section class="page-hero dark-texture" id="main-content">
+<section class="page-hero dark-texture" id="main-content" style="position:relative;overflow:hidden">
+  <span class="float-icon" style="top:18%;right:9%;--r:-7deg" aria-hidden="true">💳</span>
+  <span class="float-icon" style="top:60%;right:3%;--r:9deg;animation-delay:1.8s;font-size:22px" aria-hidden="true">📊</span>
   <div class="container">
     <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>Buy once, or stock up</div>
     <h1>Pay per app, <em>or never again.</em></h1>
@@ -119,6 +125,14 @@
 
 <div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
 <script src="/assets/app.js"></script>
+<script>
+(function(){
+  var items = ['💳 Cancel anytime', '⚡ Pro plan — unlimited downloads under ₦3,000', '🏆 Business plan — everything, unlimited',
+    '🔒 Secure checkout via Flutterwave', '🎁 Every app you buy is yours forever', '📈 Save ~2 months on yearly billing'];
+  var track = document.getElementById('tickerTrack');
+  if(track){ var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join(''); track.innerHTML = html + html; }
+})();
+</script>
 <script>
 var allPlans = [];
 var cycle = 'monthly';

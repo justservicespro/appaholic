@@ -82,6 +82,10 @@
     </div>
   </div>
 </header>
+
+<div class="ticker" role="marquee" aria-label="Live activity ticker">
+  <div class="ticker__track" id="tickerTrack"></div>
+</div>
 <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
   <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
@@ -92,7 +96,9 @@
   <div class="mobile-drawer__actions"><a href="/auth" class="btn btn-ghost" id="mobileSignIn" onclick="closeDrawer()">Sign In</a></div>
 </nav>
 
-<section class="page-hero dark-texture">
+<section class="page-hero dark-texture" style="position:relative;overflow:hidden">
+  <span class="float-icon" style="top:15%;right:10%;--r:-6deg" aria-hidden="true">📦</span>
+  <span class="float-icon" style="top:65%;right:4%;--r:8deg;animation-delay:1.5s;font-size:22px" aria-hidden="true">🖥️</span>
   <div class="container">
     <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>The full catalogue</div>
     <h1>Everything on <em>the shelf.</em></h1>
@@ -164,6 +170,14 @@
 
 <div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastMsg"></span></div>
 <script src="/assets/app.js"></script>
+<script>
+(function(){
+  var items = ['🛍️ Browse Web, Desktop & Mobile apps', '⚡ 48-hour request review', '💳 Secure checkout via Flutterwave',
+    '🗳️ Community-voted builds', '🎁 Requesters get it free on launch', '📥 Free apps download instantly', '🔥 15 apps in stock'];
+  var track = document.getElementById('tickerTrack');
+  if(track){ var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join(''); track.innerHTML = html + html; }
+})();
+</script>
 <script>
 var currentPlatform = new URLSearchParams(window.location.search).get('platform') || '';
 var allApps = [];

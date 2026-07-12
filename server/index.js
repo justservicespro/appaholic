@@ -106,6 +106,38 @@ function requireAuth(req, res, next) {
   next();
 }
 
+/* ── ADMIN AUTH — separate from the Google/user session system entirely.
+   Email+password, checked against a salted scrypt hash (Node's built-in
+   crypto — no extra dependency). Admin JWTs carry role:'admin' and a short
+   7-day expiry, verified with the same SESSION_SECRET but never accepted
+   by requireAuth's user-facing routes since those don't check for role. ── */
+const ADMIN_PANEL_EMAIL = process.env.ADMIN_PANEL_EMAIL;
+const ADMIN_PANEL_PASSWORD_HASH = process.env.ADMIN_PANEL_PASSWORD_HASH; // format: "salt:hash"
+if (!ADMIN_PANEL_EMAIL || !ADMIN_PANEL_PASSWORD_HASH) console.warn('⚠️  ADMIN_PANEL_EMAIL / ADMIN_PANEL_PASSWORD_HASH not set — admin panel login will always fail.');
+
+function verifyAdminPassword(password) {
+  if (!ADMIN_PANEL_PASSWORD_HASH || !password) return false;
+  const [salt, storedHash] = ADMIN_PANEL_PASSWORD_HASH.split(':');
+  if (!salt || !storedHash) return false;
+  const attemptHash = crypto.scryptSync(password, salt, 64).toString('hex');
+  const a = Buffer.from(attemptHash, 'hex');
+  const b = Buffer.from(storedHash, 'hex');
+  return a.length === b.length && crypto.timingSafeEqual(a, b); // constant-time compare — no timing side-channel
+}
+function signAdminSession(email) {
+  return jwt.sign({ role: 'admin', email }, SESSION_SECRET, { expiresIn: '7d' });
+}
+function requireAdmin(req, res, next) {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  const payload = token && verifySession(token);
+  if (!payload || payload.role !== 'admin') return res.status(401).json({ ok: false, error: 'Admin sign-in required.' });
+  req.admin = payload;
+  next();
+}
+// Login attempts are rate-limited hard — this endpoint is a real attack target.
+const adminLoginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 8, standardHeaders: true, legacyHeaders: false, message: { ok: false, error: 'Too many attempts. Try again later.' } });
+
 /* ── SMTP ────────────────────────────────────────────────────────────── */
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -791,12 +823,93 @@ app.delete('/api/quicknote/notes/:id', requireAuth, asyncRoute(async (req, res) 
   res.json({ ok: true });
 }));
 
+/* ════════════════════════════════════════════════════════════════════
+   ADMIN PANEL — separate auth, read-mostly views over the business data.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.post('/api/admin/login', adminLoginLimiter, asyncRoute(async (req, res) => {
+  const { email, password } = req.body || {};
+  if (!email || !password) return res.status(400).json({ ok: false, error: 'Email and password required.' });
+  if (!ADMIN_PANEL_EMAIL || !ADMIN_PANEL_PASSWORD_HASH) return res.status(503).json({ ok: false, error: 'Admin panel is not configured yet.' });
+
+  // Constant-time-ish: always run the password check even on email mismatch, so a wrong
+  // email doesn't return faster than a wrong password (avoids trivially timing email guesses).
+  const emailMatches = email.toLowerCase() === ADMIN_PANEL_EMAIL.toLowerCase();
+  const passwordMatches = verifyAdminPassword(password);
+  if (!emailMatches || !passwordMatches) return res.status(401).json({ ok: false, error: 'Invalid email or password.' });
+
+  res.json({ ok: true, token: signAdminSession(ADMIN_PANEL_EMAIL) });
+}));
+
+app.get('/api/admin/me', requireAdmin, (req, res) => res.json({ ok: true, admin: { email: req.admin.email } }));
+
+app.get('/api/admin/overview', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const [profiles, requests, messages, purchases, subs] = await Promise.all([
+    supabase.from('profiles').select('id', { count: 'exact', head: true }),
+    supabase.from('app_requests').select('id', { count: 'exact', head: true }),
+    supabase.from('contact_messages').select('id', { count: 'exact', head: true }),
+    supabase.from('purchases').select('amount').eq('status', 'completed'),
+    supabase.from('subscriptions').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+  ]);
+  const totalRevenue = (purchases.data || []).reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  res.json({
+    ok: true,
+    stats: {
+      totalUsers: profiles.count || 0,
+      totalRequests: requests.count || 0,
+      totalMessages: messages.count || 0,
+      totalPurchases: (purchases.data || []).length,
+      totalRevenue,
+      activeSubscriptions: subs.count || 0,
+    },
+  });
+}));
+
+app.get('/api/admin/requests', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('app_requests').select('*').order('created_at', { ascending: false }).limit(200);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load requests.' });
+  res.json({ ok: true, requests: data });
+}));
+
+app.patch('/api/admin/requests/:id', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { status } = req.body || {};
+  if (!['submitted', 'in_progress', 'under_review', 'built', 'declined'].includes(status)) return res.status(400).json({ ok: false, error: 'Invalid status.' });
+  const { data, error } = await supabase.from('app_requests').update({ status }).eq('id', req.params.id).select('*').maybeSingle();
+  if (error || !data) return res.status(500).json({ ok: false, error: 'Could not update request.' });
+  res.json({ ok: true, request: data });
+}));
+
+app.get('/api/admin/messages', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false }).limit(200);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load messages.' });
+  res.json({ ok: true, messages: data });
+}));
+
+app.get('/api/admin/purchases', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('purchases').select('*, apps(name)').order('created_at', { ascending: false }).limit(200);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load purchases.' });
+  res.json({ ok: true, purchases: data });
+}));
+
+app.get('/api/admin/subscriptions', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('subscriptions').select('*').order('created_at', { ascending: false }).limit(200);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load subscriptions.' });
+  res.json({ ok: true, subscriptions: data });
+}));
+
 app.get('/api/health', (req, res) => res.json({
   ok: true,
   smtp: !missing.includes('GMAIL_USER') && !missing.includes('GMAIL_APP_PASSWORD'),
   oauth: !missing.includes('GOOGLE_CLIENT_ID') && !missing.includes('GOOGLE_CLIENT_SECRET'),
   database: !!supabase,
   session: !missing.includes('SESSION_SECRET'),
+  admin: !!(ADMIN_PANEL_EMAIL && ADMIN_PANEL_PASSWORD_HASH),
   uptime: process.uptime(),
 }));
 
