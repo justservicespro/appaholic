@@ -284,7 +284,7 @@ function setModalAction(state){
     return;
   }
 
-  if(currentModalApp.platform === 'web'){
+  if(currentModalApp.launch_url){
     btn.textContent = 'Launch App';
   } else {
     btn.textContent = Number(currentModalApp.price) > 0 ? 'Get This App' : 'Download';

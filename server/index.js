@@ -489,13 +489,14 @@ app.get('/api/download/:appId', requireAuth, asyncRoute(async (req, res) => {
 
   if (!entitled) return res.status(402).json({ ok: false, error: 'Purchase or a subscription that covers this app is required.', requiresPurchase: true });
 
-  // ── Web apps: no file, just the URL where the app actually runs ──
-  if (app.platform === 'web') {
-    if (!app.launch_url) return res.status(503).json({ ok: false, error: 'This app is not live yet — check back soon.' });
+  // ── If a launch_url is set, use it regardless of platform label ──
+  // Lets a "mobile" catalog entry be honestly satisfied by a responsive
+  // web/PWA build when no native binary exists, instead of hiding that fact.
+  if (app.launch_url) {
     return res.json({ ok: true, type: 'launch', url: app.launch_url });
   }
 
-  // ── Desktop/Mobile: generate a short-lived signed download link ──
+  // ── Otherwise, this needs an actual file — generate a short-lived signed link ──
   if (!app.storage_path) return res.status(503).json({ ok: false, error: 'This app is not available for download yet — check back soon.' });
 
   const { data: signed, error: signErr } = await supabase.storage.from('app-files').createSignedUrl(app.storage_path, 300); // 5 minutes

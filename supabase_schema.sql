@@ -260,3 +260,10 @@ on conflict (id) do nothing;
 -- existing row, so launch_url/storage_path are set here instead, separately,
 -- as each app actually gets built. Safe to re-run — it's just an UPDATE.
 update public.apps set launch_url = '/quicknote' where id = 'quicknote';
+
+-- QuickNote Mobile: no native Android/iOS build exists (see project notes on
+-- why mobile apps need real native tooling this environment doesn't have).
+-- Pragmatic substitution: it points at the same QuickNote web app, which is
+-- mobile-responsive and installable to a home screen as a PWA. Notes sync
+-- automatically since it's literally the same app and backend, not a copy.
+update public.apps set launch_url = '/quicknote' where id = 'quicknote-m';
