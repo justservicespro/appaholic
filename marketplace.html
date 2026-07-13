@@ -83,9 +83,7 @@
   </div>
 </header>
 
-<div class="ticker" role="marquee" aria-label="Live activity ticker">
-  <div class="ticker__track" id="tickerTrack"></div>
-</div>
+<div class="ticker" id="tickerBar" aria-live="polite"></div>
 <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
   <div class="mobile-drawer__header"><span class="nav__logo"><span class="nav__logo-mark">A</span>AppAholic</span><button class="mobile-drawer__close" id="drawerClose" aria-label="Close menu">&#x2715;</button></div>
@@ -174,11 +172,18 @@
 (function(){
   var items = ['🛍️ Browse Web, Desktop & Mobile apps', '⚡ 48-hour request review', '💳 Secure checkout via Flutterwave',
     '🗳️ Community-voted builds', '🎁 Requesters get it free on launch', '📥 Free apps download instantly', '🔥 15 apps in stock'];
-  var track = document.getElementById('tickerTrack');
-  if(track){
-    var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join('');
-    track.innerHTML = html + html;
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){ track.classList.add('ticker-ready'); }); });
+  var bar = document.getElementById('tickerBar');
+  if(!bar) return;
+  bar.innerHTML = items.map(function(t){ return '<div class="ticker__item">' + t + '</div>'; }).join('');
+  var els = bar.querySelectorAll('.ticker__item');
+  var idx = 0;
+  els[0].classList.add('ticker__item--active');
+  if(els.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    setInterval(function(){
+      els[idx].classList.remove('ticker__item--active');
+      idx = (idx + 1) % els.length;
+      els[idx].classList.add('ticker__item--active');
+    }, 3200);
   }
 })();
 </script>
