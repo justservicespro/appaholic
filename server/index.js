@@ -776,7 +776,102 @@ app.post('/api/admin-alert', strictLimiter, asyncRoute(async (req, res) => {
   }
 }));
 
-/* ── HEALTH ── */
+/* ════════════════════════════════════════════════════════════════════
+   INVOICEKIT — per-app API. Clients + invoices, both scoped to the owner.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/invoicekit/clients', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('invoicekit_clients').select('*').eq('user_id', req.user.sub).order('name', { ascending: true });
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load clients.' });
+  res.json({ ok: true, clients: data });
+}));
+
+app.post('/api/invoicekit/clients', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { name, email, phone, address } = req.body || {};
+  if (!name) return res.status(400).json({ ok: false, error: 'Client name is required.' });
+  const { data, error } = await supabase.from('invoicekit_clients')
+    .insert({ user_id: req.user.sub, name: String(name).slice(0, 200), email: email || null, phone: phone || null, address: address || null })
+    .select('*').single();
+  if (error) return res.status(500).json({ ok: false, error: 'Could not create client.' });
+  res.json({ ok: true, client: data });
+}));
+
+app.put('/api/invoicekit/clients/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { name, email, phone, address } = req.body || {};
+  const { data, error } = await supabase.from('invoicekit_clients')
+    .update({ name, email, phone, address }).eq('id', req.params.id).eq('user_id', req.user.sub)
+    .select('*').maybeSingle();
+  if (error || !data) return res.status(404).json({ ok: false, error: 'Client not found.' });
+  res.json({ ok: true, client: data });
+}));
+
+app.delete('/api/invoicekit/clients/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { error, count } = await supabase.from('invoicekit_clients').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not delete client.' });
+  if (!count) return res.status(404).json({ ok: false, error: 'Client not found.' });
+  res.json({ ok: true });
+}));
+
+app.get('/api/invoicekit/invoices', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('invoicekit_invoices').select('*, invoicekit_clients(name, email)').eq('user_id', req.user.sub).order('created_at', { ascending: false });
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load invoices.' });
+  res.json({ ok: true, invoices: data });
+}));
+
+app.post('/api/invoicekit/invoices', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { clientId, invoiceNumber, businessName, items, vatRate, whtRate, dueDate } = req.body || {};
+  if (!invoiceNumber || !Array.isArray(items) || !items.length) return res.status(400).json({ ok: false, error: 'Invoice number and at least one line item are required.' });
+
+  const subtotal = items.reduce((sum, i) => sum + (Number(i.qty) || 0) * (Number(i.price) || 0), 0);
+  const vat = Math.round(subtotal * (Number(vatRate) || 0) / 100);
+  const wht = Math.round(subtotal * (Number(whtRate) || 0) / 100);
+  const total = subtotal + vat - wht;
+
+  const { data, error } = await supabase.from('invoicekit_invoices').insert({
+    user_id: req.user.sub, client_id: clientId || null, invoice_number: invoiceNumber, business_name: businessName || null,
+    items, vat_rate: vatRate || 0, wht_rate: whtRate || 0, subtotal, vat_amount: vat, wht_amount: wht, total,
+    due_date: dueDate || null,
+  }).select('*').single();
+  if (error) return res.status(500).json({ ok: false, error: 'Could not create invoice.' });
+  res.json({ ok: true, invoice: data });
+}));
+
+app.put('/api/invoicekit/invoices/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { status, items, vatRate, whtRate, dueDate } = req.body || {};
+  const updates = { updated_at: new Date().toISOString() };
+  if (status !== undefined) {
+    if (!['draft', 'sent', 'paid', 'overdue'].includes(status)) return res.status(400).json({ ok: false, error: 'Invalid status.' });
+    updates.status = status;
+    if (status === 'paid') updates.paid_at = new Date().toISOString();
+  }
+  if (Array.isArray(items) && items.length) {
+    const subtotal = items.reduce((sum, i) => sum + (Number(i.qty) || 0) * (Number(i.price) || 0), 0);
+    const vat = Math.round(subtotal * (Number(vatRate) || 0) / 100);
+    const wht = Math.round(subtotal * (Number(whtRate) || 0) / 100);
+    Object.assign(updates, { items, vat_rate: vatRate || 0, wht_rate: whtRate || 0, subtotal, vat_amount: vat, wht_amount: wht, total: subtotal + vat - wht });
+  }
+  if (dueDate !== undefined) updates.due_date = dueDate;
+
+  const { data, error } = await supabase.from('invoicekit_invoices').update(updates).eq('id', req.params.id).eq('user_id', req.user.sub).select('*').maybeSingle();
+  if (error || !data) return res.status(404).json({ ok: false, error: 'Invoice not found.' });
+  res.json({ ok: true, invoice: data });
+}));
+
+app.delete('/api/invoicekit/invoices/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { error, count } = await supabase.from('invoicekit_invoices').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not delete invoice.' });
+  if (!count) return res.status(404).json({ ok: false, error: 'Invoice not found.' });
+  res.json({ ok: true });
+}));
+
 /* ════════════════════════════════════════════════════════════════════
    QUICKNOTE — per-app API. Pattern for future web apps: namespaced routes,
    same requireAuth + Supabase service-role pattern as everything else.

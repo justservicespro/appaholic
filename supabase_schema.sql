@@ -214,6 +214,50 @@ create index if not exists idx_apps_category    on public.apps(category);
 alter table public.apps add column if not exists storage_path text;
 alter table public.apps add column if not exists launch_url text;
 
+-- ── INVOICEKIT — per-app data tables ────────────────────────────────
+create table if not exists public.invoicekit_clients (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid not null references public.profiles(id) on delete cascade,
+  name        text not null,
+  email       text,
+  phone       text,
+  address     text,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.invoicekit_clients enable row level security;
+drop policy if exists "invoicekit_clients_all_own" on public.invoicekit_clients;
+create policy "invoicekit_clients_all_own" on public.invoicekit_clients
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create table if not exists public.invoicekit_invoices (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid not null references public.profiles(id) on delete cascade,
+  client_id       uuid references public.invoicekit_clients(id) on delete set null,
+  invoice_number  text not null,
+  business_name   text,
+  items           jsonb not null default '[]',   -- [{description, qty, price}]
+  vat_rate        numeric not null default 7.5,   -- Nigeria standard VAT %
+  wht_rate        numeric not null default 0,     -- withholding tax %, 0 unless applicable
+  subtotal        numeric not null default 0,
+  vat_amount      numeric not null default 0,
+  wht_amount      numeric not null default 0,
+  total           numeric not null default 0,
+  status          text not null default 'draft' check (status in ('draft','sent','paid','overdue')),
+  due_date        date,
+  paid_at         timestamptz,
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now()
+);
+
+alter table public.invoicekit_invoices enable row level security;
+drop policy if exists "invoicekit_invoices_all_own" on public.invoicekit_invoices;
+create policy "invoicekit_invoices_all_own" on public.invoicekit_invoices
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create index if not exists idx_invoicekit_clients_user on public.invoicekit_clients(user_id);
+create index if not exists idx_invoicekit_invoices_user on public.invoicekit_invoices(user_id);
+
 -- ── QUICKNOTE — per-app data table ──────────────────────────────────
 -- Pattern to follow for future web apps: one table per app, namespaced
 -- routes under /api/{app-slug}/..., all authenticated via the same
@@ -267,3 +311,4 @@ update public.apps set launch_url = '/quicknote' where id = 'quicknote';
 -- not a web-app stand-in. This line reverses that substitution if it was ever
 -- applied to your database; it's a no-op (both already null) otherwise.
 update public.apps set launch_url = null where id = 'quicknote-m';
+update public.apps set launch_url = '/invoicekit' where id = 'invoicekit';

@@ -195,10 +195,6 @@ textarea.form-input{resize:vertical}
 }
 .dark-texture::before{background-size:200% 200%;animation:breathe-glow 8s ease-in-out infinite}
 
-.ticker{overflow:hidden;background:var(--ink);border-bottom:1.5px solid var(--line);position:relative;height:38px;display:flex;align-items:center;justify-content:center}
-.ticker__item{position:absolute;left:0;right:0;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;font-weight:600;color:rgba(255,255,255,.75);letter-spacing:.02em;padding:0 16px;opacity:0;transform:translateY(6px);transition:opacity .5s ease,transform .5s ease;pointer-events:none}
-.ticker__item.ticker__item--active{opacity:1;transform:translateY(0);pointer-events:auto}
-.ticker__item strong{color:var(--ochre)}
 
 @keyframes float-bob{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-14px) rotate(var(--r,0deg))}}
 .float-icon{position:absolute;font-size:28px;opacity:.85;animation:float-bob 4.5s ease-in-out infinite;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}

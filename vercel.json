@@ -6,6 +6,7 @@
     { "source": "/marketplace", "destination": "/marketplace.html" },
     { "source": "/pricing", "destination": "/pricing.html" },
     { "source": "/quicknote", "destination": "/quicknote.html" },
+    { "source": "/invoicekit", "destination": "/invoicekit.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/request", "destination": "/request.html" },
     { "source": "/contact", "destination": "/contact.html" },

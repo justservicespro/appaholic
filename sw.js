@@ -16,7 +16,7 @@ const PRE_CACHE = [
   '/assets/app.js',
 ];
 
-const PAGE_ROUTES = ['/', '/marketplace', '/pricing', '/auth', '/dashboard', '/about', '/privacy', '/terms', '/request', '/contact', '/quicknote'];
+const PAGE_ROUTES = ['/', '/marketplace', '/pricing', '/auth', '/dashboard', '/about', '/privacy', '/terms', '/request', '/contact', '/quicknote', '/invoicekit'];
 
 self.addEventListener('install', function (e) {
   self.skipWaiting();

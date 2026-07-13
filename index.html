@@ -34,6 +34,24 @@
 .hero__stats{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap}
 .hero__stat strong{display:block;font-family:var(--font-display);font-size:24px;color:var(--ink)}
 .hero__stat span{font-size:11.5px;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+
+.slider-section{padding:56px 0 64px;background:var(--paper-2)}
+.app-slider{display:flex;align-items:center;gap:14px}
+.app-slider__viewport{flex:1;overflow:hidden;border-radius:var(--r-xl)}
+.app-slider__track{display:flex;transition:transform .45s cubic-bezier(.65,0,.35,1)}
+.app-slider__slide{flex:0 0 25%;padding:0 8px;box-sizing:border-box}
+@media(max-width:900px){.app-slider__slide{flex-basis:33.333%}}
+@media(max-width:640px){.app-slider__slide{flex-basis:50%}}
+@media(max-width:420px){.app-slider__slide{flex-basis:100%}}
+.app-slider__icon{width:100%;aspect-ratio:1.5;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:var(--shadow-md);transition:transform .2s}
+.app-slider__slide:hover .app-slider__icon{transform:translateY(-4px)}
+.app-slider__name{font-family:var(--font-display);font-size:15px;font-weight:700;margin-top:10px}
+.app-slider__meta{font-size:11.5px;color:var(--muted);font-family:var(--font-mono)}
+.app-slider__nav{width:38px;height:38px;border-radius:50%;background:var(--white);border:1.5px solid var(--line);font-size:18px;color:var(--ink);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.app-slider__nav:hover{border-color:var(--ink);background:var(--ink);color:var(--white)}
+.app-slider__dots{display:flex;justify-content:center;gap:7px;margin-top:20px}
+.slider-dot{width:7px;height:7px;border-radius:50%;background:var(--line);transition:all .2s}
+.slider-dot.active{background:var(--ochre-dim);width:20px;border-radius:4px}
 .ledger-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:0;overflow:hidden}
 .ledger-card__head{background:var(--ink);color:var(--white);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
 .ledger-card__head span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55)}
@@ -141,7 +159,6 @@
   </div>
 </header>
 
-<div class="ticker" id="tickerBar" aria-live="polite"></div>
 
 <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true" role="dialog">
@@ -194,6 +211,32 @@
         <div class="ledger-row"><div class="ledger-row__icon" style="background:#E8EAF6">🤖</div><div class="ledger-row__text"><strong>TaskMind AI</strong><span>AI Tools · Web</span></div><div class="ledger-row__price">₦5,000</div></div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="slider-section">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div class="section-eyebrow">On the shelf right now</div>
+      <h2>Straight from the catalogue.</h2>
+    </div>
+    <div class="app-slider" data-reveal="scale">
+      <button class="app-slider__nav app-slider__nav--prev" id="sliderPrev" aria-label="Previous">&#8249;</button>
+      <div class="app-slider__viewport">
+        <div class="app-slider__track" id="sliderTrack">
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#F3E5F5">🧾</div><div class="app-slider__name">InvoiceKit</div><div class="app-slider__meta">Finance · Web · ₦2,500</div></div>
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#FFFDE7">📝</div><div class="app-slider__name">QuickNote</div><div class="app-slider__meta">Productivity · Web · Free</div></div>
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#E3F2FD">🗂️</div><div class="app-slider__name">VaultSync</div><div class="app-slider__meta">Storage · Desktop · Free</div></div>
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#E8F5E9">💸</div><div class="app-slider__name">PayTrack</div><div class="app-slider__meta">Finance · Mobile · ₦800</div></div>
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#E8EAF6">🤖</div><div class="app-slider__name">TaskMind AI</div><div class="app-slider__meta">AI Tools · Web · ₦5,000</div></div>
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#FFF3E0">⏱️</div><div class="app-slider__name">FocusClock</div><div class="app-slider__meta">Productivity · Web · ₦1,200</div></div>
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#FCE4EC">🔐</div><div class="app-slider__name">LockBox</div><div class="app-slider__meta">Security · Desktop · ₦2,000</div></div>
+          <div class="app-slider__slide"><div class="app-slider__icon" style="background:#E0F7FA">💬</div><div class="app-slider__name">TeamPing</div><div class="app-slider__meta">Communication · Web · ₦1,800</div></div>
+        </div>
+      </div>
+      <button class="app-slider__nav app-slider__nav--next" id="sliderNext" aria-label="Next">&#8250;</button>
+    </div>
+    <div class="app-slider__dots" id="sliderDots"></div>
   </div>
 </section>
 
@@ -418,26 +461,60 @@
   }
 })();
 
-/* ── ACTIVITY BANNER — fades between messages, no width-dependent animation ── */
+/* ── APP SLIDER — discrete steps, re-measures actual layout on every move
+   (not a precomputed animation), so it can't drift or "scatter" the way a
+   seamless-loop marquee can if fonts/layout shift after the animation starts. ── */
 (function(){
-  var items = [
-    '🧾 InvoiceKit — ₦2,500', '📝 QuickNote — Free', '⚡ 48-hour request review',
-    '🗳️ Community-voted builds', '💳 Secure checkout via Flutterwave', '🎁 Requesters get it free on launch',
-    '🖥️ Desktop & 📱 Mobile & 🌐 Web available', '🔥 15 apps in stock', '🤖 TaskMind AI — ₦5,000',
-  ];
-  var bar = document.getElementById('tickerBar');
-  if(!bar) return;
-  bar.innerHTML = items.map(function(t){ return '<div class="ticker__item">' + t + '</div>'; }).join('');
-  var els = bar.querySelectorAll('.ticker__item');
-  var idx = 0;
-  els[0].classList.add('ticker__item--active');
-  if(els.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    setInterval(function(){
-      els[idx].classList.remove('ticker__item--active');
-      idx = (idx + 1) % els.length;
-      els[idx].classList.add('ticker__item--active');
-    }, 3200);
+  var track = document.getElementById('sliderTrack');
+  if(!track) return;
+  var slides = track.querySelectorAll('.app-slider__slide');
+  var dotsWrap = document.getElementById('sliderDots');
+  var index = 0;
+  var autoTimer = null;
+
+  function visibleCount(){
+    if(window.innerWidth <= 420) return 1;
+    if(window.innerWidth <= 640) return 2;
+    if(window.innerWidth <= 900) return 3;
+    return 4;
   }
+  function maxIndex(){ return Math.max(0, slides.length - visibleCount()); }
+
+  function renderDots(){
+    var pages = maxIndex() + 1;
+    dotsWrap.innerHTML = '';
+    for(var i = 0; i < pages; i++){
+      var d = document.createElement('button');
+      d.className = 'slider-dot' + (i === index ? ' active' : '');
+      d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+      (function(pageIdx){ d.addEventListener('click', function(){ resetAuto(); goTo(pageIdx); }); })(i);
+      dotsWrap.appendChild(d);
+    }
+  }
+
+  function goTo(i){
+    index = Math.max(0, Math.min(i, maxIndex()));
+    // Measure the actual current slide width fresh, every time — self-correcting
+    // even if fonts/layout shifted since the last move, unlike a fixed-duration
+    // seamless-loop animation decided once before content settled.
+    var pxPerSlide = slides[0].offsetWidth;
+    track.style.transform = 'translateX(-' + (pxPerSlide * index) + 'px)';
+    renderDots();
+  }
+
+  document.getElementById('sliderNext').addEventListener('click', function(){ resetAuto(); goTo(index + 1 > maxIndex() ? 0 : index + 1); });
+  document.getElementById('sliderPrev').addEventListener('click', function(){ resetAuto(); goTo(index - 1 < 0 ? maxIndex() : index - 1); });
+
+  function startAuto(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    autoTimer = setInterval(function(){ goTo(index + 1 > maxIndex() ? 0 : index + 1); }, 4000);
+  }
+  function resetAuto(){ clearInterval(autoTimer); startAuto(); }
+
+  window.addEventListener('resize', function(){ goTo(Math.min(index, maxIndex())); });
+
+  renderDots();
+  startAuto();
 })();
 
 /* ── BUDGET CALCULATOR — full feature-chip + multi-selector estimator ── */
@@ -474,17 +551,22 @@ function toggleFeat(btn){
 }
 
 function updateCalc(){
-  var b = CB[CS.type] * CP[CS.platform] * CC[CS.complexity] + CI[CS.integrations] + CA[CS.admin];
+  var raw = CB[CS.type] * CP[CS.platform] * CC[CS.complexity] + CI[CS.integrations] + CA[CS.admin];
   var featCost = 0;
   document.querySelectorAll('.feat-chip.on').forEach(function(c){ featCost += Number(c.dataset.cost) || 0; });
-  if(CS.timeline === 'rush') b *= 1.3;
-  b = Math.round((b + featCost) / 1000) * 1000;
-  // Range widened beyond the raw estimate as a deliberate buffer: local Nigerian
-  // freelance/project rates vary significantly by developer experience and city,
-  // and scope creep is the norm, not the exception, once a project actually starts.
-  // Lower bound stays close to the estimate; upper bound has more room to absorb
-  // added complexity discovered after the request is submitted.
-  var lo = Math.round(b * 0.85 / 1000) * 1000, hi = Math.round(b * 1.6 / 1000) * 1000;
+  if(CS.timeline === 'rush') raw *= 1.3;
+  raw += featCost;
+
+  // BUFFER: the headline estimate itself is bumped 15% above the raw calculation,
+  // not just the range around it. Local project scope reliably grows once work
+  // starts, and it's safer to anchor a client's expectation a bit high than to
+  // underquote and have to renegotiate upward later.
+  var BUFFER = 1.15;
+  var b = Math.round((raw * BUFFER) / 1000) * 1000;
+
+  // Range sits around the already-buffered number — lower bound close to it,
+  // upper bound with more room for added complexity discovered mid-project.
+  var lo = Math.round(b * 0.9 / 1000) * 1000, hi = Math.round(b * 1.5 / 1000) * 1000;
 
   document.getElementById('calcPrice').textContent = '₦' + b.toLocaleString();
   document.getElementById('calcRange').textContent = 'Range: ₦' + lo.toLocaleString() + ' – ₦' + hi.toLocaleString();
@@ -498,6 +580,7 @@ function updateCalc(){
   if(CA[CS.admin]) rows.push({ l: 'Admin dashboard', v: '+₦' + CA[CS.admin].toLocaleString() });
   if(featCost) rows.push({ l: 'Features', v: '+₦' + featCost.toLocaleString() });
   if(CS.timeline === 'rush') rows.push({ l: 'Rush delivery', v: '+30%' });
+  rows.push({ l: 'Planning buffer', v: '+15%' });
   rows.push({ l: 'Total estimate', v: '₦' + b.toLocaleString(), t: true });
 
   document.getElementById('calcBreakdown').innerHTML = rows.map(function(r){
