@@ -175,7 +175,11 @@
   var items = ['🛍️ Browse Web, Desktop & Mobile apps', '⚡ 48-hour request review', '💳 Secure checkout via Flutterwave',
     '🗳️ Community-voted builds', '🎁 Requesters get it free on launch', '📥 Free apps download instantly', '🔥 15 apps in stock'];
   var track = document.getElementById('tickerTrack');
-  if(track){ var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join(''); track.innerHTML = html + html; }
+  if(track){
+    var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join('');
+    track.innerHTML = html + html;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ track.classList.add('ticker-ready'); }); });
+  }
 })();
 </script>
 <script>

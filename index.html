@@ -73,13 +73,40 @@
 .request-cta__promises{display:flex;flex-direction:column;gap:14px;position:relative;z-index:1}
 .request-cta__promise{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,.75)}
 
-.calc-wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:0;background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-md)}
-@media(max-width:760px){.calc-wrap{grid-template-columns:1fr}}
-.calc-inputs{padding:32px}
-.calc-result{background:var(--ink);color:var(--white);padding:32px;display:flex;flex-direction:column;justify-content:center}
-.calc-result__label{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.5)}
-.calc-result__price{font-family:var(--font-display);font-size:clamp(24px,3vw,32px);font-weight:700;color:var(--ochre);margin:8px 0 12px;transition:opacity .2s}
-.calc-result__note{font-size:12px;color:rgba(255,255,255,.55);line-height:1.6}
+.calc-hints{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+@media(max-width:800px){.calc-hints{grid-template-columns:1fr}}
+.calc-hint{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.6}
+
+.calc-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.calc-layout{grid-template-columns:1fr}}
+.calc-left{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);padding:26px}
+.feat-section__title{font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:14px}
+.feat-chips{display:flex;flex-wrap:wrap;gap:8px}
+.feat-chip{display:inline-flex;align-items:center;gap:6px;padding:9px 13px;border-radius:999px;border:1.5px solid var(--line);font-size:12px;font-weight:600;color:var(--ink-3);background:var(--white);transition:all .18s}
+.feat-chip:hover{border-color:var(--ink)}
+.feat-chip__check{display:none;color:var(--white);font-size:10px}
+.feat-chip.on{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.feat-chip.on .feat-chip__check{display:inline}
+.feat-chip__price{font-family:var(--font-mono);font-size:10.5px;opacity:.7}
+
+.calc-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-xl);padding:26px}
+.calc-row{margin-bottom:18px}
+.calc-row label{display:block;font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:8px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.03em}
+.calc-options{display:flex;flex-wrap:wrap;gap:7px}
+.calc-opt{padding:8px 13px;border-radius:8px;border:1.5px solid var(--line);font-size:12px;font-weight:600;color:var(--ink-3);background:var(--white);transition:all .15s}
+.calc-opt:hover{border-color:var(--ink)}
+.calc-opt.sel{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.feat-summary{margin:18px 0;padding:14px;background:var(--paper);border-radius:var(--r-md);border:1px solid var(--line)}
+.feat-summary__title{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;letter-spacing:.03em}
+.feat-summary-item{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;color:var(--ink-3)}
+.calc-result{background:var(--ink);color:var(--white);border-radius:var(--r-lg);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px}
+.calc-result__lbl{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;color:rgba(255,255,255,.5);letter-spacing:.04em}
+.calc-result__price{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ochre);margin:4px 0}
+.calc-result__range{font-size:11px;color:rgba(255,255,255,.55)}
+.calc-breakdown{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+.calc-brow{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;color:var(--ink-3)}
+.calc-brow.total{font-weight:700;color:var(--ink);border-top:1px solid var(--line);margin-top:6px;padding-top:10px}
+.calc-note{margin-top:14px;font-size:11.5px;color:var(--muted);text-align:center}
 .request-cta__promise strong{color:var(--white);display:block;font-size:13.5px}
 </style>
 </head>
@@ -218,42 +245,82 @@
 <section class="section" id="calculator">
   <div class="container">
     <div class="section-head" data-reveal>
-      <div class="section-eyebrow">Not sure what it'll cost?</div>
-      <h2>Estimate your app.</h2>
+      <div class="section-eyebrow">Project estimator</div>
+      <h2>How much will your app cost?</h2>
     </div>
-    <div class="calc-wrap" data-reveal="scale">
-      <div class="calc-inputs">
-        <div class="form-row">
-          <label>What kind of app?</label>
-          <select class="form-input" id="calcComplexity">
-            <option value="simple">Simple — one core feature, minimal setup</option>
-            <option value="standard" selected>Standard — a few features, some data/reports</option>
-            <option value="complex">Complex — multiple features, integrations, admin panel</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label>Which platform?</label>
-          <select class="form-input" id="calcPlatform">
-            <option value="web">Web (browser)</option>
-            <option value="desktop">Desktop (Windows/Mac)</option>
-            <option value="mobile">Mobile (Android/iOS)</option>
-            <option value="cross">Cross-platform (all of the above)</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label>Any external integrations? <span style="color:var(--muted);font-weight:400">(WhatsApp, Flutterwave, Google Sheets, etc.)</span></label>
-          <select class="form-input" id="calcIntegrations">
-            <option value="none">None needed</option>
-            <option value="one">One or two</option>
-            <option value="several">Several</option>
-          </select>
+    <div class="calc-hints" data-reveal>
+      <div class="calc-hint">📋 <span>Estimates cover standard builds. Complex AI features or multi-platform needs may shift pricing.</span></div>
+      <div class="calc-hint">⚡ <span>Rush delivery under 2 weeks adds 30% to the base estimate.</span></div>
+      <div class="calc-hint">🎁 <span>Apps listed on AppAholic get revenue-share pricing — lower upfront cost.</span></div>
+    </div>
+
+    <div class="calc-layout" data-reveal="scale">
+      <div class="calc-left">
+        <div class="feat-section__title">Popular features — click to add</div>
+        <div class="feat-chips" id="featChips">
+          <button class="feat-chip" data-cost="15000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>🔍 Search &amp; Filter <span class="feat-chip__price">+₦15K</span></button>
+          <button class="feat-chip" data-cost="25000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>👤 User Auth / Login <span class="feat-chip__price">+₦25K</span></button>
+          <button class="feat-chip" data-cost="30000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>💳 Payment Integration <span class="feat-chip__price">+₦30K</span></button>
+          <button class="feat-chip" data-cost="20000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>📊 Charts &amp; Analytics <span class="feat-chip__price">+₦20K</span></button>
+          <button class="feat-chip" data-cost="18000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>🔔 Push Notifications <span class="feat-chip__price">+₦18K</span></button>
+          <button class="feat-chip" data-cost="20000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>📤 File Upload / Export <span class="feat-chip__price">+₦20K</span></button>
+          <button class="feat-chip" data-cost="22000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>🌗 Dark / Light Mode <span class="feat-chip__price">+₦22K</span></button>
+          <button class="feat-chip" data-cost="35000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>🤖 AI / Smart Features <span class="feat-chip__price">+₦35K</span></button>
+          <button class="feat-chip" data-cost="16000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>📷 Camera / QR Scan <span class="feat-chip__price">+₦16K</span></button>
+          <button class="feat-chip" data-cost="12000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>🌐 Multi-language <span class="feat-chip__price">+₦12K</span></button>
+          <button class="feat-chip" data-cost="14000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>💬 Live Chat / Support <span class="feat-chip__price">+₦14K</span></button>
+          <button class="feat-chip" data-cost="28000" onclick="toggleFeat(this)"><span class="feat-chip__check">✓</span>📴 Offline / PWA Support <span class="feat-chip__price">+₦28K</span></button>
         </div>
       </div>
-      <div class="calc-result">
-        <div class="calc-result__label">Estimated range</div>
-        <div class="calc-result__price" id="calcPrice">₦40,000 – ₦120,000</div>
-        <div class="calc-result__note">This is a rough estimate to help you plan — your actual quote is confirmed after you submit a request.</div>
-        <a href="/request" class="btn btn-ochre" style="width:100%;justify-content:center;margin-top:16px" id="calcCta">Request This App →</a>
+
+      <div class="calc-card">
+        <div class="calc-row"><label>App Type</label><div class="calc-options" id="calc-type">
+          <button class="calc-opt sel" data-val="utility" onclick="calcPick(this,'type')">Utility / Tool</button>
+          <button class="calc-opt" data-val="dashboard" onclick="calcPick(this,'type')">Dashboard</button>
+          <button class="calc-opt" data-val="ecommerce" onclick="calcPick(this,'type')">E-commerce</button>
+          <button class="calc-opt" data-val="ai" onclick="calcPick(this,'type')">AI-powered</button>
+        </div></div>
+        <div class="calc-row"><label>Platform</label><div class="calc-options" id="calc-platform">
+          <button class="calc-opt sel" data-val="web" onclick="calcPick(this,'platform')">🌐 Web</button>
+          <button class="calc-opt" data-val="desktop" onclick="calcPick(this,'platform')">🖥️ Desktop</button>
+          <button class="calc-opt" data-val="mobile" onclick="calcPick(this,'platform')">📱 Mobile</button>
+          <button class="calc-opt" data-val="both" onclick="calcPick(this,'platform')">⚡ Web + Mobile</button>
+        </div></div>
+        <div class="calc-row"><label>Complexity</label><div class="calc-options" id="calc-complexity">
+          <button class="calc-opt sel" data-val="basic" onclick="calcPick(this,'complexity')">Basic (3–5 screens)</button>
+          <button class="calc-opt" data-val="standard" onclick="calcPick(this,'complexity')">Standard (6–10)</button>
+          <button class="calc-opt" data-val="advanced" onclick="calcPick(this,'complexity')">Advanced (10+)</button>
+        </div></div>
+        <div class="calc-row"><label>Integrations</label><div class="calc-options" id="calc-integrations">
+          <button class="calc-opt sel" data-val="none" onclick="calcPick(this,'integrations')">None</button>
+          <button class="calc-opt" data-val="some" onclick="calcPick(this,'integrations')">1–2 (email, SMS)</button>
+          <button class="calc-opt" data-val="many" onclick="calcPick(this,'integrations')">3+ (APIs, payments)</button>
+        </div></div>
+        <div class="calc-row"><label>Admin Dashboard</label><div class="calc-options" id="calc-admin">
+          <button class="calc-opt sel" data-val="no" onclick="calcPick(this,'admin')">Not needed</button>
+          <button class="calc-opt" data-val="basic" onclick="calcPick(this,'admin')">Basic</button>
+          <button class="calc-opt" data-val="full" onclick="calcPick(this,'admin')">Full dashboard</button>
+        </div></div>
+        <div class="calc-row"><label>Timeline</label><div class="calc-options" id="calc-timeline">
+          <button class="calc-opt sel" data-val="normal" onclick="calcPick(this,'timeline')">Flexible</button>
+          <button class="calc-opt" data-val="rush" onclick="calcPick(this,'timeline')">Rush (+30%)</button>
+        </div></div>
+
+        <div class="feat-summary" id="featSummary" style="display:none">
+          <div class="feat-summary__title">Added features</div>
+          <div id="featSummaryList"></div>
+        </div>
+
+        <div class="calc-result">
+          <div>
+            <div class="calc-result__lbl">Estimated Cost</div>
+            <div class="calc-result__price" id="calcPrice">₦25,000</div>
+            <div class="calc-result__range" id="calcRange">Range: ₦20,000 – ₦33,000</div>
+          </div>
+          <a href="/request" class="btn btn-ochre" id="calcCta">Request This →</a>
+        </div>
+        <div class="calc-breakdown" id="calcBreakdown"></div>
+        <div class="calc-note">This is an estimate, not a quote. Submit a request and we'll send a detailed proposal within 48 hours.</div>
       </div>
     </div>
   </div>
@@ -364,42 +431,73 @@
   if(!track) return;
   var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join('');
   track.innerHTML = html + html; // duplicated for seamless -50% loop
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ track.classList.add('ticker-ready'); }); });
 })();
 
-/* ── BUDGET CALCULATOR ── */
-(function(){
-  var ranges = {
-    simple:   { web: [15000, 40000], desktop: [25000, 55000], mobile: [30000, 65000], cross: [45000, 90000] },
-    standard: { web: [40000, 120000], desktop: [55000, 140000], mobile: [65000, 150000], cross: [90000, 200000] },
-    complex:  { web: [120000, 300000], desktop: [140000, 320000], mobile: [150000, 350000], cross: [200000, 450000] },
-  };
-  var integrationMultiplier = { none: 1, one: 1.15, several: 1.35 };
+/* ── BUDGET CALCULATOR — full feature-chip + multi-selector estimator ── */
+var CS = { type:'utility', platform:'web', complexity:'basic', integrations:'none', admin:'no', timeline:'normal' };
+var CB = { utility:25000, dashboard:45000, ecommerce:65000, ai:90000 };
+var CP = { web:1, desktop:1.15, mobile:1.3, both:1.7 };
+var CC = { basic:1, standard:1.5, advanced:2.2 };
+var CI = { none:0, some:8000, many:20000 };
+var CA = { no:0, basic:12000, full:25000 };
+var PLATFORM_LABEL = { web:'Web (Browser)', desktop:'Windows Desktop', mobile:'Android Mobile', both:'Cross-platform' };
 
-  function fmt(n){ return '₦' + Math.round(n).toLocaleString(); }
+function calcPick(btn, g){
+  document.querySelectorAll('#calc-' + g + ' .calc-opt').forEach(function(b){ b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  CS[g] = btn.dataset.val;
+  updateCalc();
+}
 
-  function updateEstimate(){
-    var complexity = document.getElementById('calcComplexity').value;
-    var platform = document.getElementById('calcPlatform').value;
-    var integrations = document.getElementById('calcIntegrations').value;
-    var base = ranges[complexity][platform];
-    var mult = integrationMultiplier[integrations];
-    var priceEl = document.getElementById('calcPrice');
-    priceEl.style.opacity = '0';
-    setTimeout(function(){
-      priceEl.textContent = fmt(base[0] * mult) + ' – ' + fmt(base[1] * mult);
-      priceEl.style.opacity = '1';
-    }, 150);
-
-    var params = new URLSearchParams();
-    params.set('platform', platform === 'cross' ? 'Cross-platform' : platform.charAt(0).toUpperCase() + platform.slice(1));
-    document.getElementById('calcCta').href = '/request?' + params.toString();
+function toggleFeat(btn){
+  btn.classList.toggle('on');
+  var sel = Array.from(document.querySelectorAll('.feat-chip.on'));
+  var summary = document.getElementById('featSummary');
+  var list = document.getElementById('featSummaryList');
+  if(!sel.length){
+    if(summary) summary.style.display = 'none';
+  } else {
+    if(summary) summary.style.display = 'block';
+    if(list) list.innerHTML = sel.map(function(c){
+      var label = c.textContent.replace('✓','').replace(/\+₦\d+K/,'').trim();
+      return '<div class="feat-summary-item"><span>' + label + '</span><span>+₦' + Number(c.dataset.cost).toLocaleString() + '</span></div>';
+    }).join('');
   }
-  ['calcComplexity','calcPlatform','calcIntegrations'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.addEventListener('change', updateEstimate);
-  });
-  if(document.getElementById('calcPrice')) updateEstimate();
-})();
+  updateCalc();
+}
+
+function updateCalc(){
+  var b = CB[CS.type] * CP[CS.platform] * CC[CS.complexity] + CI[CS.integrations] + CA[CS.admin];
+  var featCost = 0;
+  document.querySelectorAll('.feat-chip.on').forEach(function(c){ featCost += Number(c.dataset.cost) || 0; });
+  if(CS.timeline === 'rush') b *= 1.3;
+  b = Math.round((b + featCost) / 1000) * 1000;
+  var lo = Math.round(b * 0.8 / 1000) * 1000, hi = Math.round(b * 1.3 / 1000) * 1000;
+
+  document.getElementById('calcPrice').textContent = '₦' + b.toLocaleString();
+  document.getElementById('calcRange').textContent = 'Range: ₦' + lo.toLocaleString() + ' – ₦' + hi.toLocaleString();
+
+  var rows = [
+    { l: 'Base (' + CS.type + ')', v: '₦' + CB[CS.type].toLocaleString() },
+    { l: 'Platform', v: 'x' + CP[CS.platform] },
+    { l: 'Complexity', v: 'x' + CC[CS.complexity] },
+  ];
+  if(CI[CS.integrations]) rows.push({ l: 'Integrations', v: '+₦' + CI[CS.integrations].toLocaleString() });
+  if(CA[CS.admin]) rows.push({ l: 'Admin dashboard', v: '+₦' + CA[CS.admin].toLocaleString() });
+  if(featCost) rows.push({ l: 'Features', v: '+₦' + featCost.toLocaleString() });
+  if(CS.timeline === 'rush') rows.push({ l: 'Rush delivery', v: '+30%' });
+  rows.push({ l: 'Total estimate', v: '₦' + b.toLocaleString(), t: true });
+
+  document.getElementById('calcBreakdown').innerHTML = rows.map(function(r){
+    return '<div class="calc-brow' + (r.t ? ' total' : '') + '"><span class="calc-brow__lbl">' + r.l + '</span><span class="calc-brow__val">' + r.v + '</span></div>';
+  }).join('');
+
+  var params = new URLSearchParams();
+  params.set('platform', PLATFORM_LABEL[CS.platform]);
+  document.getElementById('calcCta').href = '/request?' + params.toString();
+}
+if(document.getElementById('calcBreakdown')) updateCalc();
 </script>
 </body>
 </html>

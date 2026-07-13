@@ -130,7 +130,11 @@
   var items = ['💳 Cancel anytime', '⚡ Pro plan — unlimited downloads under ₦3,000', '🏆 Business plan — everything, unlimited',
     '🔒 Secure checkout via Flutterwave', '🎁 Every app you buy is yours forever', '📈 Save ~2 months on yearly billing'];
   var track = document.getElementById('tickerTrack');
-  if(track){ var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join(''); track.innerHTML = html + html; }
+  if(track){
+    var html = items.map(function(t){ return '<span class="ticker__item">' + t + '</span><span class="ticker__sep">·</span>'; }).join('');
+    track.innerHTML = html + html;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ track.classList.add('ticker-ready'); }); });
+  }
 })();
 </script>
 <script>
