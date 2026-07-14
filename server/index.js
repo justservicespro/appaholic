@@ -493,6 +493,32 @@ app.post('/api/webhook', asyncRoute(async (req, res) => {
   }
 }));
 
+// Shared entitlement check — free apps, purchased apps, or subscription-covered apps.
+// Used by both the lightweight /api/entitlement check (for button labeling) and the
+// actual /api/download route (which needs entitlement confirmed before handing out a file).
+async function checkEntitlement(userId, app) {
+  if (Number(app.price) === 0) return true;
+  const { data: purchase } = await supabase.from('purchases').select('id').eq('user_id', userId).eq('app_id', app.id).eq('status', 'completed').maybeSingle();
+  if (purchase) return true;
+  const { data: sub } = await supabase.from('subscriptions').select('plan').eq('user_id', userId).eq('status', 'active').order('created_at', { ascending: false }).limit(1).maybeSingle();
+  if (sub) {
+    if (sub.plan === 'business') return true;
+    if (sub.plan === 'pro' && Number(app.price) <= 3000) return true;
+  }
+  return false;
+}
+
+// GET /api/entitlement/:appId — lightweight, no signed URL generated. Used by the
+// marketplace to decide the correct button label (Get / Download / Install) *before*
+// the user clicks anything, not just react after the fact.
+app.get('/api/entitlement/:appId', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data: app, error: appErr } = await supabase.from('apps').select('id, price, platform, launch_url, storage_path').eq('id', req.params.appId).eq('active', true).maybeSingle();
+  if (appErr || !app) return res.status(404).json({ ok: false, error: 'App not found.' });
+  const entitled = await checkEntitlement(req.user.sub, app);
+  res.json({ ok: true, entitled, deliveryType: app.launch_url ? 'install' : (app.storage_path ? 'download' : 'unavailable') });
+}));
+
 // GET /api/download/:appId — authenticated. Checks the user is actually entitled to this
 // app (free, purchased, or covered by their subscription tier) before handing out anything.
 // Desktop/Mobile apps get a short-lived signed Supabase Storage URL; Web apps get their launch_url.
@@ -503,28 +529,17 @@ app.get('/api/download/:appId', requireAuth, asyncRoute(async (req, res) => {
   const { data: app, error: appErr } = await supabase.from('apps').select('*').eq('id', appId).eq('active', true).maybeSingle();
   if (appErr || !app) return res.status(404).json({ ok: false, error: 'App not found.' });
 
-  // ── Entitlement check ──
-  let entitled = Number(app.price) === 0;
-
-  if (!entitled) {
-    const { data: purchase } = await supabase.from('purchases').select('id').eq('user_id', req.user.sub).eq('app_id', appId).eq('status', 'completed').maybeSingle();
-    if (purchase) entitled = true;
-  }
-
-  if (!entitled) {
-    const { data: sub } = await supabase.from('subscriptions').select('plan').eq('user_id', req.user.sub).eq('status', 'active').order('created_at', { ascending: false }).limit(1).maybeSingle();
-    if (sub) {
-      if (sub.plan === 'business') entitled = true;
-      else if (sub.plan === 'pro' && Number(app.price) <= 3000) entitled = true;
-    }
-  }
-
+  const entitled = await checkEntitlement(req.user.sub, app);
   if (!entitled) return res.status(402).json({ ok: false, error: 'Purchase or a subscription that covers this app is required.', requiresPurchase: true });
 
   // ── If a launch_url is set, use it regardless of platform label ──
   // Lets a "mobile" catalog entry be honestly satisfied by a responsive
   // web/PWA build when no native binary exists, instead of hiding that fact.
   if (app.launch_url) {
+    // Log this the same way an actual file download is logged — every acquisition
+    // (bought or free, file or web/install) should show up in the user's dashboard.
+    supabase.from('downloads').insert({ user_id: req.user.sub, app_id: appId, device: 'web-install' })
+      .then(({ error }) => { if (error) console.error('install log insert failed:', error.message); });
     return res.json({ ok: true, type: 'launch', url: app.launch_url });
   }
 
@@ -783,7 +798,7 @@ app.post('/api/admin-alert', strictLimiter, asyncRoute(async (req, res) => {
 app.get('/api/invoicekit/clients', requireAuth, asyncRoute(async (req, res) => {
   if (!requireSupabase(res)) return;
   const { data, error } = await supabase.from('invoicekit_clients').select('*').eq('user_id', req.user.sub).order('name', { ascending: true });
-  if (error) return res.status(500).json({ ok: false, error: 'Could not load clients.' });
+  if (error) { console.error('invoicekit GET clients failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load clients.' }); }
   res.json({ ok: true, clients: data });
 }));
 
@@ -794,7 +809,7 @@ app.post('/api/invoicekit/clients', requireAuth, asyncRoute(async (req, res) => 
   const { data, error } = await supabase.from('invoicekit_clients')
     .insert({ user_id: req.user.sub, name: String(name).slice(0, 200), email: email || null, phone: phone || null, address: address || null })
     .select('*').single();
-  if (error) return res.status(500).json({ ok: false, error: 'Could not create client.' });
+  if (error) { console.error('invoicekit POST client failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not create client.' }); }
   res.json({ ok: true, client: data });
 }));
 
@@ -804,6 +819,7 @@ app.put('/api/invoicekit/clients/:id', requireAuth, asyncRoute(async (req, res) 
   const { data, error } = await supabase.from('invoicekit_clients')
     .update({ name, email, phone, address }).eq('id', req.params.id).eq('user_id', req.user.sub)
     .select('*').maybeSingle();
+  if (error) console.error('invoicekit PUT client failed:', error.message);
   if (error || !data) return res.status(404).json({ ok: false, error: 'Client not found.' });
   res.json({ ok: true, client: data });
 }));
@@ -811,7 +827,7 @@ app.put('/api/invoicekit/clients/:id', requireAuth, asyncRoute(async (req, res) 
 app.delete('/api/invoicekit/clients/:id', requireAuth, asyncRoute(async (req, res) => {
   if (!requireSupabase(res)) return;
   const { error, count } = await supabase.from('invoicekit_clients').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
-  if (error) return res.status(500).json({ ok: false, error: 'Could not delete client.' });
+  if (error) { console.error('invoicekit DELETE client failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not delete client.' }); }
   if (!count) return res.status(404).json({ ok: false, error: 'Client not found.' });
   res.json({ ok: true });
 }));
@@ -819,7 +835,7 @@ app.delete('/api/invoicekit/clients/:id', requireAuth, asyncRoute(async (req, re
 app.get('/api/invoicekit/invoices', requireAuth, asyncRoute(async (req, res) => {
   if (!requireSupabase(res)) return;
   const { data, error } = await supabase.from('invoicekit_invoices').select('*, invoicekit_clients(name, email)').eq('user_id', req.user.sub).order('created_at', { ascending: false });
-  if (error) return res.status(500).json({ ok: false, error: 'Could not load invoices.' });
+  if (error) { console.error('invoicekit GET invoices failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load invoices.' }); }
   res.json({ ok: true, invoices: data });
 }));
 
@@ -838,7 +854,7 @@ app.post('/api/invoicekit/invoices', requireAuth, asyncRoute(async (req, res) =>
     items, vat_rate: vatRate || 0, wht_rate: whtRate || 0, subtotal, vat_amount: vat, wht_amount: wht, total,
     due_date: dueDate || null,
   }).select('*').single();
-  if (error) return res.status(500).json({ ok: false, error: 'Could not create invoice.' });
+  if (error) { console.error('invoicekit POST invoice failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not create invoice.' }); }
   res.json({ ok: true, invoice: data });
 }));
 
@@ -860,6 +876,7 @@ app.put('/api/invoicekit/invoices/:id', requireAuth, asyncRoute(async (req, res)
   if (dueDate !== undefined) updates.due_date = dueDate;
 
   const { data, error } = await supabase.from('invoicekit_invoices').update(updates).eq('id', req.params.id).eq('user_id', req.user.sub).select('*').maybeSingle();
+  if (error) console.error('invoicekit PUT invoice failed:', error.message);
   if (error || !data) return res.status(404).json({ ok: false, error: 'Invoice not found.' });
   res.json({ ok: true, invoice: data });
 }));
@@ -867,7 +884,7 @@ app.put('/api/invoicekit/invoices/:id', requireAuth, asyncRoute(async (req, res)
 app.delete('/api/invoicekit/invoices/:id', requireAuth, asyncRoute(async (req, res) => {
   if (!requireSupabase(res)) return;
   const { error, count } = await supabase.from('invoicekit_invoices').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
-  if (error) return res.status(500).json({ ok: false, error: 'Could not delete invoice.' });
+  if (error) { console.error('invoicekit DELETE invoice failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not delete invoice.' }); }
   if (!count) return res.status(404).json({ ok: false, error: 'Invoice not found.' });
   res.json({ ok: true });
 }));
@@ -880,7 +897,7 @@ app.delete('/api/invoicekit/invoices/:id', requireAuth, asyncRoute(async (req, r
 app.get('/api/quicknote/notes', requireAuth, asyncRoute(async (req, res) => {
   if (!requireSupabase(res)) return;
   const { data, error } = await supabase.from('quicknote_notes').select('*').eq('user_id', req.user.sub).order('updated_at', { ascending: false });
-  if (error) return res.status(500).json({ ok: false, error: 'Could not load notes.' });
+  if (error) { console.error('quicknote GET notes failed:', error.message, '| user_id:', req.user.sub); return res.status(500).json({ ok: false, error: 'Could not load notes.' }); }
   res.json({ ok: true, notes: data });
 }));
 
@@ -890,7 +907,7 @@ app.post('/api/quicknote/notes', requireAuth, asyncRoute(async (req, res) => {
   const { data, error } = await supabase.from('quicknote_notes')
     .insert({ user_id: req.user.sub, title: (title || 'Untitled').slice(0, 200), content: content || '', tags: Array.isArray(tags) ? tags.slice(0, 20) : [] })
     .select('*').single();
-  if (error) return res.status(500).json({ ok: false, error: 'Could not create note.' });
+  if (error) { console.error('quicknote POST note failed:', error.message, '| user_id:', req.user.sub); return res.status(500).json({ ok: false, error: 'Could not create note.' }); }
   res.json({ ok: true, note: data });
 }));
 
@@ -905,7 +922,7 @@ app.put('/api/quicknote/notes/:id', requireAuth, asyncRoute(async (req, res) => 
   const { data, error } = await supabase.from('quicknote_notes')
     .update(updates).eq('id', req.params.id).eq('user_id', req.user.sub) // scoped to owner — can't touch someone else's note
     .select('*').maybeSingle();
-  if (error) return res.status(500).json({ ok: false, error: 'Could not save note.' });
+  if (error) { console.error('quicknote PUT note failed:', error.message, '| user_id:', req.user.sub); return res.status(500).json({ ok: false, error: 'Could not save note.' }); }
   if (!data) return res.status(404).json({ ok: false, error: 'Note not found.' });
   res.json({ ok: true, note: data });
 }));
@@ -913,7 +930,7 @@ app.put('/api/quicknote/notes/:id', requireAuth, asyncRoute(async (req, res) => 
 app.delete('/api/quicknote/notes/:id', requireAuth, asyncRoute(async (req, res) => {
   if (!requireSupabase(res)) return;
   const { error, count } = await supabase.from('quicknote_notes').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
-  if (error) return res.status(500).json({ ok: false, error: 'Could not delete note.' });
+  if (error) { console.error('quicknote DELETE note failed:', error.message, '| user_id:', req.user.sub); return res.status(500).json({ ok: false, error: 'Could not delete note.' }); }
   if (!count) return res.status(404).json({ ok: false, error: 'Note not found.' });
   res.json({ ok: true });
 }));

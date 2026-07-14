@@ -76,6 +76,26 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+/* ── PWA INSTALL — captures the browser's install prompt so any page can trigger it.
+   Real constraint, stated plainly rather than hidden: Chrome/Edge/Android support this
+   event; Safari/iOS does not — there, "Install" falls back to a hint about the browser's
+   own "Add to Home Screen" menu option, since no JS API can trigger that on iOS. ── */
+var _deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+});
+window.AppInstall = {
+  isAvailable: function () { return !!_deferredInstallPrompt; },
+  prompt: function () {
+    if (!_deferredInstallPrompt) return Promise.resolve('unavailable');
+    var evt = _deferredInstallPrompt;
+    _deferredInstallPrompt = null;
+    evt.prompt();
+    return evt.userChoice.then(function (choice) { return choice.outcome; }); // 'accepted' | 'dismissed'
+  },
+};
+
 /* ── NAV / DRAWER / SIGNED-IN STATE (runs on every page) ── */
 document.addEventListener('DOMContentLoaded', function () {
   var hamburger = document.getElementById('navHamburger');

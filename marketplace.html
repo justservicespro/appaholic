@@ -255,7 +255,8 @@ function openAppModal(appId){
   document.getElementById('modalPrice').textContent = Number(app.price) > 0 ? '₦' + Number(app.price).toLocaleString() : 'Free';
   document.getElementById('modalNote').textContent = '';
 
-  setModalAction('idle');
+  setModalAction('loading');
+  resolveModalAction();
 
   document.getElementById('appModalBackdrop').classList.add('show');
   var params = new URLSearchParams(window.location.search);
@@ -275,48 +276,95 @@ document.getElementById('appModalBackdrop').addEventListener('click', function(e
 });
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAppModal(); });
 
-function setModalAction(state){
+// Figures out, up front, whether the button should say Get / Download / Install —
+// not just what it does when clicked. Free apps skip the entitlement check (always
+// entitled); paid apps ask the server whether this user already owns it.
+function resolveModalAction(){
+  if(!Session.isSignedIn()){
+    setModalAction('signin');
+    return;
+  }
+  if(Number(currentModalApp.price) === 0){
+    setModalAction(currentModalApp.launch_url ? 'install' : 'download');
+    return;
+  }
+  authFetch('/api/entitlement/' + currentModalApp.id).then(function(r){ return r.json(); }).then(function(data){
+    if(!data.ok){ setModalAction('get'); return; }
+    if(!data.entitled){ setModalAction('get'); return; }
+    setModalAction(data.deliveryType === 'install' ? 'install' : 'download');
+  }).catch(function(){ setModalAction('get'); });
+}
+
+function setModalAction(mode){
   var btn = document.getElementById('modalActionBtn');
   var note = document.getElementById('modalNote');
-  if(state === 'loading'){ btn.disabled = true; btn.textContent = 'Please wait…'; return; }
   btn.disabled = false;
 
-  if(!Session.isSignedIn()){
+  if(mode === 'loading'){ btn.disabled = true; btn.textContent = 'Checking…'; note.textContent = ''; return; }
+
+  if(mode === 'signin'){
     btn.textContent = 'Sign In to Continue';
     btn.onclick = function(){ window.location.href = '/auth?redirect=/marketplace?app=' + currentModalApp.id; };
     note.textContent = '';
     return;
   }
-
-  btn.textContent = Number(currentModalApp.price) > 0 ? 'Get' : 'Download';
-  btn.onclick = handleModalAction;
+  if(mode === 'get'){
+    btn.textContent = 'Get';
+    btn.onclick = startPurchase;
+    note.textContent = 'Routes through secure checkout — access unlocks immediately after payment.';
+    return;
+  }
+  if(mode === 'install'){
+    btn.textContent = 'Install';
+    btn.onclick = handleInstall;
+    note.textContent = '';
+    return;
+  }
+  // mode === 'download'
+  btn.textContent = 'Download';
+  btn.onclick = handleDownload;
+  note.textContent = '';
 }
 
-function handleModalAction(){
-  setModalAction('loading');
+function handleDownload(){
+  var btn = document.getElementById('modalActionBtn');
+  btn.disabled = true; btn.textContent = 'Preparing…';
   authFetch('/api/download/' + currentModalApp.id)
     .then(function(r){ return r.json().then(function(data){ return { status: r.status, data: data }; }); })
     .then(function(res){
-      if(res.data.ok && res.data.type === 'launch'){
-        window.open(res.data.url, '_blank');
-        setModalAction('idle');
-      } else if(res.data.ok && res.data.type === 'download'){
+      if(res.data.ok && res.data.type === 'download'){
         var a = document.createElement('a');
         a.href = res.data.url; a.download = '';
         document.body.appendChild(a); a.click(); a.remove();
         showToast('Download started!', '✅');
-        setModalAction('idle');
-      } else if(res.status === 402){
-        startPurchase();
       } else {
         showToast(res.data.error || 'Something went wrong.', '⚠️');
-        setModalAction('idle');
       }
+      setModalAction('download');
     })
-    .catch(function(){
-      showToast('Could not reach the server. Please try again.', '⚠️');
-      setModalAction('idle');
-    });
+    .catch(function(){ showToast('Could not reach the server. Please try again.', '⚠️'); setModalAction('download'); });
+}
+
+function handleInstall(){
+  var btn = document.getElementById('modalActionBtn');
+  btn.disabled = true; btn.textContent = 'Opening…';
+  authFetch('/api/download/' + currentModalApp.id)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data.ok || !data.url){ showToast(data.error || 'Something went wrong.', '⚠️'); setModalAction('install'); return; }
+      // Real constraint, not hidden: a true PWA install prompt can only fire from
+      // within a page the browser considers installable, and Safari/iOS has no
+      // programmatic install API at all — there, opening the app and using the
+      // browser's own "Add to Home Screen" menu is the actual mechanism.
+      window.open(data.url, '_blank');
+      if(window.AppInstall && window.AppInstall.isAvailable()){
+        window.AppInstall.prompt();
+      } else {
+        showToast('Opened — use your browser menu to "Add to Home Screen" to install.', 'ℹ️');
+      }
+      setModalAction('install');
+    })
+    .catch(function(){ showToast('Could not reach the server. Please try again.', '⚠️'); setModalAction('install'); });
 }
 
 function startPurchase(){
@@ -329,9 +377,9 @@ function startPurchase(){
     .then(function(r){ return r.json(); })
     .then(function(data){
       if(data.ok && data.link){ window.location.href = data.link; }
-      else { showToast(data.error || 'Could not start checkout.', '⚠️'); setModalAction('idle'); }
+      else { showToast(data.error || 'Could not start checkout.', '⚠️'); setModalAction('get'); }
     })
-    .catch(function(){ showToast('Could not reach the server. Please try again.', '⚠️'); setModalAction('idle'); });
+    .catch(function(){ showToast('Could not reach the server. Please try again.', '⚠️'); setModalAction('get'); });
 }
 </script>
 </body>
