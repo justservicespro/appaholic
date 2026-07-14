@@ -10,13 +10,25 @@ create extension if not exists "pgcrypto";
 -- ── PROFILES ─────────────────────────────────────────────────────────
 -- One row per Supabase Auth user. Created automatically on signup via trigger below.
 create table if not exists public.profiles (
-  id            uuid primary key references auth.users(id) on delete cascade,
+  id            uuid primary key default gen_random_uuid(),
   email         text not null,
   full_name     text,
   avatar_url    text,
   provider      text default 'email',
   created_at    timestamptz not null default now()
 );
+
+-- MIGRATION for an already-created database: the original version of this table
+-- incorrectly referenced auth.users(id) — Supabase's own built-in auth system,
+-- which this project doesn't use (custom Google OAuth + signed JWTs instead).
+-- That FK silently broke every new profile insert. This drops it if present;
+-- safe to re-run, no-op if the constraint was never there or already removed.
+alter table public.profiles drop constraint if exists profiles_id_fkey;
+
+-- MIGRATION: remove the dead auth.users trigger/function if an earlier version
+-- of this schema already created them on your database. Safe to re-run.
+drop trigger if exists on_auth_user_created on auth.users;
+drop function if exists public.handle_new_user();
 
 alter table public.profiles enable row level security;
 
@@ -28,30 +40,12 @@ drop policy if exists "profiles_update_own" on public.profiles;
 create policy "profiles_update_own" on public.profiles
   for update using (auth.uid() = id);
 
--- Auto-create a profile row whenever a new auth user is created (email or Google OAuth)
-create or replace function public.handle_new_user()
-returns trigger
-language plpgsql
-security definer set search_path = public
-as $$
-begin
-  insert into public.profiles (id, email, full_name, avatar_url, provider)
-  values (
-    new.id,
-    new.email,
-    coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'),
-    new.raw_user_meta_data->>'avatar_url',
-    coalesce(new.raw_app_meta_data->>'provider', 'email')
-  )
-  on conflict (id) do nothing;
-  return new;
-end;
-$$;
-
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+-- NOTE: no auth.users trigger here. Profiles are created directly by the
+-- server's Google OAuth callback (server/index.js), not by a Supabase Auth
+-- signup event — this project doesn't use Supabase Auth, only Supabase as a
+-- database. An earlier version of this schema had a trigger on auth.users
+-- that could never fire for that reason; removed to avoid the confusion it
+-- caused while debugging the profiles.id foreign key bug above.
 
 -- ── APPS (marketplace catalogue) ─────────────────────────────────────
 create table if not exists public.apps (
