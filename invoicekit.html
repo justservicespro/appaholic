@@ -109,6 +109,7 @@ if(!Session.isSignedIn()){
   document.getElementById('ikApp').style.display = 'grid';
   initInvoiceKit();
 }
+AppInstall.tryAutoPromptFromUrl();
 
 function initInvoiceKit(){
   var invoices = [], clients = [];

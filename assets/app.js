@@ -94,6 +94,39 @@ window.AppInstall = {
     evt.prompt();
     return evt.userChoice.then(function (choice) { return choice.outcome; }); // 'accepted' | 'dismissed'
   },
+  // Call this on an app's own page. Checks for ?install=1 in the URL (set when
+  // arriving from the marketplace's Install button), cleans it from the URL, and
+  // waits briefly for the browser's install prompt to become available — it can
+  // fire a moment after page load, not always instantly. Falls back to a toast
+  // hint if it never arrives (Safari/iOS has no such event at all; Chrome may
+  // withhold it on a very first visit until its own engagement heuristics are met —
+  // neither is something a webpage can force).
+  tryAutoPromptFromUrl: function () {
+    var params = new URLSearchParams(window.location.search);
+    if (!params.get('install')) return;
+    params.delete('install');
+    var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    history.replaceState({}, '', clean);
+
+    var attempts = 0;
+    var maxAttempts = 10; // ~5 seconds
+    var self = this;
+    (function poll() {
+      if (self.isAvailable()) {
+        self.prompt().then(function (outcome) {
+          if (typeof showToast === 'function') {
+            showToast(outcome === 'accepted' ? 'Installed! Check your home screen / desktop.' : 'Install dismissed — you can try again anytime from here.', outcome === 'accepted' ? '✅' : 'ℹ️');
+          }
+        });
+        return;
+      }
+      attempts++;
+      if (attempts < maxAttempts) { setTimeout(poll, 500); return; }
+      if (typeof showToast === 'function') {
+        showToast('Use your browser\'s install icon (address bar) or menu → "Add to Home Screen" / "Install App".', 'ℹ️');
+      }
+    })();
+  },
 };
 
 /* ── NAV / DRAWER / SIGNED-IN STATE (runs on every page) ── */

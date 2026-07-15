@@ -352,16 +352,12 @@ function handleInstall(){
     .then(function(r){ return r.json(); })
     .then(function(data){
       if(!data.ok || !data.url){ showToast(data.error || 'Something went wrong.', '⚠️'); setModalAction('install'); return; }
-      // Real constraint, not hidden: a true PWA install prompt can only fire from
-      // within a page the browser considers installable, and Safari/iOS has no
-      // programmatic install API at all — there, opening the app and using the
-      // browser's own "Add to Home Screen" menu is the actual mechanism.
-      window.open(data.url, '_blank');
-      if(window.AppInstall && window.AppInstall.isAvailable()){
-        window.AppInstall.prompt();
-      } else {
-        showToast('Opened — use your browser menu to "Add to Home Screen" to install.', 'ℹ️');
-      }
+      // The install prompt has to be captured AND triggered on the app's own page
+      // (it's tied to whichever manifest that page links) — not here on the
+      // marketplace, which links a different, site-wide manifest. Passing
+      // ?install=1 tells the app page to attempt the prompt itself on load.
+      var sep = data.url.indexOf('?') > -1 ? '&' : '?';
+      window.open(data.url + sep + 'install=1', '_blank');
       setModalAction('install');
     })
     .catch(function(){ showToast('Could not reach the server. Please try again.', '⚠️'); setModalAction('install'); });

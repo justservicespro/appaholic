@@ -149,6 +149,7 @@ if(!Session.isSignedIn()){
   document.getElementById('qnApp').style.display = 'grid';
   initQuickNote();
 }
+AppInstall.tryAutoPromptFromUrl();
 
 function initQuickNote(){
   var notes = [];
