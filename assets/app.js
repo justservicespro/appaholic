@@ -81,10 +81,53 @@ document.addEventListener('DOMContentLoaded', function () {
    event; Safari/iOS does not — there, "Install" falls back to a hint about the browser's
    own "Add to Home Screen" menu option, since no JS API can trigger that on iOS. ── */
 var _deferredInstallPrompt = null;
+var INSTALL_DISMISS_KEY = 'aah_install_dismissed_at';
+var INSTALL_DISMISS_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   _deferredInstallPrompt = e;
+  maybeShowInstallBanner();
 });
+
+function maybeShowInstallBanner() {
+  if (!_deferredInstallPrompt) return;
+  // Don't show on an app's own page (quicknote.html, invoicekit.html handle
+  // their own install flow already) — only on general site pages.
+  if (document.body.getAttribute('data-no-install-banner') === 'true') return;
+  var dismissedAt = Number(localStorage.getItem(INSTALL_DISMISS_KEY) || 0);
+  if (Date.now() - dismissedAt < INSTALL_DISMISS_COOLDOWN_MS) return;
+  renderInstallBanner();
+}
+
+function renderInstallBanner() {
+  if (document.getElementById('installBanner')) return; // already showing
+  var banner = document.createElement('div');
+  banner.id = 'installBanner';
+  banner.className = 'install-banner';
+  banner.innerHTML =
+    '<span class="install-banner__icon">📲</span>' +
+    '<span class="install-banner__text"><strong>Install AppAholic</strong> — add it to your home screen or desktop for one-tap access.</span>' +
+    '<button class="btn btn-ochre btn-sm install-banner__install">Install</button>' +
+    '<button class="install-banner__dismiss" aria-label="Dismiss">&#x2715;</button>';
+  document.body.appendChild(banner);
+  requestAnimationFrame(function () { requestAnimationFrame(function () { banner.classList.add('show'); }); });
+
+  banner.querySelector('.install-banner__install').addEventListener('click', function () {
+    window.AppInstall.prompt().then(function (outcome) {
+      if (outcome !== 'unavailable') dismissInstallBanner();
+      if (typeof showToast === 'function' && outcome === 'accepted') showToast('Installed! Check your home screen / desktop.', '✅');
+    });
+  });
+  banner.querySelector('.install-banner__dismiss').addEventListener('click', dismissInstallBanner);
+}
+
+function dismissInstallBanner() {
+  var banner = document.getElementById('installBanner');
+  if (banner) { banner.classList.remove('show'); setTimeout(function () { banner.remove(); }, 300); }
+  localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now()));
+}
+
 window.AppInstall = {
   isAvailable: function () { return !!_deferredInstallPrompt; },
   prompt: function () {

@@ -10,13 +10,21 @@ create extension if not exists "pgcrypto";
 -- ── PROFILES ─────────────────────────────────────────────────────────
 -- One row per Supabase Auth user. Created automatically on signup via trigger below.
 create table if not exists public.profiles (
-  id            uuid primary key default gen_random_uuid(),
-  email         text not null,
-  full_name     text,
-  avatar_url    text,
-  provider      text default 'email',
-  created_at    timestamptz not null default now()
+  id                    uuid primary key default gen_random_uuid(),
+  email                 text not null,
+  full_name             text,
+  avatar_url            text,
+  provider              text default 'email',
+  password_hash         text,              -- null for Google-only accounts; "salt:hash" for email/password accounts
+  reset_token_hash      text,              -- set only while a password reset is pending
+  reset_token_expires   timestamptz,
+  created_at            timestamptz not null default now()
 );
+
+alter table public.profiles add column if not exists password_hash text;
+alter table public.profiles add column if not exists reset_token_hash text;
+alter table public.profiles add column if not exists reset_token_expires timestamptz;
+create unique index if not exists idx_profiles_email on public.profiles(lower(email));
 
 -- MIGRATION for an already-created database: the original version of this table
 -- incorrectly referenced auth.users(id) — Supabase's own built-in auth system,

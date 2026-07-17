@@ -28,6 +28,16 @@
 .auth-signedin{display:none}
 .auth-signedin.show{display:block}
 .auth-signedin .avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 14px;object-fit:cover;border:2px solid var(--line)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--muted);font-size:11.5px;font-family:var(--font-mono);text-transform:uppercase}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.auth-tabs{display:flex;background:var(--paper);border-radius:10px;padding:4px;margin-bottom:22px}
+.auth-tab{flex:1;padding:9px;border-radius:7px;font-size:13px;font-weight:600;color:var(--muted);text-align:center}
+.auth-tab.active{background:var(--white);color:var(--ink);box-shadow:0 1px 3px rgba(10,18,32,.1)}
+.auth-form{display:none;text-align:left}
+.auth-form.active{display:block}
+.auth-form .form-row{margin-bottom:14px}
+.auth-form .form-row label{font-size:12.5px}
+.auth-link-btn{background:none;border:none;color:var(--ochre-dim);font-size:12.5px;text-decoration:underline;padding:0}
 </style>
 </head>
 <body>
@@ -72,13 +82,48 @@
     <div id="signedOutView">
       <div class="auth-card__mark">A</div>
       <h1>Welcome to AppAholic</h1>
-      <p>Sign in with Google to access your dashboard, track requests and re-download anything you've bought.</p>
+      <p>Sign in to access your dashboard, track requests and re-download anything you've bought.</p>
       <button class="google-btn" id="googleBtn" onclick="startGoogleSignIn()">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.9-2.26c-.81.54-1.85.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.9v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.69A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.16.28-1.69V4.98H.9A9 9 0 0 0 0 9c0 1.45.35 2.83.9 4.02l3.05-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .9 4.98l3.05 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
         <span id="googleBtnText">Continue with Google</span>
       </button>
+
+      <div class="auth-divider">or</div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+
+      <form class="auth-form active" id="signInForm" novalidate>
+        <div class="form-row"><label>Email</label><input class="form-input" type="email" id="siEmail" autocomplete="username"/></div>
+        <div class="form-row"><label>Password</label><input class="form-input" type="password" id="siPassword" autocomplete="current-password"/></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px">Sign In</button>
+        <div style="text-align:center"><button type="button" class="auth-link-btn" onclick="switchAuthTab('forgot')">Forgot password?</button></div>
+      </form>
+
+      <form class="auth-form" id="signUpForm" novalidate>
+        <div class="form-row"><label>Full Name</label><input class="form-input" type="text" id="suName" autocomplete="name"/></div>
+        <div class="form-row"><label>Email</label><input class="form-input" type="email" id="suEmail" autocomplete="username"/></div>
+        <div class="form-row"><label>Password <span style="color:var(--muted);font-weight:400">(min. 8 characters)</span></label><input class="form-input" type="password" id="suPassword" autocomplete="new-password"/></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Create Account</button>
+      </form>
+
+      <form class="auth-form" id="forgotForm" novalidate>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Enter your email — we'll send a link to reset your password.</p>
+        <div class="form-row"><label>Email</label><input class="form-input" type="email" id="fpEmail" autocomplete="username"/></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px">Send Reset Link</button>
+        <div style="text-align:center"><button type="button" class="auth-link-btn" onclick="switchAuthTab('signin')">Back to Sign In</button></div>
+      </form>
+
+      <form class="auth-form" id="resetForm" novalidate>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Choose a new password for <strong id="resetEmailLabel"></strong>.</p>
+        <div class="form-row"><label>New Password <span style="color:var(--muted);font-weight:400">(min. 8 characters)</span></label><input class="form-input" type="password" id="rpPassword" autocomplete="new-password"/></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Set New Password</button>
+      </form>
+
       <div class="auth-error" id="authError"></div>
-      <p class="auth-note">🔒 We only use your name, email and photo — nothing is posted on your behalf.</p>
+      <p class="auth-note">🔒 We only use your name and email — nothing is posted on your behalf.</p>
     </div>
 
     <div id="signedInView" class="auth-signedin">
@@ -108,6 +153,88 @@ function startGoogleSignIn(){
   window.location.href = window.API_BASE + '/auth/google?redirect=' + redirect;
 }
 
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-form').forEach(function(f){ f.classList.remove('active'); });
+  document.querySelectorAll('.auth-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('authError').classList.remove('show');
+
+  var isMainTab = tab === 'signin' || tab === 'signup';
+  document.querySelector('.auth-tabs').style.display = isMainTab ? 'flex' : 'none';
+  document.querySelector('.auth-divider').style.display = isMainTab ? 'flex' : 'none';
+  document.getElementById('googleBtn').style.display = isMainTab ? 'flex' : 'none';
+
+  var formMap = { signin: 'signInForm', signup: 'signUpForm', forgot: 'forgotForm', reset: 'resetForm' };
+  document.getElementById(formMap[tab]).classList.add('active');
+  if(isMainTab){
+    document.getElementById(tab === 'signin' ? 'tabSignIn' : 'tabSignUp').classList.add('active');
+  }
+}
+
+function showAuthError(msg){
+  var el = document.getElementById('authError');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+document.getElementById('signInForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var email = document.getElementById('siEmail').value.trim();
+  var password = document.getElementById('siPassword').value;
+  if(!email || !password){ showAuthError('Enter your email and password.'); return; }
+  fetch(window.API_BASE + '/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: email, password: password }) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok && data.token){ Session.set(data.token); window.location.href = '/dashboard'; }
+      else { showAuthError(data.error || 'Invalid email or password.'); }
+    })
+    .catch(function(){ showAuthError('Could not reach the server. Please try again.'); });
+});
+
+document.getElementById('signUpForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var name = document.getElementById('suName').value.trim();
+  var email = document.getElementById('suEmail').value.trim();
+  var password = document.getElementById('suPassword').value;
+  if(!name || !email || !password){ showAuthError('Fill in your name, email and password.'); return; }
+  if(password.length < 8){ showAuthError('Password must be at least 8 characters.'); return; }
+  fetch(window.API_BASE + '/auth/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name: name, email: email, password: password }) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok && data.token){ Session.set(data.token); window.location.href = '/dashboard'; }
+      else { showAuthError(data.error || 'Could not create your account.'); }
+    })
+    .catch(function(){ showAuthError('Could not reach the server. Please try again.'); });
+});
+
+document.getElementById('forgotForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var email = document.getElementById('fpEmail').value.trim();
+  if(!email){ showAuthError('Enter your email.'); return; }
+  fetch(window.API_BASE + '/auth/forgot-password', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: email }) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      showToast('If that email has an account, a reset link is on its way.', '✅');
+      switchAuthTab('signin');
+    })
+    .catch(function(){ showAuthError('Could not reach the server. Please try again.'); });
+});
+
+document.getElementById('resetForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('reset');
+  var email = params.get('email');
+  var newPassword = document.getElementById('rpPassword').value;
+  if(newPassword.length < 8){ showAuthError('Password must be at least 8 characters.'); return; }
+  fetch(window.API_BASE + '/auth/reset-password', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: email, token: token, newPassword: newPassword }) })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok){ showToast('Password updated — sign in with your new password.', '✅'); switchAuthTab('signin'); }
+      else { showAuthError(data.error || 'Could not reset your password.'); }
+    })
+    .catch(function(){ showAuthError('Could not reach the server. Please try again.'); });
+});
+
 function signOut(){
   Session.clear();
   document.getElementById('signedInView').classList.remove('show');
@@ -136,6 +263,15 @@ function renderSignedIn(){
     el.textContent = ERROR_MESSAGES[err] || 'Something went wrong. Please try again.';
     el.classList.add('show');
   }
+
+  var resetToken = params.get('reset');
+  var resetEmail = params.get('email');
+  if(resetToken && resetEmail){
+    document.getElementById('resetEmailLabel').textContent = resetEmail;
+    switchAuthTab('reset');
+    return;
+  }
+
   if(Session.isSignedIn()) renderSignedIn();
 })();
 </script>

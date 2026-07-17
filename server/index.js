@@ -127,6 +127,24 @@ function verifyAdminPassword(password) {
 function signAdminSession(email) {
   return jwt.sign({ role: 'admin', email }, SESSION_SECRET, { expiresIn: '7d' });
 }
+
+// General-purpose versions of the same scrypt pattern above, for regular user
+// accounts (email/password signup) rather than the single hardcoded admin login.
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+  return `${salt}:${hash}`;
+}
+function verifyPassword(password, stored) {
+  if (!stored || !password) return false;
+  const [salt, storedHash] = stored.split(':');
+  if (!salt || !storedHash) return false;
+  const attemptHash = crypto.scryptSync(password, salt, 64).toString('hex');
+  const a = Buffer.from(attemptHash, 'hex');
+  const b = Buffer.from(storedHash, 'hex');
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
 function requireAdmin(req, res, next) {
   const header = req.headers.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : null;
@@ -308,6 +326,112 @@ app.get('/auth/me', requireAuth, asyncRoute(async (req, res) => {
 }));
 
 app.post('/auth/logout', (req, res) => res.json({ ok: true }));
+
+/* ════════════════════════════════════════════════════════════════════
+   EMAIL / PASSWORD AUTH — alternative to Google OAuth. Issues the same
+   kind of signed session JWT either way, so every other route (dashboard,
+   downloads, purchases, etc.) works identically regardless of how someone
+   signed in.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.post('/auth/signup', strictLimiter, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { name, email, password } = req.body || {};
+  if (!name || !email || !password) return res.status(400).json({ ok: false, error: 'Name, email and password are all required.' });
+  if (!isValidEmail(email)) return res.status(400).json({ ok: false, error: 'Invalid email address.' });
+  if (String(password).length < 8) return res.status(400).json({ ok: false, error: 'Password must be at least 8 characters.' });
+
+  const { data: existing } = await supabase.from('profiles').select('id, provider').ilike('email', email).maybeSingle();
+  if (existing) {
+    const msg = existing.provider === 'google' ? 'This email is already registered via Google — use "Continue with Google" instead.' : 'An account with this email already exists. Try signing in.';
+    return res.status(409).json({ ok: false, error: msg });
+  }
+
+  const { data: profile, error } = await supabase.from('profiles')
+    .insert({ id: crypto.randomUUID(), email, full_name: name, provider: 'email', password_hash: hashPassword(password) })
+    .select('id, email, full_name').single();
+  if (error) { console.error('signup insert failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not create your account. Please try again.' }); }
+
+  const session = signSession({ id: profile.id, email: profile.email, name: profile.full_name, avatar: null });
+
+  sendMail({
+    to: email, subject: `Welcome to AppAholic, ${name.split(' ')[0]}!`,
+    html: wrapEmail({
+      preheader: 'Your AppAholic account is ready.',
+      title: `Welcome, ${esc(name.split(' ')[0])}! 🎉`,
+      bodyHtml: `<p>Your account is ready. Browse Web, Desktop and Mobile apps whenever you like.</p>`,
+      ctaText: 'Go to My Dashboard', ctaUrl: `${SITE_URL}/dashboard`,
+    }),
+  }).catch(e => console.warn('Welcome email failed (non-fatal):', e.message));
+  sendAdminMail({
+    subject: `New signup: ${cleanHeader(email)}`,
+    html: wrapEmail({ title: 'New Signup', bodyHtml: `<p><strong>${esc(name)}</strong> signed up with <strong>${esc(email)}</strong> (email/password).</p>` }),
+  }).catch(e => console.warn('Admin signup alert failed (non-fatal):', e.message));
+
+  res.json({ ok: true, token: session });
+}));
+
+app.post('/auth/login', strictLimiter, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { email, password } = req.body || {};
+  if (!email || !password) return res.status(400).json({ ok: false, error: 'Email and password are required.' });
+
+  const { data: profile } = await supabase.from('profiles').select('id, email, full_name, avatar_url, provider, password_hash').ilike('email', email).maybeSingle();
+  if (!profile) return res.status(401).json({ ok: false, error: 'Invalid email or password.' });
+  if (!profile.password_hash) return res.status(401).json({ ok: false, error: 'This email is registered via Google — use "Continue with Google" instead.' });
+  if (!verifyPassword(password, profile.password_hash)) return res.status(401).json({ ok: false, error: 'Invalid email or password.' });
+
+  const session = signSession({ id: profile.id, email: profile.email, name: profile.full_name, avatar: profile.avatar_url });
+  res.json({ ok: true, token: session });
+}));
+
+app.post('/auth/forgot-password', strictLimiter, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { email } = req.body || {};
+  if (!email || !isValidEmail(email)) return res.status(400).json({ ok: false, error: 'A valid email is required.' });
+
+  const { data: profile } = await supabase.from('profiles').select('id, full_name, password_hash').ilike('email', email).maybeSingle();
+  // Always respond ok, whether or not the account exists — prevents using this
+  // endpoint to enumerate which emails have accounts.
+  if (!profile || !profile.password_hash) { res.json({ ok: true }); return; }
+
+  const rawToken = crypto.randomBytes(32).toString('hex');
+  const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+  const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+  await supabase.from('profiles').update({ reset_token_hash: tokenHash, reset_token_expires: expires.toISOString() }).eq('id', profile.id);
+
+  const resetUrl = `${SITE_URL}/auth?reset=${rawToken}&email=${encodeURIComponent(email)}`;
+  sendMail({
+    to: email, subject: 'Reset your AppAholic password',
+    html: wrapEmail({
+      preheader: 'Reset your password — link expires in 1 hour.',
+      title: 'Reset your password',
+      bodyHtml: `<p>Click below to reset your password. This link expires in 1 hour. Ignore this email if you didn't request it.</p>`,
+      ctaText: 'Reset Password', ctaUrl: resetUrl,
+    }),
+  }).catch(e => console.warn('Reset email failed:', e.message));
+
+  res.json({ ok: true });
+}));
+
+app.post('/auth/reset-password', strictLimiter, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { email, token, newPassword } = req.body || {};
+  if (!email || !token || !newPassword) return res.status(400).json({ ok: false, error: 'Missing fields.' });
+  if (String(newPassword).length < 8) return res.status(400).json({ ok: false, error: 'Password must be at least 8 characters.' });
+
+  const { data: profile } = await supabase.from('profiles').select('id, reset_token_hash, reset_token_expires').ilike('email', email).maybeSingle();
+  if (!profile || !profile.reset_token_hash) return res.status(400).json({ ok: false, error: 'Invalid or expired reset link.' });
+  if (new Date(profile.reset_token_expires) < new Date()) return res.status(400).json({ ok: false, error: 'This reset link has expired. Request a new one.' });
+
+  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+  const a = Buffer.from(tokenHash, 'hex'), b = Buffer.from(profile.reset_token_hash, 'hex');
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return res.status(400).json({ ok: false, error: 'Invalid or expired reset link.' });
+
+  await supabase.from('profiles').update({ password_hash: hashPassword(newPassword), reset_token_hash: null, reset_token_expires: null }).eq('id', profile.id);
+  res.json({ ok: true });
+}));
 
 /* ════════════════════════════════════════════════════════════════════
    APPS (marketplace catalogue — read from Supabase)
