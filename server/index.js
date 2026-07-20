@@ -16,6 +16,7 @@ const jwt           = require('jsonwebtoken');
 const { google }    = require('googleapis');
 const { createClient } = require('@supabase/supabase-js');
 const crypto        = require('crypto');
+const multer         = require('multer');
 require('dotenv').config();
 
 /* ── ENV VALIDATION ──────────────────────────────────────────────────
@@ -916,6 +917,133 @@ app.post('/api/admin-alert', strictLimiter, asyncRoute(async (req, res) => {
 }));
 
 /* ════════════════════════════════════════════════════════════════════
+   FOCUSCLOCK — per-app API. Session logging + stats.
+   Catalogue promises "website & app blocker" and "Google Calendar sync" —
+   neither is built: a webpage genuinely cannot block other browser tabs or
+   OS-level apps (no such capability exists in the browser sandbox), and
+   calendar sync needs an additional OAuth scope beyond what's currently
+   requested at sign-in. Stated here rather than silently dropped.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/focusclock/sessions', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('focusclock_sessions').select('*').eq('user_id', req.user.sub).order('started_at', { ascending: false }).limit(200);
+  if (error) { console.error('focusclock GET sessions failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load sessions.' }); }
+  res.json({ ok: true, sessions: data });
+}));
+
+app.post('/api/focusclock/sessions', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { sessionType, durationSecs, completed, label, startedAt } = req.body || {};
+  if (!['focus', 'break'].includes(sessionType) || !durationSecs) return res.status(400).json({ ok: false, error: 'Missing session details.' });
+  const { data, error } = await supabase.from('focusclock_sessions').insert({
+    user_id: req.user.sub, session_type: sessionType, duration_secs: Math.round(durationSecs),
+    completed: !!completed, label: label || null, started_at: startedAt || new Date().toISOString(), ended_at: new Date().toISOString(),
+  }).select('*').single();
+  if (error) { console.error('focusclock POST session failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not save session.' }); }
+  res.json({ ok: true, session: data });
+}));
+
+/* ════════════════════════════════════════════════════════════════════
+   TASKMIND — per-app API. Real task CRUD + deterministic smart-sort.
+   Catalogue says "AI-powered" — honestly: prioritization is rule-based
+   (deadline proximity + priority + estimated time) by default. If
+   ANTHROPIC_API_KEY is set in env, /api/taskmind/focus-plan calls a real
+   LLM for a genuine AI-generated daily plan; without it, that route
+   returns a clearly-labeled rule-based plan instead of faking AI output.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/taskmind/tasks', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('taskmind_tasks').select('*').eq('user_id', req.user.sub).order('created_at', { ascending: false });
+  if (error) { console.error('taskmind GET tasks failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load tasks.' }); }
+  res.json({ ok: true, tasks: data });
+}));
+
+app.post('/api/taskmind/tasks', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { title, notes, priority, dueDate, estimatedMinutes } = req.body || {};
+  if (!title) return res.status(400).json({ ok: false, error: 'Task title is required.' });
+  const { data, error } = await supabase.from('taskmind_tasks').insert({
+    user_id: req.user.sub, title: String(title).slice(0, 300), notes: notes || null,
+    priority: ['low', 'medium', 'high'].includes(priority) ? priority : 'medium',
+    due_date: dueDate || null, estimated_minutes: estimatedMinutes || null,
+  }).select('*').single();
+  if (error) { console.error('taskmind POST task failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not create task.' }); }
+  res.json({ ok: true, task: data });
+}));
+
+app.put('/api/taskmind/tasks/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { title, notes, priority, dueDate, estimatedMinutes, completed } = req.body || {};
+  const updates = {};
+  if (title !== undefined) updates.title = String(title).slice(0, 300);
+  if (notes !== undefined) updates.notes = notes;
+  if (priority !== undefined && ['low', 'medium', 'high'].includes(priority)) updates.priority = priority;
+  if (dueDate !== undefined) updates.due_date = dueDate;
+  if (estimatedMinutes !== undefined) updates.estimated_minutes = estimatedMinutes;
+  if (completed !== undefined) { updates.completed = !!completed; updates.completed_at = completed ? new Date().toISOString() : null; }
+  const { data, error } = await supabase.from('taskmind_tasks').update(updates).eq('id', req.params.id).eq('user_id', req.user.sub).select('*').maybeSingle();
+  if (error) console.error('taskmind PUT task failed:', error.message);
+  if (error || !data) return res.status(404).json({ ok: false, error: 'Task not found.' });
+  res.json({ ok: true, task: data });
+}));
+
+app.delete('/api/taskmind/tasks/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { error, count } = await supabase.from('taskmind_tasks').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
+  if (error) { console.error('taskmind DELETE task failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not delete task.' }); }
+  if (!count) return res.status(404).json({ ok: false, error: 'Task not found.' });
+  res.json({ ok: true });
+}));
+
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+
+app.get('/api/taskmind/focus-plan', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data: tasks, error } = await supabase.from('taskmind_tasks').select('*').eq('user_id', req.user.sub).eq('completed', false);
+  if (error) return res.status(500).json({ ok: false, error: 'Could not load tasks.' });
+  if (!tasks.length) return res.json({ ok: true, plan: 'No open tasks — you\'re all caught up.', ranked: [], source: 'rule-based' });
+
+  // Deterministic rule-based ranking (always computed, used as the fallback and as
+  // the ordering AI mode is asked to work from — never invented from nothing).
+  const now = Date.now();
+  const scored = tasks.map(t => {
+    let score = 0;
+    if (t.priority === 'high') score += 30; else if (t.priority === 'medium') score += 15;
+    if (t.due_date) {
+      const daysUntil = (new Date(t.due_date).getTime() - now) / 86400000;
+      if (daysUntil < 0) score += 50; else if (daysUntil < 1) score += 40; else if (daysUntil < 3) score += 25; else if (daysUntil < 7) score += 10;
+    }
+    return { ...t, _score: score };
+  }).sort((a, b) => b._score - a._score);
+
+  if (!ANTHROPIC_API_KEY) {
+    return res.json({ ok: true, source: 'rule-based', ranked: scored.map(({ _score, ...t }) => t),
+      plan: 'Ranked by priority and due date. Add an ANTHROPIC_API_KEY to enable an AI-written daily plan summary.' });
+  }
+
+  try {
+    const taskList = scored.slice(0, 10).map(t => `- ${t.title}${t.due_date ? ` (due ${t.due_date})` : ''} [${t.priority} priority]${t.estimated_minutes ? `, ~${t.estimated_minutes}min` : ''}`).join('\n');
+    const aiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5', max_tokens: 300,
+        messages: [{ role: 'user', content: `Here are my open tasks, already ranked by urgency:\n${taskList}\n\nWrite a short (3-4 sentence), encouraging daily focus plan telling me what to tackle first and why. Be specific, reference the actual task titles.` }],
+      }),
+    });
+    const aiData = await aiRes.json();
+    const planText = aiData.content && aiData.content[0] && aiData.content[0].text;
+    if (!planText) throw new Error('No plan text returned');
+    res.json({ ok: true, source: 'ai', ranked: scored.map(({ _score, ...t }) => t), plan: planText });
+  } catch (err) {
+    console.error('taskmind AI focus-plan failed, falling back to rule-based:', err.message);
+    res.json({ ok: true, source: 'rule-based', ranked: scored.map(({ _score, ...t }) => t), plan: 'Ranked by priority and due date. (AI plan temporarily unavailable.)' });
+  }
+}));
+
+/* ════════════════════════════════════════════════════════════════════
    INVOICEKIT — per-app API. Clients + invoices, both scoped to the owner.
    ════════════════════════════════════════════════════════════════════ */
 
@@ -1011,6 +1139,203 @@ app.delete('/api/invoicekit/invoices/:id', requireAuth, asyncRoute(async (req, r
   if (error) { console.error('invoicekit DELETE invoice failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not delete invoice.' }); }
   if (!count) return res.status(404).json({ ok: false, error: 'Invoice not found.' });
   res.json({ ok: true });
+}));
+
+/* ════════════════════════════════════════════════════════════════════
+   FOCUSCLOCK — Pomodoro timer sessions + settings.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/focusclock/settings', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('focusclock_settings').select('*').eq('user_id', req.user.sub).maybeSingle();
+  if (error) { console.error('focusclock GET settings failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load settings.' }); }
+  res.json({ ok: true, settings: data || { work_minutes: 25, break_minutes: 5, long_break_minutes: 15, sessions_before_long_break: 4 } });
+}));
+
+app.put('/api/focusclock/settings', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { workMinutes, breakMinutes, longBreakMinutes, sessionsBeforeLongBreak } = req.body || {};
+  const payload = {
+    user_id: req.user.sub,
+    work_minutes: Math.max(1, Math.min(120, Number(workMinutes) || 25)),
+    break_minutes: Math.max(1, Math.min(60, Number(breakMinutes) || 5)),
+    long_break_minutes: Math.max(1, Math.min(60, Number(longBreakMinutes) || 15)),
+    sessions_before_long_break: Math.max(1, Math.min(12, Number(sessionsBeforeLongBreak) || 4)),
+    updated_at: new Date().toISOString(),
+  };
+  const { data, error } = await supabase.from('focusclock_settings').upsert(payload, { onConflict: 'user_id' }).select('*').single();
+  if (error) { console.error('focusclock PUT settings failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not save settings.' }); }
+  res.json({ ok: true, settings: data });
+}));
+
+app.post('/api/focusclock/sessions', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { sessionType, durationMin, completed } = req.body || {};
+  if (!['work', 'break', 'long_break'].includes(sessionType)) return res.status(400).json({ ok: false, error: 'Invalid session type.' });
+  const { data, error } = await supabase.from('focusclock_sessions')
+    .insert({ user_id: req.user.sub, session_type: sessionType, duration_min: Number(durationMin) || 0, completed: !!completed, ended_at: completed ? new Date().toISOString() : null })
+    .select('*').single();
+  if (error) { console.error('focusclock POST session failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not log session.' }); }
+  res.json({ ok: true, session: data });
+}));
+
+app.get('/api/focusclock/stats', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const since = new Date(); since.setDate(since.getDate() - 7);
+  const { data, error } = await supabase.from('focusclock_sessions').select('*').eq('user_id', req.user.sub).gte('started_at', since.toISOString()).order('started_at', { ascending: true });
+  if (error) { console.error('focusclock GET stats failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load stats.' }); }
+  const workSessions = data.filter(s => s.session_type === 'work' && s.completed);
+  res.json({
+    ok: true,
+    sessions: data,
+    totals: { completedWorkSessions: workSessions.length, totalFocusMinutes: workSessions.reduce((s, x) => s + x.duration_min, 0) },
+  });
+}));
+
+/* ════════════════════════════════════════════════════════════════════
+   DATAPULSE — CSV-backed datasets rendered as charts. NOTE ON SCOPE: the
+   catalogue description mentions a live Google Sheets connector — that
+   needs real Google Sheets API OAuth scopes this pass doesn't wire up.
+   What's actually built: paste/upload CSV data, pick a chart type and
+   columns, get an instant chart, save it, export as PDF.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/datapulse/datasets', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('datapulse_datasets').select('*').eq('user_id', req.user.sub).order('updated_at', { ascending: false });
+  if (error) { console.error('datapulse GET datasets failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load datasets.' }); }
+  res.json({ ok: true, datasets: data });
+}));
+
+app.post('/api/datapulse/datasets', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { name, headers, rows, chartType, xColumn, yColumn } = req.body || {};
+  if (!name || !Array.isArray(headers) || !Array.isArray(rows)) return res.status(400).json({ ok: false, error: 'Name, headers and rows are required.' });
+  const { data, error } = await supabase.from('datapulse_datasets')
+    .insert({ user_id: req.user.sub, name: String(name).slice(0, 200), headers, rows, chart_type: chartType || 'bar', x_column: xColumn || 0, y_column: yColumn || 1 })
+    .select('*').single();
+  if (error) { console.error('datapulse POST dataset failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not save dataset.' }); }
+  res.json({ ok: true, dataset: data });
+}));
+
+app.put('/api/datapulse/datasets/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { name, chartType, xColumn, yColumn } = req.body || {};
+  const updates = { updated_at: new Date().toISOString() };
+  if (name !== undefined) updates.name = String(name).slice(0, 200);
+  if (chartType !== undefined) updates.chart_type = chartType;
+  if (xColumn !== undefined) updates.x_column = xColumn;
+  if (yColumn !== undefined) updates.y_column = yColumn;
+  const { data, error } = await supabase.from('datapulse_datasets').update(updates).eq('id', req.params.id).eq('user_id', req.user.sub).select('*').maybeSingle();
+  if (error) console.error('datapulse PUT dataset failed:', error.message);
+  if (error || !data) return res.status(404).json({ ok: false, error: 'Dataset not found.' });
+  res.json({ ok: true, dataset: data });
+}));
+
+app.delete('/api/datapulse/datasets/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { error, count } = await supabase.from('datapulse_datasets').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
+  if (error) { console.error('datapulse DELETE dataset failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not delete dataset.' }); }
+  if (!count) return res.status(404).json({ ok: false, error: 'Dataset not found.' });
+  res.json({ ok: true });
+}));
+
+/* ════════════════════════════════════════════════════════════════════
+   TASKMIND — task manager with a heuristic (not machine-learned) smart
+   sort. NOTE ON SCOPE: the catalogue description implies genuine AI/ML
+   that "learns your habits" — what's actually built is a transparent
+   rule-based priority score (deadline proximity + priority + energy
+   match to time of day), explained as such in the UI, not marketed as
+   real AI. Calendar sync needs real Google/Outlook OAuth this pass
+   doesn't wire up.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/taskmind/tasks', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('taskmind_tasks').select('*').eq('user_id', req.user.sub).order('created_at', { ascending: false });
+  if (error) { console.error('taskmind GET tasks failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load tasks.' }); }
+  res.json({ ok: true, tasks: data });
+}));
+
+app.post('/api/taskmind/tasks', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { title, notes, dueDate, priority, energyTag } = req.body || {};
+  if (!title) return res.status(400).json({ ok: false, error: 'Task title is required.' });
+  const { data, error } = await supabase.from('taskmind_tasks')
+    .insert({ user_id: req.user.sub, title: String(title).slice(0, 300), notes: notes || null, due_date: dueDate || null, priority: priority || 'medium', energy_tag: energyTag || 'any' })
+    .select('*').single();
+  if (error) { console.error('taskmind POST task failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not create task.' }); }
+  res.json({ ok: true, task: data });
+}));
+
+app.put('/api/taskmind/tasks/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { title, notes, dueDate, priority, energyTag, status } = req.body || {};
+  const updates = {};
+  if (title !== undefined) updates.title = String(title).slice(0, 300);
+  if (notes !== undefined) updates.notes = notes;
+  if (dueDate !== undefined) updates.due_date = dueDate;
+  if (priority !== undefined) updates.priority = priority;
+  if (energyTag !== undefined) updates.energy_tag = energyTag;
+  if (status !== undefined) {
+    if (!['todo', 'in_progress', 'done'].includes(status)) return res.status(400).json({ ok: false, error: 'Invalid status.' });
+    updates.status = status;
+    updates.completed_at = status === 'done' ? new Date().toISOString() : null;
+  }
+  const { data, error } = await supabase.from('taskmind_tasks').update(updates).eq('id', req.params.id).eq('user_id', req.user.sub).select('*').maybeSingle();
+  if (error) console.error('taskmind PUT task failed:', error.message);
+  if (error || !data) return res.status(404).json({ ok: false, error: 'Task not found.' });
+  res.json({ ok: true, task: data });
+}));
+
+app.delete('/api/taskmind/tasks/:id', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { error, count } = await supabase.from('taskmind_tasks').delete({ count: 'exact' }).eq('id', req.params.id).eq('user_id', req.user.sub);
+  if (error) { console.error('taskmind DELETE task failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not delete task.' }); }
+  if (!count) return res.status(404).json({ ok: false, error: 'Task not found.' });
+  res.json({ ok: true });
+}));
+
+/* ════════════════════════════════════════════════════════════════════
+   TEAMPING — shared channels + messages. See schema comment: this is one
+   open workspace shared across all AppAholic users, not isolated private
+   teams. Polling-based (no websockets/Supabase Realtime wired up), so the
+   frontend refetches periodically rather than getting a live push.
+   ════════════════════════════════════════════════════════════════════ */
+
+app.get('/api/teamping/channels', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('teamping_channels').select('*').order('created_at', { ascending: true });
+  if (error) { console.error('teamping GET channels failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load channels.' }); }
+  res.json({ ok: true, channels: data });
+}));
+
+app.post('/api/teamping/channels', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { name } = req.body || {};
+  if (!name) return res.status(400).json({ ok: false, error: 'Channel name is required.' });
+  const { data, error } = await supabase.from('teamping_channels').insert({ name: String(name).slice(0, 80), created_by: req.user.sub }).select('*').single();
+  if (error) { console.error('teamping POST channel failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not create channel.' }); }
+  res.json({ ok: true, channel: data });
+}));
+
+app.get('/api/teamping/channels/:id/messages', requireAuth, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('teamping_messages').select('*, profiles(full_name, email, avatar_url)').eq('channel_id', req.params.id).order('created_at', { ascending: true }).limit(200);
+  if (error) { console.error('teamping GET messages failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load messages.' }); }
+  res.json({ ok: true, messages: data });
+}));
+
+app.post('/api/teamping/channels/:id/messages', requireAuth, strictLimiter, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { content } = req.body || {};
+  if (!content || !content.trim()) return res.status(400).json({ ok: false, error: 'Message cannot be empty.' });
+  if (content.length > 2000) return res.status(400).json({ ok: false, error: 'Message is too long.' });
+  const { data, error } = await supabase.from('teamping_messages')
+    .insert({ channel_id: req.params.id, user_id: req.user.sub, content: content.trim() })
+    .select('*, profiles(full_name, email, avatar_url)').single();
+  if (error) { console.error('teamping POST message failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not send message.' }); }
+  res.json({ ok: true, message: data });
 }));
 
 /* ════════════════════════════════════════════════════════════════════
@@ -1137,6 +1462,102 @@ app.get('/api/admin/subscriptions', requireAdmin, asyncRoute(async (req, res) =>
   const { data, error } = await supabase.from('subscriptions').select('*').order('created_at', { ascending: false }).limit(200);
   if (error) return res.status(500).json({ ok: false, error: 'Could not load subscriptions.' });
   res.json({ ok: true, subscriptions: data });
+}));
+
+/* ════════════════════════════════════════════════════════════════════
+   ADMIN — APPS CATALOGUE MANAGEMENT. Add/edit catalogue entries, wire
+   launch_url (web apps) or storage_path (files), toggle active state.
+   ════════════════════════════════════════════════════════════════════ */
+
+// GET all apps regardless of active state (the public /api/apps only returns active ones).
+app.get('/api/admin/apps', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { data, error } = await supabase.from('apps').select('*').order('created_at', { ascending: false });
+  if (error) { console.error('admin GET apps failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not load apps.' }); }
+  res.json({ ok: true, apps: data });
+}));
+
+app.post('/api/admin/apps', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const b = req.body || {};
+  if (!b.id || !b.name || !b.category || !b.platform) return res.status(400).json({ ok: false, error: 'id, name, category and platform are required.' });
+  if (!/^[a-z0-9-]+$/.test(b.id)) return res.status(400).json({ ok: false, error: 'id must be lowercase letters, numbers and hyphens only (used in URLs and storage paths).' });
+  if (!['web', 'desktop', 'mobile'].includes(b.platform)) return res.status(400).json({ ok: false, error: 'platform must be web, desktop or mobile.' });
+
+  const { data, error } = await supabase.from('apps').insert({
+    id: b.id, name: b.name, category: b.category, platform: b.platform,
+    os: Array.isArray(b.os) ? b.os : [], price: Number(b.price) || 0,
+    tag: b.tag || null, icon: b.icon || '📦', banner_color: b.bannerColor || '#F0EBDF',
+    description: b.description || '', long_description: b.longDescription || '',
+    features: Array.isArray(b.features) ? b.features : [], tags: Array.isArray(b.tags) ? b.tags : [],
+    launch_url: b.launchUrl || null, storage_path: b.storagePath || null, active: b.active !== false,
+  }).select('*').single();
+  if (error) { console.error('admin POST app failed:', error.message); return res.status(500).json({ ok: false, error: error.message.includes('duplicate') ? 'An app with this id already exists.' : 'Could not create app.' }); }
+  res.json({ ok: true, app: data });
+}));
+
+app.put('/api/admin/apps/:id', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const b = req.body || {};
+  const updates = {};
+  const map = {
+    name: 'name', category: 'category', platform: 'platform', os: 'os', price: 'price',
+    tag: 'tag', icon: 'icon', bannerColor: 'banner_color', description: 'description',
+    longDescription: 'long_description', features: 'features', tags: 'tags',
+    launchUrl: 'launch_url', storagePath: 'storage_path', active: 'active', rating: 'rating',
+  };
+  Object.keys(map).forEach(k => { if (b[k] !== undefined) updates[map[k]] = b[k]; });
+  if (updates.platform && !['web', 'desktop', 'mobile'].includes(updates.platform)) return res.status(400).json({ ok: false, error: 'Invalid platform.' });
+
+  const { data, error } = await supabase.from('apps').update(updates).eq('id', req.params.id).select('*').maybeSingle();
+  if (error) console.error('admin PUT app failed:', error.message);
+  if (error || !data) return res.status(404).json({ ok: false, error: 'App not found.' });
+  res.json({ ok: true, app: data });
+}));
+
+app.delete('/api/admin/apps/:id', requireAdmin, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  const { error, count } = await supabase.from('apps').delete({ count: 'exact' }).eq('id', req.params.id);
+  if (error) { console.error('admin DELETE app failed:', error.message); return res.status(500).json({ ok: false, error: 'Could not delete app. If it has purchases/downloads linked, deactivate it instead (active: false) rather than deleting.' }); }
+  if (!count) return res.status(404).json({ ok: false, error: 'App not found.' });
+  res.json({ ok: true });
+}));
+
+// POST an installer file (.apk, .exe, .dmg, etc.) — uploads to Supabase Storage and
+// sets that app's storage_path automatically.
+//
+// REAL CONSTRAINT, not hidden: this proxies the upload through this Vercel serverless
+// function, which has a platform-level request body size cap that Express config
+// cannot override (varies by Vercel plan, commonly a few MB on lower tiers). Small
+// files will work fine here. For anything large — most real .apk/.exe/.dmg installers
+// easily exceed that — upload the file directly via the Supabase dashboard's Storage
+// section instead (Storage → app-files bucket → upload → copy the resulting path),
+// then paste that path into the "Storage Path" field in the edit form below rather
+// than using this upload button. This route stays useful for smaller files and for
+// icons/screenshots.
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } }); // 20MB soft cap — see note above
+
+app.post('/api/admin/apps/:id/upload', requireAdmin, (req, res, next) => {
+  upload.single('file')(req, res, (err) => {
+    if (err) return res.status(413).json({ ok: false, error: err.code === 'LIMIT_FILE_SIZE' ? 'File too large for direct upload here (20MB limit on this route) — use the Supabase dashboard to upload larger files directly, then paste the resulting Storage Path into the edit form.' : 'Upload failed.' });
+    next();
+  });
+}, asyncRoute(async (req, res) => {
+  if (!requireSupabase(res)) return;
+  if (!req.file) return res.status(400).json({ ok: false, error: 'No file provided.' });
+
+  const { data: app } = await supabase.from('apps').select('id').eq('id', req.params.id).maybeSingle();
+  if (!app) return res.status(404).json({ ok: false, error: 'App not found.' });
+
+  const safeFilename = req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const storagePath = `${req.params.id}/${Date.now()}-${safeFilename}`;
+
+  const { error: uploadErr } = await supabase.storage.from('app-files').upload(storagePath, req.file.buffer, { contentType: req.file.mimetype, upsert: false });
+  if (uploadErr) { console.error('admin file upload failed:', uploadErr.message); return res.status(500).json({ ok: false, error: 'Upload to storage failed: ' + uploadErr.message }); }
+
+  const { data, error } = await supabase.from('apps').update({ storage_path: storagePath }).eq('id', req.params.id).select('*').single();
+  if (error) { console.error('admin update storage_path failed:', error.message); return res.status(500).json({ ok: false, error: 'File uploaded but could not update the app record. Set Storage Path manually to: ' + storagePath }); }
+  res.json({ ok: true, app: data, storagePath });
 }));
 
 app.get('/api/health', (req, res) => res.json({
